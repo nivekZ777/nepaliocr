@@ -327,7 +327,7 @@ void Separate::WordSeparate1(ArrayList* start,ArrayList* end)
 	IEnumerator *wordStartEnumerator,*wordEndEnumerator;
 	ArrayList** wordStart1=new ArrayList*();
 	ArrayList** wordEnd1=new ArrayList*();
-	IEnumerator *wordStartEnumerator1,*wordEndEnumerator1;
+	//IEnumerator *wordStartEnumerator1,*wordEndEnumerator1;
 
 	
 	IEnumerator *startEnumerator;
