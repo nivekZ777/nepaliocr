@@ -30,7 +30,7 @@ TrainingProcess::TrainingProcess(System::String* path,int **imgArray, int left_x
 	this->HMMNameFilePath = this->HMMNameFilePath->Concat(path ,"\\htk\\files\\hmmName.txt");
 	this->HMMListFilePath = this->HMMListFilePath->Concat(path ,"\\htk\\files\\hmmlist.txt");
 	this->exeFileDir = this->exeFileDir->Concat(path ,"\\htk\\executables\\");
-	this->mmfFilePath = this->mmfFilePath->Concat(path ,"\\htk\\files\\banglaOCR.mmf");
+	this->mmfFilePath = this->mmfFilePath->Concat(path ,"\\htk\\files\\nepaliOCR.mmf");
 	this->grammerFilePath = this->grammerFilePath->Concat(path ,"\\htk\\files\\def\\gram.txt");
 	this->dictFilePath = this->dictFilePath->Concat(path ,"\\htk\\files\\def\\dict.txt");
 	this->transFilePath = this->transFilePath->Concat(path ,"\\htk\\files\\transcription.txt");
@@ -133,7 +133,8 @@ void TrainingProcess::TrainingByHTK(int numOfFrame)
 		fm->CreateHMMFile(this->exeFileDir,this->outputHMMFileDir,to,this->trainingFilePath);
 
 		// Add Newly Created HMM Model definition into MMF(Master Model File)
-		from = from->Concat(this->outputHMMFileDir, "\\" , this->modelName);
+		from="";
+		from = from->Concat(from,this->outputHMMFileDir, "\\" , this->modelName);
 		fm->AddModelDefToMasterModelFile(this->mmfFilePath,from);
 
 		// Add the Model Name to HMM List and HMM Name file
