@@ -10,9 +10,7 @@ public __gc class Deskew
 	
 public:
 	static Bitmap* cBmp;
-	static double cAlphaStart= -0;
-//static double cAlphaStart= -20;
-
+	static double cAlphaStart= -20;
 	static double cAlphaStep= 0.2;
 	static int cSteps= 40 * 5;
 	static double *cSinA;
