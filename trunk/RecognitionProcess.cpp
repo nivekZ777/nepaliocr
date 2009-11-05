@@ -79,10 +79,11 @@ System::Collections::SortedList* RecognitionProcess::LoadModelTranscriptions(Sys
 	 System::String* tempStr;
 	 int count=0;
 	 bool modelName = true;
+
 	 try
 	 {
 		sr = new System::IO::StreamReader(dbFilePath);
-
+		 
 		/*
 
 
@@ -137,6 +138,7 @@ System::Collections::SortedList* RecognitionProcess::LoadModelTranscriptions(Sys
 	 }
 	 catch(System::Exception* ex)
 	{
+
 		System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to Load the Model DataBase!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		exit(0);
 	}
