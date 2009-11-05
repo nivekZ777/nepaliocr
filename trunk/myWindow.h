@@ -22,7 +22,7 @@ namespace OCR
 	///
 	/// WARNING: If you change the name of this class, you will need to change the 
 	///          'Resource File Name' property for the managed resource compiler tool 
-	///          associated with all .resx files this class depends on.  Otherwise,
+	///          associated with all .resx files this class depends on.  Othe rwise,
 	///          the designers will not be able to interact properly with localized
 	///          resources associated with this form.
 	/// </summary>
@@ -602,6 +602,8 @@ private: void LoadFromFile()
 					 this->myRTB->AppendText(this->LineInfo[lineno].Words[wordno].getTotalUnit().ToString());
 
 					 this->charno++;
+ 				 
+
 				 }
 				 else
 				 {
@@ -612,7 +614,8 @@ private: void LoadFromFile()
 						 this->charno=0;
 						 this->myRTB->AppendText("\n else if -----------total units ----------");
 						 this->myRTB->AppendText(this->LineInfo[lineno].Words[wordno].getTotalUnit().ToString());
-					 }
+						 
+							}
 
 
 					 else
@@ -624,7 +627,8 @@ private: void LoadFromFile()
 							 this->lineno++;
 							 this->myRTB->AppendText("------else else if -----total units ----------");
 							 this->myRTB->AppendText(this->LineInfo[lineno].Words[wordno].getTotalUnit().ToString());
-						 }
+ 							 
+									}
 						 else
 						 {
 							 this->lineno=0;
@@ -632,18 +636,32 @@ private: void LoadFromFile()
 							 this->charno=0;
 							 this->myRTB->AppendText("------else else else -----total units ----------");
 							 this->myRTB->AppendText(this->LineInfo[lineno].Words[wordno].getTotalUnit().ToString());
+							
 						 }
 					 }
 				 }
 				 this->display(this->lineno,this->wordno,this->charno);
 				 this->Update;
+
+
+				 this->myRTB->AppendText("\n x1:");
+				 this->myRTB->AppendText(x1.ToString());
+				 this->myRTB->AppendText(" x2:");
+				 this->myRTB->AppendText(x2.ToString());
+				 this->myRTB->AppendText(" y1:");
+				 this->myRTB->AppendText(y1.ToString());
+				 this->myRTB->AppendText(" y2:");
+				 this->myRTB->AppendText(y2.ToString());
+				 this->myRTB->AppendText(" Charno:");
+				 this->myRTB->AppendText(this->charno.ToString());
 				 x1=this->LineInfo[lineno].Words[wordno].Units[charno].getStartColumn(); //Equivalent to :: left_x
 				 x2=this->LineInfo[lineno].Words[wordno].Units[charno].getEndColumn();	//Equivalent to :: right_x
 				 y1=this->LineInfo[lineno].getStartRow();		//Equivalent to :: top_y
 				 y2=this->LineInfo[lineno].getEndRow();	
-				 System::Windows::Forms::MessageBox::Show(charno.ToString(),"Charno");
+				 singleRecognize(x1,x2,y1,y2,1) ;
+
 				 //Cuzz charno starts from 0, we need to increment charno by 1, before recognizing
-				 singleRecognize(x1,x2,y1,y2,charno+1) ;
+				// singleRecognize(x1,x2,y1,y2,charno) ;
 				
 				 
 				 
