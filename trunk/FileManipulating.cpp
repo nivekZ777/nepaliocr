@@ -21,7 +21,7 @@ FileManipulating::FileManipulating(void)
 		dctArr[i] = new float[FRAME_WD];
 	}
 }
-
+/*
 System::String* string_handling(System::String *temp1,System::String *temp2,System::String *temp3)
 {
 temp2->Concat(temp3);
@@ -38,7 +38,7 @@ temp1->Concat(temp2);
 return(temp1);
 }
 
-
+*/
 System::String* FileManipulating::GetModelName(System::String* filePath)
 {
 
@@ -151,7 +151,6 @@ void FileManipulating::CreateHMMFile(System::String *exeFileDir, System::String 
 		System::String* batchFileName = batchFileName->Concat(outputHmmDir, "\\" ,"_HInit.bat");
 		System::IO::StreamWriter* sw = new System::IO::StreamWriter(batchFileName);
 		System::String* tempStr = "";
-		System::Windows::Forms::MessageBox::Show("Create HMM File on Process 1","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 		System::String* HHH="HInit";
 
@@ -162,11 +161,11 @@ void FileManipulating::CreateHMMFile(System::String *exeFileDir, System::String 
 		//tempStr->a
 		tempStr=tempStr->Concat(tempStr," -m 1"," -M ");			// required for training from single sample
 		//tempStr += " -M ";
-		tempStr=tempStr->Concat(tempStr,invComa, outputHmmDir , invComa," ");
+		tempStr=tempStr->Concat(tempStr,invComa, outputHmmDir , invComa,(String*)" ");
 		//tempStr += "\"" + outputHmmDir + "\"";
 		//tempStr += " ";
 		
-		tempStr=tempStr->Concat(tempStr,invComa, prototypeFile,invComa," ");
+		tempStr=tempStr->Concat(tempStr,invComa, prototypeFile,invComa,(String*)" ");
 		//tempStr += "\"" + prototypeFile + "\"";
 		//tempStr += " ";
 		
@@ -200,6 +199,8 @@ void FileManipulating::AddModelDefToMasterModelFile(System::String *mmfFilePath,
 		System::IO::StreamWriter* sw = System::IO::StreamWriter::Null;
 		System::String* tempStr;
 		int lineNum = 0;
+		System::Windows::Forms::MessageBox::Show(mmfFilePath,"MMF FilePath: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		System::Windows::Forms::MessageBox::Show(fromHmmFile,"HMM File: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 		// if the file does not exist then directly copy the entire content of the prototype file
 		if(!System::IO::File::Exists(mmfFilePath))
@@ -276,8 +277,10 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 		if(!System::IO::File::Exists(gramFile))
 		{
 			sw = new System::IO::StreamWriter(gramFile);
-			tmp->Concat("$WORD = ", modelName , ";" );
-			tmp->Concat	("\n" , "([$WORD])");
+			System::String* wd="$WORD = ";
+			System::String* semiColon=";";
+			System::String* enter="\n";
+			tmp=tmp->Concat(wd, modelName ,semiColon,enter,(String*)"([$WORD])");
 			text=tmp;
 			//text = "$WORD = "+ modelName + ";" + "\n" + "([$WORD])";
 			sw->Write(text);
@@ -303,14 +306,14 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 				{
 					//text += line+"\n";
 					//String * tmp;
-					text = tmp->Concat(line,"\n");
+					text = text->Concat(text,line,"\n");
 				}
 				else
 				{
 					line = line->Substring(0,k);
-					tmp->Concat(line , "|" , modelName);
-					tmp->Concat(";" , "\n");
-					text=tmp;
+					
+					text=text->Concat(text,line ,(String*)"|",modelName,";" , "\n");
+					
 					//text += line + "|" + modelName + ";" + "\n";
 				}
 				line=sr->ReadLine();
@@ -336,14 +339,20 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 
 		// build the world network
 		/*1. Creating _HParse.bat*/
-		System::String* parseFile = string_handling(wdnetFileDir, "_HParse.bat");
+		System::String* parseFile = parseFile->Concat(wdnetFileDir,(String*)"_HParse.bat");
 		//System::String* tmp="";
 		//text=tmp->Concat(execpath,"HParse"," ","\"",gramFile,"\""," ","\"",wdnetFileDir,"net.slf","\"");
 		sw = new System::IO::StreamWriter(parseFile);
-		tmp->Concat("\"",execpath,"HPARSE","\"");
-		tmp->Concat(" ","\"",gramFile,"\"");
-		tmp->Concat(" ","\"",wdnetFileDir);
-		tmp->Concat("net.slf","\"");
+		System::String* invComma="\"";
+		text=invComma;
+		text = text->Concat(text,execpath,(String*)"HParse",invComma,(String*)" ");
+		text = text->Concat(text,invComma,gramFile,invComma,(String*)" ");
+		text = text->Concat(text,invComma,wdnetFileDir,(String*)"net.slf",invComma);
+
+		/*text=text->Concat(text,"\"",execpath,"HPARSE","\""," ");
+		text=text->Concat(text,"\"",gramFile,"\""," ");
+		text=text->Concat(text,"\"",wdnetFileDir);
+		text=text->Concat(text,"net.slf","\"");
 		/*text = "\"" + execpath + "HParse" + "\"" + " ";
 		text += "\"" + gramFile + "\"" + " ";
 		text += "\"" + wdnetFileDir + "net.slf" + "\"";*/
@@ -355,15 +364,17 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 		System::String* genFile;
 		genFile->Concat(wdnetFileDir ,"_HSGen.bat");
 		sw = new System::IO::StreamWriter(genFile);
-		/*text = "\"" + execpath + "HSGen" + "\"" + " ";
-		text += "\"" + wdnetFileDir + "net.slf" + "\"" + " ";
-		text += "\"" + dictFile + "\"";*/
+//		System::String* invComma="\"";
+		text=invComma;
+		text = text->Concat(text,execpath,(String*)"HSGen",invComma,(String*)" ");
+		text = text->Concat(text,invComma,wdnetFileDir,(String*)"net.slf",invComma,(String*)" ");
+		text = text->Concat(text,invComma,dictFile,invComma);
 
-		text->Concat("\"" , execpath , "HSGen");
+		/*text->Concat("\"" , execpath , "HSGen");
 		text->Concat("\"" , " ","\"");
 		text->Concat(wdnetFileDir , "net.slf" , "\"" , " ");
 		text->Concat("\"", dictFile, "\"");
-
+*/
 		sw->Write(text);
 		sw->Close();
 
@@ -390,9 +401,9 @@ void FileManipulating::RecognizeByHMM(System::String* recDir, System::String* ex
 {
 	try
 	{
-		//System::String* batchFileName = recDir + "_HVite.bat";
-		System::String* batchFileName;
-		batchFileName->Concat(recDir,"_HVite.bat");
+		System::String* batchFileName = batchFileName->Concat(recDir,"_HVite.bat");
+		//System::String* batchFileName;
+		//batchFileName->Concat(recDir,"_HVite.bat");
 		System::IO::StreamWriter* sw = new System::IO::StreamWriter(batchFileName);
 		System::String* tempStr = "";
 
@@ -403,29 +414,29 @@ void FileManipulating::RecognizeByHMM(System::String* recDir, System::String* ex
 
 
 		// building the associate command for the initialization
-		
-		/*tempStr += "\"" + execFile + "HVite" + "\"";
-		tempStr += " -H ";			// required for training from single sample
-		tempStr += "\"" + mmfFile + "\"";
-		tempStr += " -i ";
-		tempStr += "\"" + mlfFile + "\"";
-		tempStr += " -w ";
-		tempStr += "\"" + wdNetFile + "\"";
-		tempStr += " ";
-		tempStr += "\"" + dictFile + "\"";
-		tempStr += " ";
-		tempStr += "\"" + hmmListFile + "\"";
-		tempStr += " -S ";
-		tempStr += "\"" + scriptFile + "\"";*/
+		System::String* invComma="\"";
+		tempStr = tempStr->Concat(tempStr,invComma,execFile,(String*)"HVite",invComma);
+		tempStr = tempStr->Concat(tempStr," -H ");			// required for training from single sample
+		tempStr = tempStr->Concat(tempStr,invComma,mmfFile,invComma);
+		tempStr = tempStr->Concat(tempStr," -i ");
+		tempStr = tempStr->Concat(tempStr,invComma,mlfFile,invComma);
+		tempStr = tempStr->Concat(tempStr," -w ");
+		tempStr = tempStr->Concat(tempStr,invComma,wdNetFile,invComma);
+		tempStr = tempStr->Concat(tempStr,(String*)" ");
+		tempStr = tempStr->Concat(tempStr,invComma,dictFile,invComma);
+		tempStr = tempStr->Concat(tempStr,(String*)" ");
+		tempStr = tempStr->Concat(tempStr,invComma,hmmListFile,invComma);
+		tempStr = tempStr->Concat(tempStr," -S ");
+		tempStr = tempStr->Concat(tempStr,invComma,scriptFile,invComma);
 
-		tempStr->Concat("\"" , execFile , "HVite" , "\"");
+		/*tempStr->Concat("\"" , execFile , "HVite" , "\"");
 		tempStr->Concat(" -H ","\"" , mmfFile , "\"");
 		tempStr->Concat(" -i ","\"" , mlfFile , "\"");
 		tempStr->Concat(" -w ","\"" , wdNetFile , "\"");
 		tempStr->Concat(" ","\"" , dictFile , "\"");
 		tempStr->Concat(" ","\"" , hmmListFile , "\"");
 		tempStr->Concat(" -S ","\"" , scriptFile ,"\"");
-
+*/
 		
 		sw->Write(tempStr);
 		sw->Close();
@@ -476,7 +487,7 @@ System::Collections::ArrayList* FileManipulating::FetchOutputModels(System::Stri
 				length = enIndex - stIndex;
 				str = tempStr->Substring(stIndex,length);
 				//text += str + "\n";
-				text->Concat(str,"\n");
+				text=text->Concat(text,str,"\n");
 				lineNo = 0;							
 				alWord->Add(str);
 			}
@@ -681,7 +692,7 @@ void FileManipulating::PrepareData(System::String* dataFileName, int **imageArr,
 			}
 		}
 		//FClose(file, flag);
-		FClose(file, FALSE);
+		FClose(file, flag);
 	}
 	catch(System::NullReferenceException* ex)
 	{
