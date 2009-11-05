@@ -33,6 +33,13 @@ namespace OCR
 	///          resources associated with this form.
 	/// </summary>
 	
+/*
+ 
+		The main Class of the program.
+		This program initiates the start dialog box. This class control other classes and initiates them.
+ 
+*/
+
 	public __gc class Form1 : public System::Windows::Forms::Form
 	{	
 	public:
@@ -133,10 +140,10 @@ namespace OCR
 	private: System::Windows::Forms::Button *  deSkew;
 	private: System::Windows::Forms::Button *  train;
 	private: System::Windows::Forms::Button *  recognize;
-private: System::Windows::Forms::Button *  fastRecognizeButton;
-private: System::Windows::Forms::Label *  myInfo;
-private: System::Windows::Forms::Label *  myInfo1;
-private: System::Windows::Forms::Button *  findMagnification;
+	private: System::Windows::Forms::Button *  fastRecognizeButton;
+	private: System::Windows::Forms::Label *  myInfo;
+	private: System::Windows::Forms::Label *  myInfo1;
+	private: System::Windows::Forms::Button *  findMagnification;
 
 
 
@@ -354,6 +361,14 @@ private: System::Windows::Forms::Button *  findMagnification;
 
 
 		
+		/*
+
+			The InitializeComponent method initializes the application. 
+
+			
+
+		*/
+
 		public: void Conv3x3(ConvMatrix* m)
 		{
 			this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
@@ -437,6 +452,14 @@ private: System::Windows::Forms::Button *  findMagnification;
 		
 		private: void MeanRemoval(int nWeight)
 		{
+			
+			/*
+
+				This method does the mean removal of the image, before it is binarized. 
+				Yhis is an essentinal part of the Image Preprocessing part. 
+
+			*/
+
 			ConvMatrix* m=new ConvMatrix();
 			//ConvMatrix* h1[];
 			//h1=new ConvMatrix* [20];
@@ -459,7 +482,12 @@ private: System::Windows::Forms::Button *  findMagnification;
 		private: void Contrast(int nContrast)
 		{
 
-			
+			/*
+
+				This method increases the contrast of the image. 
+				Thus making the image more visible. 
+
+			*/
 			this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
 			try{
 			double pixel = 0, contrast = (100.0+nContrast)/100.0;
@@ -540,6 +568,13 @@ private: System::Windows::Forms::Button *  findMagnification;
 		}
 		private: void makeBinary()
 			 {
+				/*
+
+				This method binarizes the image. 
+				The binarized image is used during the recognition process and training process.
+ 
+				*/
+
 				 if(this->ImageLoaded)
 				 {
 					//if (this->BinaryDone)
@@ -615,6 +650,15 @@ private: System::Windows::Forms::Button *  findMagnification;
 			}
 		private: void saveImageFile()
 			{
+
+			/*
+
+			This method is used to save the image file after certain image processing portion is complete.
+			In case we need the file in future.
+
+			*/
+
+
 				if(this->BinaryDone)
 				{	
 					saveImageDialog->Filter= "PNG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
@@ -641,6 +685,11 @@ private: System::Windows::Forms::Button *  findMagnification;
 		
 		private: void separateChar()
 				 {
+/*
+
+	This method is used to separate the characters, or the connected units  after the words are separated.
+
+*/
 					 Pen* p=new Pen(Color::Blue,1);
 	
 								for(int i=0;i<this->numberOfLines;i++)
@@ -663,6 +712,11 @@ private: System::Windows::Forms::Button *  findMagnification;
 				 }
 		private: void separate()
 				 {
+
+				/*
+				This method is used to separate the words and lines after binarization.
+				*/
+
 					 this->tmpBArray=new bool*[im->Height];
 					 //System::Windows::Forms::MessageBox::Show(im->Height.ToString(),"Height");
 					 myInfo1->Text = "Image Height";
@@ -706,11 +760,10 @@ private: System::Windows::Forms::Button *  findMagnification;
 
 		private: void doDeSkew()
 				  {
-						 
-
-
-					 
-
+				/*
+				If the lines in the image is tilted or slanted, this method is used to deskew the image. 
+				*/		 
+				 
 					Deskew* ds=new Deskew(im);
 					double skewAngle=ds->GetSkewAngle();
 					
@@ -747,7 +800,9 @@ private: System::Windows::Forms::Button *  findMagnification;
 		
 		private: void Recognize()
 		{
-								 
+/*
+		This method is used to recognize the text in the image.
+*/	 
 						RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImgArray);
 
 						// load the transcription of the models
@@ -865,7 +920,9 @@ private: System::Windows::Forms::Button *  findMagnification;
 
 		private: void ProvideOutput()
 		 {
-
+/*
+		This method prints the output in a new dialog box.
+ */
 			 
 		    System::String* tempStr = "";
 			System::String* text = "";
@@ -1081,7 +1138,7 @@ private: System::Void fastRecognizeButton_Click(System::Object *  sender, System
 //Try magnify function
 		 
 private: void tryMagnify(){
-					
+			  
 				this->Contrast(10);
 				this->ContrastDone=true;
 				this->Update();
