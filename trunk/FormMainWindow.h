@@ -675,10 +675,15 @@ private: System::Windows::Forms::Button *  findMagnification;
 				 }
 		private: void separate()
 				 {
-					 this->tmpBArray=new bool*[im->Height];
+					 this->tmpBArray=new bool*[im->Height]; 
+					 //Declaring array of size image height
+
+					 
 					 //System::Windows::Forms::MessageBox::Show(im->Height.ToString(),"Height");
 					 myInfo1->Text = "Image Height";
 					 myInfo->Text = im->Height.ToString();
+					 
+					 
 					 //this->tmpBArray=this->BArray;
 					 for(int i=0;i<im->Height;i++)
 					 {

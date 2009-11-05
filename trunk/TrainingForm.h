@@ -118,7 +118,24 @@ namespace OCR
 			y1=this->LineInfo[lineno].getStartRow();
 			y2=this->LineInfo[lineno].getEndRow();
 			
+			/*
+
+
+
+			[x1,y1]-------[x2,y1]
+				|			|
+				|			|
+				|		(ysize)
+				|			|
+			[x1,y2]-(xsize)-[x2,y2] 
+
+
+
+			*/
+
+
 			 //System::Windows::Forms::MessageBox::Show("Please Load the image first","Image not loaded");
+
 			System::Windows::Forms::MessageBox::Show(x1.ToString(),"x1");
 			System::Windows::Forms::MessageBox::Show(x2.ToString(),"x2");
 			System::Windows::Forms::MessageBox::Show(y1.ToString(),"y1");
@@ -131,12 +148,13 @@ namespace OCR
 			
 			this->cropImage=new Bitmap(xsize,ysize,Imaging::PixelFormat::Format24bppRgb);
 			
-			for(int i=y1;i<=y2;i++)
+			for(int i=y1;i<=y2;i++)//traverse through y
 			{
-				for(int j=x1;j<=x2;j++)
+				for(int j=x1;j<=x2;j++)//traverse through x
 				{
 					if(this->BinArray[i][j])
 					{
+						 
 						this->cropImage->SetPixel(j-x1,i-y1,Color::White);
 					}
 					else
