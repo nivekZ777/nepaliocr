@@ -433,7 +433,10 @@ private: System::Void addChar_Click(System::Object *  sender, System::EventArgs 
 				 }
 				 this->combineChar->Text = text;
 			 }
-			 
+			 /*if(numOfElement>0)
+			 {
+				 this->buttonCompleted->Enabled = true;
+			 }*/
 
 
 
@@ -460,23 +463,35 @@ private: System::Void trainButton_Click(System::Object *  sender, System::EventA
 				 sw = System::IO::File::AppendText(this->modelTrainDBPath);
 				 sw->WriteLine(this->modelName);
 
- 
+
+				 /*for(int i=0;i<this->alForCharacters->Count;i++)
+				 {
+					 tempStr = this->slForCharacters->GetByIndex(slForCharacters->IndexOfKey(alForCharacters[i]))->ToString();
+					 sw->WriteLine(tempStr);
+				 }*/
+
 				 this->charEnumerator=this->alForCharacters->GetEnumerator();
 					 //for(int j=0;j<numOfElement;j++)
 
 				while(this->charEnumerator->MoveNext())
+//				 for(int i=0;i<this->alForCharacters->Count;i++)
 				 {
+					 //System::String* tmp=*dynamic_cast<__box System::String*>(this->charEnumerator->Current);
 					 System::String* tmp=(String*)this->charEnumerator->Current;
 					 tempStr = this->slForCharacters->GetByIndex(slForCharacters->IndexOfKey(tmp))->ToString();
-
+					 //tempStr = this->slForCharacters->GetByIndex(slForCharacters->IndexOfKey(this->charEnumerator->Current)->ToString());
 					 sw->WriteLine(tempStr);
 				 }
 				 sw->WriteLine("*");
 				 sw->Close();
 				 this->characterBox->Text = "";
 				 this->characterBox->SelectedIndex = -1;
+				 //this->labelRecWord->Text = "";
 				 this->alForCharacters->Clear();
 
+				 // disable some buttons
+				 //this->buttonCompleted->Enabled = false;
+				 //this->groupBox1->Enabled = false;
 				 
 			 }
 			 catch(System::Exception* ex)
