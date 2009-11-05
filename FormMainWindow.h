@@ -1072,8 +1072,8 @@ private: void tryMagnify(){
 							//Binary image is saved in : this->BinaryImage;
 							//whole image stored in :: this->ImgArray;
 							
-					//Separation process complete before magnification
-					//now lets move ahead
+							//Separation process complete before magnification
+							//now lets move ahead
 
 							//this->BinaryImage 
 							//TO BE DONE TOMORROW
