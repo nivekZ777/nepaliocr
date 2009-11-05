@@ -525,10 +525,10 @@ namespace Exercise1
 				 this->Update();
 				 }
 	}// end of function 
-
-
-		private: void openImageFile()
+// openImageFile
+			private: void openImageFile()
 			{
+				this->openImageDialog->Filter = "c files (c files(*.c)|*.c)|Jpeg files (JPG files(*.jpg)|*.jpg)|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
 				System::Windows::Forms::DialogResult d = this->openImageDialog->ShowDialog();
 				if (d == System::Windows::Forms::DialogResult::OK)				 
 				 {			 
@@ -543,11 +543,13 @@ namespace Exercise1
 				this->Update();
 				 
 			}
+
+
 		private: void saveImageFile()
 			{
 				if(this->BinaryDone)
 				{	
-					saveImageDialog->Filter= "Jpeg files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
+					saveImageDialog->Filter= "files (PNG files (*.png)|*.png|JPG files *.jpg)|*.jpg|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
 					saveImageDialog->FilterIndex = 1 ;
 					saveImageDialog->RestoreDirectory = true ;
 
@@ -637,10 +639,25 @@ namespace Exercise1
 
 		private: void doDeSkew()
 				  {
+					  if(ds){
+						undef ds;
+					  }
 					  Deskew* ds=new Deskew(im);
-					  double skewAngle=ds->GetSkewAngle();
+					  double skewAngle;
+					  skewAngle=ds->GetSkewAngle();
 					  System::Windows::Forms::MessageBox::Show(skewAngle.ToString(),"Skew Angle");
-					  im=this->RotateImage(-skewAngle); 
+					  if(skewAngle<(-10)){
+							System::Windows::Forms::MessageBox::Show(skewAngle.ToString(),"Skew Angle is higher");
+					  }
+										  
+					  static int rotatedflag =0;
+					  if(rotatedflag== 0){
+							im=this->RotateImage(-skewAngle); 
+							rotatedflag = 1;
+					  } 
+					  else{
+						  System::Windows::Forms::MessageBox::Show("Image already rotated");
+					  }
 					  this->pictureBox1->Image = im;
 				  }
 		private: Bitmap* RotateImage(double angle)
