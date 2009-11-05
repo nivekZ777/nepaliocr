@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="OCR"
-	ProjectGUID="{C2EFC1D3-8175-48A0-A977-302E79AF620A}"
-	RootNamespace="Exercise1"
+	Name="deskew"
+	ProjectGUID="{5CDF2CCC-F69D-4682-8B14-8E757D0ECE92}"
+	RootNamespace="tryDeskew"
 	Keyword="ManagedCProj">
 	<Platforms>
 		<Platform
@@ -126,22 +126,7 @@
 				RelativePath=".\AssemblyInfo.cpp">
 			</File>
 			<File
-				RelativePath=".\FileManipulating.cpp">
-			</File>
-			<File
 				RelativePath=".\Form1.cpp">
-			</File>
-			<File
-				RelativePath=".\HShell.cpp">
-			</File>
-			<File
-				RelativePath=".\myBitmapLoader.cpp">
-			</File>
-			<File
-				RelativePath=".\RecognitionForm.cpp">
-			</File>
-			<File
-				RelativePath=".\RecognitionProcess.cpp">
 			</File>
 			<File
 				RelativePath=".\stdafx.cpp">
@@ -158,97 +143,35 @@
 						UsePrecompiledHeader="1"/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\ThresholedValue.cpp">
-			</File>
-			<File
-				RelativePath=".\TrainingForm.cpp">
-			</File>
-			<File
-				RelativePath=".\TrainingProcess.cpp">
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\Convolution.h">
-			</File>
-			<File
 				RelativePath=".\Deskew.h">
 			</File>
 			<File
-				RelativePath=".\FileManipulating.h">
-			</File>
-			<File
-				RelativePath=".\FormMainWindow.h"
+				RelativePath=".\Form1.h"
 				FileType="3">
 				<File
-					RelativePath=".\FormMainWindow.resX">
+					RelativePath=".\Form1.resX">
 					<FileConfiguration
 						Name="Debug|Win32">
 						<Tool
 							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/Exercise1.FormMainWindow.resources"/>
+							ResourceFileName="$(IntDir)/tryDeskew.Form1.resources"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/Exercise1.FormMainWindow.resources"/>
+							ResourceFileName="$(IntDir)/tryDeskew.Form1.resources"/>
 					</FileConfiguration>
 				</File>
 			</File>
 			<File
 				RelativePath=".\HoughLine.h">
-			</File>
-			<File
-				RelativePath=".\HShell.h">
-			</File>
-			<File
-				RelativePath=".\Line.h">
-			</File>
-			<File
-				RelativePath=".\myBitmapLoader.h"
-				FileType="3">
-				<File
-					RelativePath=".\myBitmapLoader.resX">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/OCR.myBitmapLoader.resources"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/OCR.myBitmapLoader.resources"/>
-					</FileConfiguration>
-				</File>
-			</File>
-			<File
-				RelativePath=".\RecognitionForm.h"
-				FileType="3">
-				<File
-					RelativePath=".\RecognitionForm.resX">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/OCR.RecognitionForm.resources"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/OCR.RecognitionForm.resources"/>
-					</FileConfiguration>
-				</File>
-			</File>
-			<File
-				RelativePath=".\RecognitionProcess.h">
 			</File>
 			<File
 				RelativePath=".\resource.h">
@@ -257,41 +180,7 @@
 				RelativePath=".\rgbConvert.h">
 			</File>
 			<File
-				RelativePath=".\Separate.h">
-			</File>
-			<File
 				RelativePath=".\stdafx.h">
-			</File>
-			<File
-				RelativePath=".\ThresholedValue.h">
-			</File>
-			<File
-				RelativePath=".\TrainingForm.h"
-				FileType="3">
-				<File
-					RelativePath=".\TrainingForm.resX">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/OCR.TrainingForm.resources"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/OCR.TrainingForm.resources"/>
-					</FileConfiguration>
-				</File>
-			</File>
-			<File
-				RelativePath=".\TrainingProcess.h">
-			</File>
-			<File
-				RelativePath=".\Unit.h">
-			</File>
-			<File
-				RelativePath=".\Word.h">
 			</File>
 		</Filter>
 		<Filter
@@ -303,9 +192,6 @@
 			</File>
 			<File
 				RelativePath=".\app.rc">
-			</File>
-			<File
-				RelativePath=".\myIcon.ico">
 			</File>
 		</Filter>
 		<File
