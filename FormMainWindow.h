@@ -12,7 +12,7 @@
 #pragma once
 
 
-namespace Exercise1
+namespace NepaliOCR
 {
 	using namespace System;
 	using namespace System::Data;
@@ -42,6 +42,9 @@ namespace Exercise1
 			this->BinaryDone=false;
 			this->ImageLoaded=false;
 			this->SeparateDone=false;
+			this->ContrastDone=false;
+			this->meanDone=false;
+			this->deskewDone=false;
 
 			InitializeComponent();
 
@@ -95,6 +98,10 @@ namespace Exercise1
 	private: bool BinaryDone;
 	private: bool ImageLoaded;
 			 bool SeparateDone;
+			 bool ContrastDone;
+			 bool meanDone;
+			 bool deskewDone;
+
 
 	private: int numberOfLines;
 	private: Line* Lines; 
@@ -128,6 +135,7 @@ namespace Exercise1
 	private: System::Windows::Forms::Button *  deSkew;
 	private: System::Windows::Forms::Button *  train;
 	private: System::Windows::Forms::Button *  recognize;
+private: System::Windows::Forms::Button *  fastRecognizeButton;
 
 
 
@@ -157,13 +165,14 @@ namespace Exercise1
 			this->deSkew = new System::Windows::Forms::Button();
 			this->train = new System::Windows::Forms::Button();
 			this->recognize = new System::Windows::Forms::Button();
+			this->fastRecognizeButton = new System::Windows::Forms::Button();
 			this->picture_panel->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// convertToBinary_button
 			// 
 			this->convertToBinary_button->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->convertToBinary_button->Location = System::Drawing::Point(240, 80);
+			this->convertToBinary_button->Location = System::Drawing::Point(232, 80);
 			this->convertToBinary_button->Name = S"convertToBinary_button";
 			this->convertToBinary_button->Size = System::Drawing::Size(72, 24);
 			this->convertToBinary_button->TabIndex = 5;
@@ -194,7 +203,7 @@ namespace Exercise1
 			// 
 			this->openImage->BackColor = System::Drawing::Color::Transparent;
 			this->openImage->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->openImage->Location = System::Drawing::Point(224, 8);
+			this->openImage->Location = System::Drawing::Point(64, 8);
 			this->openImage->Name = S"openImage";
 			this->openImage->Size = System::Drawing::Size(112, 48);
 			this->openImage->TabIndex = 1;
@@ -203,13 +212,12 @@ namespace Exercise1
 			// 
 			// openImageDialog
 			// 
-			this->openImageDialog->DefaultExt = S"*.jpg";
-			this->openImageDialog->Filter = S" \"JPEG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|GIF Files (*.gif)|*.gif\"";
+			this->openImageDialog->Filter = S"Image Files(*.BMP;*.JPG;*.GIF;*.png)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*";
 			// 
 			// separate_button
 			// 
 			this->separate_button->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->separate_button->Location = System::Drawing::Point(352, 80);
+			this->separate_button->Location = System::Drawing::Point(344, 80);
 			this->separate_button->Name = S"separate_button";
 			this->separate_button->TabIndex = 6;
 			this->separate_button->Text = S"SEPARATE";
@@ -222,7 +230,8 @@ namespace Exercise1
 			// saveImage
 			// 
 			this->saveImage->BackColor = System::Drawing::Color::WhiteSmoke;
-			this->saveImage->Location = System::Drawing::Point(424, 8);
+			this->saveImage->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->saveImage->Location = System::Drawing::Point(640, 8);
 			this->saveImage->Name = S"saveImage";
 			this->saveImage->Size = System::Drawing::Size(112, 48);
 			this->saveImage->TabIndex = 2;
@@ -233,7 +242,7 @@ namespace Exercise1
 			// 
 			this->imContrast->BackColor = System::Drawing::Color::Transparent;
 			this->imContrast->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->imContrast->Location = System::Drawing::Point(24, 80);
+			this->imContrast->Location = System::Drawing::Point(40, 80);
 			this->imContrast->Name = S"imContrast";
 			this->imContrast->TabIndex = 3;
 			this->imContrast->Text = S"CONTRAST";
@@ -242,7 +251,7 @@ namespace Exercise1
 			// meanRemoval
 			// 
 			this->meanRemoval->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->meanRemoval->Location = System::Drawing::Point(128, 80);
+			this->meanRemoval->Location = System::Drawing::Point(136, 80);
 			this->meanRemoval->Name = S"meanRemoval";
 			this->meanRemoval->TabIndex = 4;
 			this->meanRemoval->Text = S"MEAN";
@@ -251,7 +260,7 @@ namespace Exercise1
 			// deSkew
 			// 
 			this->deSkew->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->deSkew->Location = System::Drawing::Point(464, 79);
+			this->deSkew->Location = System::Drawing::Point(456, 79);
 			this->deSkew->Name = S"deSkew";
 			this->deSkew->TabIndex = 7;
 			this->deSkew->Text = S"DE-SKEW";
@@ -259,7 +268,8 @@ namespace Exercise1
 			// 
 			// train
 			// 
-			this->train->Location = System::Drawing::Point(576, 80);
+			this->train->Cursor = System::Windows::Forms::Cursors::Hand;
+			this->train->Location = System::Drawing::Point(568, 80);
 			this->train->Name = S"train";
 			this->train->TabIndex = 8;
 			this->train->Text = S"TRAIN";
@@ -267,12 +277,22 @@ namespace Exercise1
 			// 
 			// recognize
 			// 
+			this->recognize->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->recognize->Location = System::Drawing::Point(680, 80);
 			this->recognize->Name = S"recognize";
 			this->recognize->Size = System::Drawing::Size(88, 23);
 			this->recognize->TabIndex = 9;
 			this->recognize->Text = S"RECOGNIZE";
 			this->recognize->Click += new System::EventHandler(this, recognize_Click);
+			// 
+			// fastRecognizeButton
+			// 
+			this->fastRecognizeButton->Location = System::Drawing::Point(256, 8);
+			this->fastRecognizeButton->Name = S"fastRecognizeButton";
+			this->fastRecognizeButton->Size = System::Drawing::Size(88, 48);
+			this->fastRecognizeButton->TabIndex = 10;
+			this->fastRecognizeButton->Text = S"Fast Recognize";
+			this->fastRecognizeButton->Click += new System::EventHandler(this, fastRecognizeButton_Click);
 			// 
 			// Form1
 			// 
@@ -281,6 +301,7 @@ namespace Exercise1
 			this->AutoScroll = true;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->ClientSize = System::Drawing::Size(794, 518);
+			this->Controls->Add(this->fastRecognizeButton);
 			this->Controls->Add(this->recognize);
 			this->Controls->Add(this->train);
 			this->Controls->Add(this->meanRemoval);
@@ -406,6 +427,8 @@ namespace Exercise1
 		 */
 		private: void Contrast(int nContrast)
 		{
+
+			
 			this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
 			try{
 			double pixel = 0, contrast = (100.0+nContrast)/100.0;
@@ -480,6 +503,7 @@ namespace Exercise1
 				System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to Improve the Contrast!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 			}
 		this->Cursor = System::Windows::Forms::Cursors::Default;
+	
 
 //			return true;
 		}
@@ -490,7 +514,7 @@ namespace Exercise1
 					//if (this->BinaryDone)
 					//	return;
 				 
-					this->BinaryDone = true;
+					
 					
 					try{
 					 // set the cursor to wait.... 
@@ -516,6 +540,7 @@ namespace Exercise1
 					 // set the cursor to Default.... 
 						this->Cursor = System::Windows::Forms::Cursors::Default;
 						System::Windows::Forms::MessageBox::Show(this->intLevel.ToString()/*fLevel.ToString()*/,"Threshold Value");
+						this->BinaryDone=true;
 					}
 				 catch(System::Exception* ex)
 					{
@@ -525,31 +550,39 @@ namespace Exercise1
 				 this->Update();
 				 }
 	}// end of function 
-// openImageFile
-			private: void openImageFile()
+
+
+		private: void openImageFile()
 			{
-				this->openImageDialog->Filter = "c files (c files(*.c)|*.c)|Jpeg files (JPG files(*.jpg)|*.jpg)|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
 				System::Windows::Forms::DialogResult d = this->openImageDialog->ShowDialog();
 				if (d == System::Windows::Forms::DialogResult::OK)				 
 				 {			 
-					this->BinaryDone = false;
-					this->SeparateDone=false;
+					
+
+					//reset all flags after successfull image loading
 					this->ImageLoaded = true;
+					
+					this->BinaryDone=false;
+					this->SeparateDone=false;
+					this->ContrastDone=false;
+					this->meanDone=false;
+					this->deskewDone=false;
 					// creating a bitmap
 					im = new Bitmap(this->openImageDialog->OpenFile());
 					this->pictureBox1->Image = im;
 					g=this->pictureBox1->CreateGraphics();
+					
+					
+					//System::Windows::Forms::MessageBox::Show("Image successfully loaded","Success");
 				 }
 				this->Update();
 				 
 			}
-
-
 		private: void saveImageFile()
 			{
 				if(this->BinaryDone)
 				{	
-					saveImageDialog->Filter= "files (PNG files (*.png)|*.png|JPG files *.jpg)|*.jpg|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
+					saveImageDialog->Filter= "PNG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
 					saveImageDialog->FilterIndex = 1 ;
 					saveImageDialog->RestoreDirectory = true ;
 
@@ -562,6 +595,10 @@ namespace Exercise1
 							save->Save(saveImageDialog->FileName);
 							
 							}
+				}
+				else{
+					System::Windows::Forms::MessageBox::Show("The file was not saved because \n the image processing is not completed", "Action Incomplete");
+					
 				}
 				 
 			}
@@ -602,7 +639,7 @@ namespace Exercise1
 						 }
 
 					 }
-					 if(this->BinaryDone)
+					 if(this->BinaryDone==true) //If binarization is done
 						{
 
 							if(this->SeparateDone==false)
@@ -621,17 +658,12 @@ namespace Exercise1
 								this->separateChar();
 							}
 
-
-
-
-
-
-
 							//sp->drawHorizontalHist();
 							//Pen* p=new Pen(Color::Red,1);
 							//g->DrawLine(p,50,50,150,150);
 							//g->DrawRectangle(p,50,50,150,150);//x,y,width,height
 						}
+					 
 					this->Update();
 				 }
 
@@ -639,26 +671,39 @@ namespace Exercise1
 
 		private: void doDeSkew()
 				  {
-					  if(ds){
-						undef ds;
-					  }
-					  Deskew* ds=new Deskew(im);
-					  double skewAngle;
-					  skewAngle=ds->GetSkewAngle();
+						static bool skewedFlag;
+						/*
+						*SkewedFlag checks whether the image is deskewed or not.
+						*/
+
+
+					if(skewedFlag==true){
+											 
+						 System::Windows::Forms::MessageBox::Show(" The image is already rotated","Repeated Action");
+						 					  }
+				
+					Deskew* ds=new Deskew(im);
+					
+					/*
+					*If the image is not deskewed even once .. then do deskew
+					*/
+					if(skewedFlag==false){
+					  double skewAngle=ds->GetSkewAngle();
+
 					  System::Windows::Forms::MessageBox::Show(skewAngle.ToString(),"Skew Angle");
-					  if(skewAngle<(-10)){
-							System::Windows::Forms::MessageBox::Show(skewAngle.ToString(),"Skew Angle is higher");
-					  }
-										  
-					  static int rotatedflag =0;
-					  if(rotatedflag== 0){
-							im=this->RotateImage(-skewAngle); 
-							rotatedflag = 1;
-					  } 
-					  else{
-						  System::Windows::Forms::MessageBox::Show("Image already rotated");
-					  }
+
+					  im=this->RotateImage(-skewAngle); 
+
 					  this->pictureBox1->Image = im;
+					  skewedFlag = true;
+					  /*
+					  *Set skewedFlag to true after one successful deskew action
+					  */
+					  System::Windows::Forms::MessageBox::Show(" Image rotated successfully","Action Complete");
+
+					}
+					
+					
 				  }
 		private: Bitmap* RotateImage(double angle)
 					{
@@ -672,86 +717,91 @@ namespace Exercise1
 						gr->Dispose();
 						return tmp;
 					}
+		
+		
 		private: void Recognize()
-				 {
-					 RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImgArray);
+		{
+								 
+						RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImgArray);
 
-			 // load the transcription of the models
-			 this->slModelTranscription = rp->LoadModelTranscriptions(this->modelTrainDBPath);
-			 
-			 int lineCount = this->numberOfLines;
-			 int wordCount = 0;
-			 int totalUnit = 0;
-			 int unitCount = 0;
-			 int left_x,right_x,top_y,bottom_y;
-			 System::String* wordToRec;
-			 System::String* dirOfRecFile = rp->recognitionTempFileDir;
+						// load the transcription of the models
+						this->slModelTranscription = rp->LoadModelTranscriptions(this->modelTrainDBPath);
+						 
+						int lineCount = this->numberOfLines;
+						int wordCount = 0;
+						int totalUnit = 0;
+						int unitCount = 0;
+						int left_x,right_x,top_y,bottom_y;
+						System::String* wordToRec;
+						System::String* dirOfRecFile = rp->recognitionTempFileDir;
 
-			 for(int i=0; i<lineCount;i++)
-			 {				 
-				 top_y = this->Lines[i].getStartRow();//line start
-				 bottom_y = this->Lines[i].getEndRow();//line end
+						for(int i=0; i<lineCount;i++)
+						{				 
+							top_y = this->Lines[i].getStartRow();//line start
+							bottom_y = this->Lines[i].getEndRow();//line end
 
-				 wordCount = this->Lines[i].getTotalWord();
-				 for(int j=0;j<wordCount;j++)
-				 {					 
-					 unitCount = this->Lines[i].Words[j].getTotalUnit();					 
-					 for(int k=0; k<unitCount; k++)
-					 {
-						 left_x = this->Lines[i].Words[j].Units[k].getStartColumn();//wrod start
-						 right_x = this->Lines[i].Words[j].Units[k].getEndColumn();//word end
+							wordCount = this->Lines[i].getTotalWord();
+							for(int j=0;j<wordCount;j++)
+							{					 
+								unitCount = this->Lines[i].Words[j].getTotalUnit();					 
+								for(int k=0; k<unitCount; k++)
+								{
+									left_x = this->Lines[i].Words[j].Units[k].getStartColumn();//wrod start
+									right_x = this->Lines[i].Words[j].Units[k].getEndColumn();//word end
 
-						 // setting the actual image boundary
-						 rp->SetImageBoundary(left_x,right_x,top_y,bottom_y);
-						 totalUnit++;
-						 wordToRec = wordToRec->Concat(dirOfRecFile,totalUnit.ToString(),".txt");	
-						 rp->PrepareWordData(wordToRec);
-					 } 
-				 }//wordcount
-			 }
-			  
-			 // preparing the script file to be recognized
-			 try
-			 {
-				 System::IO::StreamWriter* sw = System::IO::File::AppendText(rp->scriptFilePath);	
-				 for(int i=1;i<=totalUnit;i++)	
-				 {
-					 System::String* tmp=tmp->Concat((String*)"\"",dirOfRecFile,i.ToString(),(String*)".txt",(String*)"\"");
-					 sw->WriteLine(tmp);
-					 sw->Flush();
-					 //sw->WriteLine("\"" + dirOfRecFile+i + ".txt" + "\"");
-				 }
-				 sw->Close();
-			 }
-			 catch(System::Exception* ex)
-			 {
-				 System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to prepare the script file!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-				 exit(0);
-			 }
+									// setting the actual image boundary
+									rp->SetImageBoundary(left_x,right_x,top_y,bottom_y);
+									totalUnit++;
+									wordToRec = wordToRec->Concat(dirOfRecFile,totalUnit.ToString(),".txt");	
+									rp->PrepareWordData(wordToRec);
+								} 
+							}//wordcount
+						}
+						  
+						// preparing the script file to be recognized
+						try
+						{
+							System::IO::StreamWriter* sw = System::IO::File::AppendText(rp->scriptFilePath);	
+							for(int i=1;i<=totalUnit;i++)	
+							{
+								System::String* tmp=tmp->Concat((String*)"\"",dirOfRecFile,i.ToString(),(String*)".txt",(String*)"\"");
+								sw->WriteLine(tmp);
+								sw->Flush();
+								//sw->WriteLine("\"" + dirOfRecFile+i + ".txt" + "\"");
+							}
+							sw->Close();
+						}
+						catch(System::Exception* ex)
+						{
+							System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to prepare the script file!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+							exit(0);
+						}
 
-			 // recognize the words from the features file using the Viterbi decoder of the HTK Toolkit HVite
-			 // then read the Master Labeled File(MLF) and fetch the output models
-			 this->alModelRec = rp->RecognizeByHTK();
-			
-			 
+						// recognize the words from the features file using the Viterbi decoder of the HTK Toolkit HVite
+						// then read the Master Labeled File(MLF) and fetch the output models
+						this->alModelRec = rp->RecognizeByHTK();
+						
+						 
 
-			 
-			 this->ProvideOutput();
+						 
+						this->ProvideOutput();
 
-			 /* after recognizing is done remove the script file and also the associated image features files */
-			 // remove the script file
-			 
-			 System::IO::File::Delete(rp->scriptFilePath);
+						/* after recognizing is done remove the script file and also the associated image features files */
+						// remove the script file
+						 
+						System::IO::File::Delete(rp->scriptFilePath);
 
-			 // remove all the temporary word image feature files
-			 for(int i=1;i<=totalUnit;i++)	
-			 {
-				 System::String* tmp=tmp->Concat(dirOfRecFile,i.ToString(),".txt");
-				 //System::IO::File::Delete(dirOfRecFile+i+".txt");
-				 System::IO::File::Delete(tmp);
-			 }
+						// remove all the temporary word image feature files
+						for(int i=1;i<=totalUnit;i++)	
+						{
+							System::String* tmp=tmp->Concat(dirOfRecFile,i.ToString(),".txt");
+							//System::IO::File::Delete(dirOfRecFile+i+".txt");
+							System::IO::File::Delete(tmp);
+						}
 
-			 }
+		}
+
+
 		private: void LoadFromFile()
 		 {
 			System::IO::StreamReader* sr = System::IO::StreamReader::Null;
@@ -876,30 +926,38 @@ namespace Exercise1
 
 		 }
 
-
-		
-
-
-
-
-
-
-
 private: System::Void close_button_Click_1(System::Object *  sender, System::EventArgs *  e)
 			 {
 				//this->Dispose(true);
 				this->makeBinary();
+			
+					
 			 }
 
 
 private: System::Void openImage_Click(System::Object *  sender, System::EventArgs *  e)
 			{
 				this->openImageFile();
+				
+				
 			}
 
 private: System::Void separate_button_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 this->separate();
+			 if( (this->ImageLoaded==true  ) && (this->BinaryDone==true) )
+			 {
+				this->separate();
+			 }
+			 else if( (this->ImageLoaded==false  ) )
+			 {
+				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
+			 }
+			 else if(this->BinaryDone==false)
+					 {
+						 //System::Windows::Forms::Show("Please binarize the image before separating","Binarization not done");
+						 System::Windows::Forms::MessageBox::Show("Please binarize the image first","Binarization not done");
+
+				}
 		 }
 
 private: System::Void saveImage_Click(System::Object *  sender, System::EventArgs *  e)
@@ -909,39 +967,112 @@ private: System::Void saveImage_Click(System::Object *  sender, System::EventArg
 
 private: System::Void imContrast_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
+			if(this->ImageLoaded==true){
 			this->Contrast(10);
+			this->ContrastDone=true;
 			this->Update();
+			 }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
+			 }
 		 }
 
 private: System::Void meanRemoval_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 this->MeanRemoval(9);
-			 this->Update();
+
+			 if( (this->ImageLoaded==true) && (this->ContrastDone==true) ){
+				this->MeanRemoval(9);
+				this->meanDone= true;
+				this->Update();
+				
+			 }
+			 else if( (this->ImageLoaded==true) && (this->ContrastDone==false ) ){
+				 System::Windows::Forms::MessageBox::Show("Please set the contrast first","Contrast not done");
+			 }
+			 else if( this->ImageLoaded==false){
+				 System::Windows::Forms::MessageBox::Show("Please Load the image first","Image not loaded");
+			 }
+
 		 }
 
 private: System::Void deSkew_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
+			 if(this->ImageLoaded==true){
 			 this->doDeSkew();
+			 }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Please Load the image first","Image not loaded");
+			 }
 		 }
 
 private: System::Void train_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
+			 if(this->ImageLoaded){
+
 			 OCR::TrainingForm* tw=new OCR::TrainingForm();
 			 tw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
 			 //this->slForCharacters=tw->getSortedList();
 			 //tw->defineVar(this->BArray,this->Lines,this->numberOfLines);
 			 tw->ShowDialog();
 
-
+				}
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Image not loaded, Please load image first ","Image Not loaded");
+			 }
 			 //TrainWindow* tr=new TrainWindow();
 			
 		 }
 
 private: System::Void recognize_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 this->Recognize();
+			 if(this->ImageLoaded){
+				 if(this->SeparateDone){
+					 //if the image is loaded and words are separated.. recognition process is started
+						this->Recognize();
+
+				 }
+				 else{
+					 System::Windows::Forms::MessageBox::Show("First Complete the preprocessing steps, words are not separated","Preprocessing steps not complete");
+				 }
+			 }
+			 else{
+				 //Image is not loaded
+				 System::Windows::Forms::MessageBox::Show("Image not loaded, Please load the image first","Image not loaded");
+			 }
 			 //OCR::RecognitionForm* rw=new OCR::RecognitionForm();
 			 //rw->ShowDialog();
+		 }
+
+private: System::Void fastRecognizeButton_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 if(this->ImageLoaded==true){
+				 
+				//contrast
+				this->Contrast(10);
+				this->ContrastDone=true;
+				this->Update();
+				
+				//mean removal
+				this->MeanRemoval(9);
+				this->meanDone= true;
+				this->Update();
+
+				//Binarization
+				this->makeBinary();
+				
+				//separation
+				this->separate();
+
+				//Recognition
+				 this->Recognize();
+
+
+			 }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
+
+			 }
+
 		 }
 
 };

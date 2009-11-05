@@ -11,8 +11,6 @@ public __gc class Deskew
 public:
 	static Bitmap* cBmp;
 	static double cAlphaStart= -0;
-//static double cAlphaStart= -20;
-
 	static double cAlphaStep= 0.2;
 	static int cSteps= 40 * 5;
 	static double *cSinA;
@@ -63,8 +61,8 @@ void Deskew::Calc()
 
 	int hMin=(int)bMin;
 	int hMax=(int)bMax;
-	System::Windows::Forms::MessageBox::Show(hMin.ToString()/*fLevel.ToString()*/,"bMin");
-	System::Windows::Forms::MessageBox::Show(hMax.ToString()/*fLevel.ToString()*/,"bMax");					
+	//System::Windows::Forms::MessageBox::Show(hMin.ToString()/*fLevel.ToString()*/,"bMin");
+	//System::Windows::Forms::MessageBox::Show(hMax.ToString()/*fLevel.ToString()*/,"bMax");					
 
 	Init();
 
@@ -205,7 +203,6 @@ HoughLine* Deskew::GetTop(int count)[]
 	//		sw->WriteLine(cSteps);
 	//		sw->WriteLine(dIndex);
 	//		sw->WriteLine(AlphaIndex);
-
 			h1[i]->Alpha=GetAlpha(AlphaIndex);
 			h1[i]->d=dIndex + cDMin;
 		}
