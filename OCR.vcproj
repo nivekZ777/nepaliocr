@@ -144,6 +144,9 @@
 				RelativePath=".\RecognitionProcess.cpp">
 			</File>
 			<File
+				RelativePath=".\Separate.cpp">
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -235,6 +238,9 @@
 				</File>
 			</File>
 			<File
+				RelativePath=".\myWindowSeparate.h">
+			</File>
+			<File
 				RelativePath=".\RecognitionForm.h"
 				FileType="3">
 				<File
@@ -319,8 +325,5 @@
 		</File>
 	</Files>
 	<Globals>
-		<Global
-			Name="RESOURCE_FILE"
-			Value="app.rc"/>
 	</Globals>
 </VisualStudioProject>
