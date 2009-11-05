@@ -809,7 +809,7 @@ float GetFltArg(void)
    
    if (k != INTARG && k != FLOATARG) 
       ArgError("Float");
-   return atof(GetNextArg(TRUE));
+   return (float)atof(GetNextArg(TRUE));
 
 }
 
@@ -1523,7 +1523,7 @@ Boolean temp;
 Boolean KeyPressed(int tWait)
 {
    Boolean rtn=FALSE; 
-   char c[1];
+	//   char c[1];
      
 #ifdef UNIX
    {
