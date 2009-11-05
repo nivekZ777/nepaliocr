@@ -118,8 +118,8 @@ namespace OCR
 	private: System::Windows::Forms::Label *  label7;
 	private: System::Windows::Forms::Button *  button1;
 	private: System::Windows::Forms::Button *  button2;
-	private: System::Windows::Forms::Button *  button3;
-	private: System::Windows::Forms::Button *  button4;
+
+
 
 
 
@@ -138,7 +138,6 @@ namespace OCR
 		{
 			this->panel_myWindow = new System::Windows::Forms::Panel();
 			this->groupBox2 = new System::Windows::Forms::GroupBox();
-			this->button4 = new System::Windows::Forms::Button();
 			this->button2 = new System::Windows::Forms::Button();
 			this->button1 = new System::Windows::Forms::Button();
 			this->label8 = new System::Windows::Forms::Label();
@@ -147,7 +146,6 @@ namespace OCR
 			this->label2 = new System::Windows::Forms::Label();
 			this->pictureBox1 = new System::Windows::Forms::PictureBox();
 			this->groupBox1 = new System::Windows::Forms::GroupBox();
-			this->button3 = new System::Windows::Forms::Button();
 			this->label7 = new System::Windows::Forms::Label();
 			this->label5 = new System::Windows::Forms::Label();
 			this->label3 = new System::Windows::Forms::Label();
@@ -170,7 +168,6 @@ namespace OCR
 			// 
 			// groupBox2
 			// 
-			this->groupBox2->Controls->Add(this->button4);
 			this->groupBox2->Controls->Add(this->button2);
 			this->groupBox2->Controls->Add(this->button1);
 			this->groupBox2->Controls->Add(this->label8);
@@ -184,15 +181,6 @@ namespace OCR
 			this->groupBox2->TabIndex = 5;
 			this->groupBox2->TabStop = false;
 			this->groupBox2->Text = S"Sliced single Image";
-			// 
-			// button4
-			// 
-			this->button4->Location = System::Drawing::Point(24, 264);
-			this->button4->Name = S"button4";
-			this->button4->Size = System::Drawing::Size(72, 16);
-			this->button4->TabIndex = 8;
-			this->button4->Text = S"recognize";
-			this->button4->Click += new System::EventHandler(this, button4_Click);
 			// 
 			// button2
 			// 
@@ -251,7 +239,6 @@ namespace OCR
 			// 
 			// groupBox1
 			// 
-			this->groupBox1->Controls->Add(this->button3);
 			this->groupBox1->Controls->Add(this->label7);
 			this->groupBox1->Controls->Add(this->label5);
 			this->groupBox1->Controls->Add(this->label3);
@@ -263,14 +250,6 @@ namespace OCR
 			this->groupBox1->TabIndex = 4;
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = S"Input Image ";
-			// 
-			// button3
-			// 
-			this->button3->Location = System::Drawing::Point(40, 248);
-			this->button3->Name = S"button3";
-			this->button3->TabIndex = 6;
-			this->button3->Text = S"recognize";
-			this->button3->Click += new System::EventHandler(this, button3_Click);
 			// 
 			// label7
 			// 
@@ -326,10 +305,12 @@ namespace OCR
 	public:
 		void defineVar(int** ImgArray,bool** BArray,Line* Lines,int numberOfLines)
 			{
+				//System::Windows::Forms::MessageBox::Show( numberOfLines.ToString(),"number of lines");
 				this->ImageArray=ImgArray;
 				this->BinArray=BArray;
 				this->LineInfo=Lines;
 				this->lineCount=numberOfLines;
+				this->numberOfLines = numberOfLines;
 				this->display(this->lineno,this->wordno,this->charno);
 //				this->LoadComboBoxFromFile();
 			}
@@ -439,7 +420,7 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 				 this->Update;
 		 }
 	
-
+/* ///	Commented sept14
 	private:
 		void recognize(){//ImageArray
 							
@@ -470,13 +451,17 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 						System::String* dirOfRecFile = rp->recognitionTempFileDir;
 
 						for(int i=0; i<lineCount;i++)
-						{				 
+						{		
+							
+							System::Windows::Forms::MessageBox::Show(i.ToString(),"I");
+							
 							top_y = this->Lines[i].getStartRow();//line start
 							bottom_y = this->Lines[i].getEndRow();//line end
 
 							wordCount = this->Lines[i].getTotalWord();
 							for(int j=0;j<wordCount;j++)
-							{					 
+							{		
+								System::Windows::Forms::MessageBox::Show(j.ToString(),"J");
 								unitCount = this->Lines[i].Words[j].getTotalUnit();					 
 								for(int k=0; k<unitCount; k++)
 								{
@@ -523,7 +508,7 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 
 						/* after recognizing is done remove the script file and also the associated image features files */
 						// remove the script file
-						 
+	/*	///	Commented sept14			 
 						System::IO::File::Delete(rp->scriptFilePath);
 
 						// remove all the temporary word image feature files
@@ -536,6 +521,10 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 
 		
 		}
+
+		*/ ///	Commented sept14
+		private: void recognize(){
+				 }
 		private: void recognize_small_chars(){
 						
 				 }
@@ -667,15 +656,7 @@ private: void LoadFromFile()
 			 }
 
 
-private: System::Void button3_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 this->recognize();
-		 }
 
-private: System::Void button4_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 this->recognize();
-		 }
 
 };
 }
