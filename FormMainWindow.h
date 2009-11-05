@@ -15,7 +15,7 @@ namespace OCR
 {
 	using namespace System;
 	using namespace System::Data;
-	using namespace System::ComponentModel;
+	using namespace System::ComponentModel; 
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
 	using namespace System::Drawing;
@@ -70,7 +70,10 @@ namespace OCR
 			this->LoadFromFile();
 			
 		}
-  
+
+
+	
+
 	protected:
 		void Dispose(Boolean disposing)
 		{
@@ -141,6 +144,9 @@ namespace OCR
 	private: System::Windows::Forms::Label *  myInfo;
 	private: System::Windows::Forms::Label *  myInfo1;
 	private: System::Windows::Forms::Button *  findMagnification;
+private: System::Windows::Forms::GroupBox *  groupBox1;
+private: System::Windows::Forms::GroupBox *  groupBox2;
+private: System::Windows::Forms::GroupBox *  groupBox3;
 
 
 
@@ -175,13 +181,19 @@ namespace OCR
 			this->myInfo = new System::Windows::Forms::Label();
 			this->myInfo1 = new System::Windows::Forms::Label();
 			this->findMagnification = new System::Windows::Forms::Button();
+			this->groupBox1 = new System::Windows::Forms::GroupBox();
+			this->groupBox2 = new System::Windows::Forms::GroupBox();
+			this->groupBox3 = new System::Windows::Forms::GroupBox();
 			this->picture_panel->SuspendLayout();
+			this->groupBox1->SuspendLayout();
+			this->groupBox2->SuspendLayout();
+			this->groupBox3->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// convertToBinary_button
 			// 
 			this->convertToBinary_button->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->convertToBinary_button->Location = System::Drawing::Point(232, 80);
+			this->convertToBinary_button->Location = System::Drawing::Point(192, 24);
 			this->convertToBinary_button->Name = S"convertToBinary_button";
 			this->convertToBinary_button->Size = System::Drawing::Size(72, 24);
 			this->convertToBinary_button->TabIndex = 5;
@@ -214,7 +226,7 @@ namespace OCR
 			this->openImage->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->openImage->Location = System::Drawing::Point(32, 8);
 			this->openImage->Name = S"openImage";
-			this->openImage->Size = System::Drawing::Size(112, 48);
+			this->openImage->Size = System::Drawing::Size(112, 40);
 			this->openImage->TabIndex = 1;
 			this->openImage->Text = S"OPEN IMAGE";
 			this->openImage->Click += new System::EventHandler(this, openImage_Click);
@@ -226,7 +238,7 @@ namespace OCR
 			// separate_button
 			// 
 			this->separate_button->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->separate_button->Location = System::Drawing::Point(320, 80);
+			this->separate_button->Location = System::Drawing::Point(280, 24);
 			this->separate_button->Name = S"separate_button";
 			this->separate_button->TabIndex = 6;
 			this->separate_button->Text = S"SEPARATE";
@@ -240,7 +252,7 @@ namespace OCR
 			// 
 			this->saveImage->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->saveImage->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->saveImage->Location = System::Drawing::Point(304, 0);
+			this->saveImage->Location = System::Drawing::Point(264, 0);
 			this->saveImage->Name = S"saveImage";
 			this->saveImage->Size = System::Drawing::Size(112, 48);
 			this->saveImage->TabIndex = 2;
@@ -251,7 +263,7 @@ namespace OCR
 			// 
 			this->imContrast->BackColor = System::Drawing::Color::Transparent;
 			this->imContrast->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->imContrast->Location = System::Drawing::Point(40, 80);
+			this->imContrast->Location = System::Drawing::Point(16, 24);
 			this->imContrast->Name = S"imContrast";
 			this->imContrast->TabIndex = 3;
 			this->imContrast->Text = S"CONTRAST";
@@ -260,7 +272,7 @@ namespace OCR
 			// meanRemoval
 			// 
 			this->meanRemoval->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->meanRemoval->Location = System::Drawing::Point(136, 80);
+			this->meanRemoval->Location = System::Drawing::Point(104, 24);
 			this->meanRemoval->Name = S"meanRemoval";
 			this->meanRemoval->TabIndex = 4;
 			this->meanRemoval->Text = S"MEAN";
@@ -278,7 +290,7 @@ namespace OCR
 			// train
 			// 
 			this->train->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->train->Location = System::Drawing::Point(600, 80);
+			this->train->Location = System::Drawing::Point(8, 18);
 			this->train->Name = S"train";
 			this->train->TabIndex = 8;
 			this->train->Text = S"TRAIN";
@@ -287,7 +299,7 @@ namespace OCR
 			// recognize
 			// 
 			this->recognize->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->recognize->Location = System::Drawing::Point(680, 80);
+			this->recognize->Location = System::Drawing::Point(88, 18);
 			this->recognize->Name = S"recognize";
 			this->recognize->Size = System::Drawing::Size(88, 23);
 			this->recognize->TabIndex = 9;
@@ -296,23 +308,23 @@ namespace OCR
 			// 
 			// fastRecognizeButton
 			// 
-			this->fastRecognizeButton->Location = System::Drawing::Point(184, 8);
+			this->fastRecognizeButton->Location = System::Drawing::Point(160, 8);
 			this->fastRecognizeButton->Name = S"fastRecognizeButton";
-			this->fastRecognizeButton->Size = System::Drawing::Size(88, 48);
+			this->fastRecognizeButton->Size = System::Drawing::Size(80, 40);
 			this->fastRecognizeButton->TabIndex = 10;
 			this->fastRecognizeButton->Text = S"Fast Recognize";
 			this->fastRecognizeButton->Click += new System::EventHandler(this, fastRecognizeButton_Click);
 			// 
 			// myInfo
 			// 
-			this->myInfo->Location = System::Drawing::Point(520, 16);
+			this->myInfo->Location = System::Drawing::Point(96, 16);
 			this->myInfo->Name = S"myInfo";
 			this->myInfo->Size = System::Drawing::Size(264, 24);
 			this->myInfo->TabIndex = 11;
 			// 
 			// myInfo1
 			// 
-			this->myInfo1->Location = System::Drawing::Point(440, 16);
+			this->myInfo1->Location = System::Drawing::Point(8, 16);
 			this->myInfo1->Name = S"myInfo1";
 			this->myInfo1->Size = System::Drawing::Size(72, 24);
 			this->myInfo1->TabIndex = 12;
@@ -326,6 +338,41 @@ namespace OCR
 			this->findMagnification->Text = S"Magnification";
 			this->findMagnification->Click += new System::EventHandler(this, findMagnification_Click);
 			// 
+			// groupBox1
+			// 
+			this->groupBox1->Controls->Add(this->myInfo1);
+			this->groupBox1->Controls->Add(this->myInfo);
+			this->groupBox1->Location = System::Drawing::Point(424, 0);
+			this->groupBox1->Name = S"groupBox1";
+			this->groupBox1->Size = System::Drawing::Size(368, 48);
+			this->groupBox1->TabIndex = 14;
+			this->groupBox1->TabStop = false;
+			this->groupBox1->Text = S"Info";
+			// 
+			// groupBox2
+			// 
+			this->groupBox2->Controls->Add(this->train);
+			this->groupBox2->Controls->Add(this->recognize);
+			this->groupBox2->Location = System::Drawing::Point(600, 56);
+			this->groupBox2->Name = S"groupBox2";
+			this->groupBox2->Size = System::Drawing::Size(192, 56);
+			this->groupBox2->TabIndex = 15;
+			this->groupBox2->TabStop = false;
+			this->groupBox2->Text = S"Training/ Recognizing";
+			// 
+			// groupBox3
+			// 
+			this->groupBox3->Controls->Add(this->imContrast);
+			this->groupBox3->Controls->Add(this->meanRemoval);
+			this->groupBox3->Controls->Add(this->convertToBinary_button);
+			this->groupBox3->Controls->Add(this->separate_button);
+			this->groupBox3->Location = System::Drawing::Point(16, 56);
+			this->groupBox3->Name = S"groupBox3";
+			this->groupBox3->Size = System::Drawing::Size(384, 72);
+			this->groupBox3->TabIndex = 16;
+			this->groupBox3->TabStop = false;
+			this->groupBox3->Text = S"Preprocessing";
+			// 
 			// Form1
 			// 
 			this->AccessibleRole = System::Windows::Forms::AccessibleRole::Application;
@@ -333,25 +380,23 @@ namespace OCR
 			this->AutoScroll = true;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->ClientSize = System::Drawing::Size(794, 518);
+			this->Controls->Add(this->groupBox2);
 			this->Controls->Add(this->findMagnification);
-			this->Controls->Add(this->myInfo1);
-			this->Controls->Add(this->myInfo);
 			this->Controls->Add(this->fastRecognizeButton);
-			this->Controls->Add(this->recognize);
-			this->Controls->Add(this->train);
-			this->Controls->Add(this->meanRemoval);
-			this->Controls->Add(this->imContrast);
 			this->Controls->Add(this->saveImage);
-			this->Controls->Add(this->separate_button);
 			this->Controls->Add(this->openImage);
 			this->Controls->Add(this->picture_panel);
-			this->Controls->Add(this->convertToBinary_button);
 			this->Controls->Add(this->deSkew);
+			this->Controls->Add(this->groupBox1);
+			this->Controls->Add(this->groupBox3);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::Fixed3D;
 			this->MaximizeBox = false;
 			this->Name = S"Form1";
 			this->Text = S" Image Processing Part Of Nepali OCR";
 			this->picture_panel->ResumeLayout(false);
+			this->groupBox1->ResumeLayout(false);
+			this->groupBox2->ResumeLayout(false);
+			this->groupBox3->ResumeLayout(false);
 			this->ResumeLayout(false);
 
 		}	
@@ -542,8 +587,10 @@ namespace OCR
 
 //			return true;
 		}
-		private: void makeBinary()
+		public: void makeBinary()
 			 {
+			 
+
 				 if(this->ImageLoaded)
 				 {
 					//if (this->BinaryDone)
@@ -567,7 +614,8 @@ namespace OCR
 						rgbConvert* rgbC = new rgbConvert(im);
 						BArray = rgbC->GetBinaryArray(200);
 						ImgArray = rgbC->GetImageArray( );
-					   	
+					   
+
 					 // Showing the binary image
 						this->BinaryImage = rgbC->GetBinaryImage();
 						this->pictureBox1->Image = this->BinaryImage;
@@ -982,6 +1030,8 @@ private: void tryMagnify(){
 
 			 //Initially Separate the chars from image before magnifying
 			this->binaryArrayForMagnification=new bool*[im->Height];   //declaring array
+			//bool binaryArrayForMagnification is equivalent to bool tmpBArry of separate() function
+						
 			myInfo1->Text = "Image Height";
 			myInfo->Text = im->Height.ToString();
 			 for(int i=0;i<im->Height;i++)
@@ -1013,16 +1063,19 @@ private: void tryMagnify(){
 							//Binary image is saved in : this->BinaryImage;
 							//whole image stored in :: this->ImgArray;
 							
+					//Separation process complete before magnification
+					//now lets move ahead
+
 							//this->BinaryImage 
 							//TO BE DONE TOMORROW
 							OCR::myWindow* mw = new OCR::myWindow(this->BinaryImage);
 							//mw->pictureBox_myWindow->Image = this->binaryArrayForMagnification;
-							mw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
-
+							mw->defineVar(this->ImgArray,this->binaryArrayForMagnification,this->Lines,this->numberOfLines);
 							 //mw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
+
 							mw->ShowDialog();
-							OCR::myWindow* mw1 = new OCR::myWindow(this->im);
-							mw1->ShowDialog();
+							//OCR::myWindow* mw1 = new OCR::myWindow(this->im);
+							//mw1->ShowDialog();
 							
 
 
@@ -1184,14 +1237,15 @@ private: System::Void findMagnification_Click(System::Object *  sender, System::
 		 {
 				  
 			//function to magnify the image
-			 if(this->BinaryDone){
+			 //if(this->BinaryDone){
 					//The image magnification is easier if it is separated first
-					System::Windows::Forms::MessageBox::Show("Looks like the image is separted\n working","Good");
+					//System::Windows::Forms::MessageBox::Show("Looks like the image is separted\n working","Good");
+					this->makeBinary();
 					tryMagnify();
-			 }
-			 else{
-				 System::Windows::Forms::MessageBox::Show("Image is not Binarized","Binarize first");
-			 }
+			 //}
+			 //else{
+			//	 System::Windows::Forms::MessageBox::Show("Image is not Binarized","Binarize first");
+			 //}
 
 
 		 }
