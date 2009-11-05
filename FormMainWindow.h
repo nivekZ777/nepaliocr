@@ -1,8 +1,10 @@
+#include "TrainingForm.h"
 #include "ThresholedValue.h"
 #include "rgbConvert.h"
 #include "Separate.h"
 #include "Convolution.h"
 #include "Deskew.h"
+
 
 
 #pragma once
@@ -38,6 +40,7 @@ namespace Exercise1
 			this->BinaryDone=false;
 			this->ImageLoaded=false;
 //			num_bins=256;
+
 			
 			InitializeComponent();
 		}
@@ -66,6 +69,7 @@ namespace Exercise1
 	private: bool **BArray;
 	private: bool BinaryDone;
 	private: bool ImageLoaded;
+			 
 	
 	//private: Graphics* g;	
 //    private: BinaryImgProcessor* bim;
@@ -82,6 +86,7 @@ namespace Exercise1
 	private: System::Windows::Forms::Button *  imContrast;
 	private: System::Windows::Forms::Button *  meanRemoval;
 	private: System::Windows::Forms::Button *  deSkew;
+	private: System::Windows::Forms::Button *  train;
 
 
 
@@ -108,6 +113,7 @@ namespace Exercise1
 			this->imContrast = new System::Windows::Forms::Button();
 			this->meanRemoval = new System::Windows::Forms::Button();
 			this->deSkew = new System::Windows::Forms::Button();
+			this->train = new System::Windows::Forms::Button();
 			this->picture_panel->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -208,6 +214,14 @@ namespace Exercise1
 			this->deSkew->Text = S"DE-SKEW";
 			this->deSkew->Click += new System::EventHandler(this, deSkew_Click);
 			// 
+			// train
+			// 
+			this->train->Location = System::Drawing::Point(701, 80);
+			this->train->Name = S"train";
+			this->train->TabIndex = 8;
+			this->train->Text = S"Train";
+			this->train->Click += new System::EventHandler(this, train_Click);
+			// 
 			// Form1
 			// 
 			this->AccessibleRole = System::Windows::Forms::AccessibleRole::Application;
@@ -215,6 +229,7 @@ namespace Exercise1
 			this->AutoScroll = true;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->ClientSize = System::Drawing::Size(794, 518);
+			this->Controls->Add(this->train);
 			this->Controls->Add(this->meanRemoval);
 			this->Controls->Add(this->imContrast);
 			this->Controls->Add(this->saveImage);
@@ -227,7 +242,7 @@ namespace Exercise1
 			this->MaximizeBox = false;
 			this->Name = S"Form1";
 			this->Text = S" Image Processing Part Of Nepali OCR";
-			this->TopMost = true;
+			this->TopMost = false;
 			this->picture_panel->ResumeLayout(false);
 			this->ResumeLayout(false);
 
@@ -567,6 +582,16 @@ private: System::Void meanRemoval_Click(System::Object *  sender, System::EventA
 private: System::Void deSkew_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 this->doDeSkew();
+		 }
+
+private: System::Void train_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 OCR::TrainingForm* tw=new OCR::TrainingForm();
+			 tw->ShowDialog();
+
+
+			 //TrainWindow* tr=new TrainWindow();
+			
 		 }
 
 };
