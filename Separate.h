@@ -448,6 +448,10 @@ while(startEnumerator->MoveNext() && endEnumerator->MoveNext())
 	cnt++;
 	}
 
+	if(_number_of_gaps==0){
+		System::Windows::Forms::MessageBox::Show("It seems that gaps between words is invalid \n Please reload a proper image ....","invalid image width");
+		
+	}
 	int _average_word_gaps=(int)(_sum_word_gap)/(_number_of_gaps);		
 	//System::Windows::Forms::MessageBox::Show(_average_word_gaps.ToString(),"Average Word Gaps");
 
