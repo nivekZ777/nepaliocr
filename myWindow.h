@@ -1,4 +1,13 @@
-#include "Separate.h"
+//#ifndef SEPERATE_H
+//#undef SEPARATE_H
+//#include "Separate.h"
+//#else
+//#define SEPARATE_H
+//#endif
+
+
+
+//#include "Separate.h"
 #include "Line.h"
 #include "RecognitionProcess.h"
 #include "RecognitionForm.h"
@@ -546,109 +555,7 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 				 this->Update;
 		 }
 	
-/* ///	Commented sept14
-	private:
-		void recognize(){//ImageArray
-							
-						//int** whymakeBinary;
-						this->smallBinary();			
-						
-						
-						RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,ImgArray);
-						
-						//RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImageArray);
-						//from:: //	RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImgArray);
-
-						// load the transcription of the models
-						this->slModelTranscription = rp->LoadModelTranscriptions(this->modelTrainDBPath);
-						
-						
-
-						int lineCount = this->numberOfLines;
-						
-						if(this->ImgArray){
-							System::Windows::Forms::MessageBox::Show(this->numberOfLines.ToString(),"image array exists");
-						}
-						int wordCount = 0;
-						int totalUnit = 0;
-						int unitCount = 0;
-						int left_x,right_x,top_y,bottom_y;
-						System::String* wordToRec;
-						System::String* dirOfRecFile = rp->recognitionTempFileDir;
-
-						for(int i=0; i<lineCount;i++)
-						{		
-							
-							System::Windows::Forms::MessageBox::Show(i.ToString(),"I");
-							
-							top_y = this->Lines[i].getStartRow();//line start
-							bottom_y = this->Lines[i].getEndRow();//line end
-
-							wordCount = this->Lines[i].getTotalWord();
-							for(int j=0;j<wordCount;j++)
-							{		
-								System::Windows::Forms::MessageBox::Show(j.ToString(),"J");
-								unitCount = this->Lines[i].Words[j].getTotalUnit();					 
-								for(int k=0; k<unitCount; k++)
-								{
-									left_x = this->Lines[i].Words[j].Units[k].getStartColumn();//wrod start
-									right_x = this->Lines[i].Words[j].Units[k].getEndColumn();//word end
-
-									// setting the actual image boundary
-									rp->SetImageBoundary(left_x,right_x,top_y,bottom_y);
-									totalUnit++;
-									wordToRec = wordToRec->Concat(dirOfRecFile,totalUnit.ToString(),".txt");	
-									rp->PrepareWordData(wordToRec);
-								} 
-							}//wordcount
-						}
-						  
-						// preparing the script file to be recognized
-						try
-						{
-							System::IO::StreamWriter* sw = System::IO::File::AppendText(rp->scriptFilePath);	
-							for(int i=1;i<=totalUnit;i++)	
-							{
-								System::String* tmp=tmp->Concat((String*)"\"",dirOfRecFile,i.ToString(),(String*)".txt",(String*)"\"");
-								sw->WriteLine(tmp);
-								sw->Flush();
-								//sw->WriteLine("\"" + dirOfRecFile+i + ".txt" + "\"");
-							}
-							sw->Close();
-						}
-						catch(System::Exception* ex)
-						{
-							//System::Windows::Forms::MessageBox::Show("ke bhayo","ke bhayo");
-							System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to prepare the script file!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-							exit(0);
-						}
-
-						// recognize the words from the features file using the Viterbi decoder of the HTK Toolkit HVite
-						// then read the Master Labeled File(MLF) and fetch the output models
-						this->alModelRec = rp->RecognizeByHTK();
-						
-						 
-						
-						
-						this->ProvideOutput();
-
-						/* after recognizing is done remove the script file and also the associated image features files */
-						// remove the script file
-	/*	///	Commented sept14			 
-						System::IO::File::Delete(rp->scriptFilePath);
-
-						// remove all the temporary word image feature files
-						for(int i=1;i<=totalUnit;i++)	
-						{~
-							System::String* tmp=tmp->Concat(dirOfRecFile,i.ToString(),".txt");
-							//System::IO::File::Delete(dirOfRecFile+i+".txt");
-							System::IO::File::Delete(tmp);
-						}
-
-		
-		}
-
-		*/ ///	Commented sept14
+	 
 		private: void recognize(){
 				 }
 		private: void recognize_small_chars(){
@@ -757,6 +664,8 @@ private: void LoadFromFile()
 				errorString1 = ex->Message->ToString();
 				errorString1 = errorString1->Concat("Database file access error \n\nThe system generated the following error:\n",errorString1);
 				System::Windows::Forms::MessageBox::Show( errorString1,"Error");
+				//System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Can't load the Combo box!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+				//System::Windows::Forms::MessageBox::Show( ex->Message->ToString(),"Can't access database files");
 				exit(0);
 			}
 		 }
@@ -912,10 +821,10 @@ private: void LoadFromFile()
 private: System::Void avgButton_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			checkParameters();
-			this->separate();
 		 }
 
-		 
+		 //
+		 /*
 		 	private: void separate()
 				 {
 					 this->tmpBArray=new bool*[imageReceivedToForm->Height]; 
@@ -929,7 +838,6 @@ private: System::Void avgButton_Click(System::Object *  sender, System::EventArg
 						 for(int j=0;j<imageReceivedToForm->Width;j++)
 						 {
 							 this->tmpBArray[i][j]=this->BArray[i][j];
-							 //Error here 28 september
 						 }
 
 					 }
@@ -992,6 +900,8 @@ private: System::Void avgButton_Click(System::Object *  sender, System::EventArg
 									}
 
 				 }
-				 
+
+
+				 */
 };
 }
