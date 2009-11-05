@@ -39,6 +39,7 @@ namespace Exercise1
 			//user declarations
 			this->BinaryDone=false;
 			this->ImageLoaded=false;
+			this->SeparateDone=false;
 //			num_bins=256;
 
 			
@@ -67,8 +68,13 @@ namespace Exercise1
 	private: int **ImgArray;
 
 	private: bool **BArray;
+			 bool **tmpBArray;
 	private: bool BinaryDone;
 	private: bool ImageLoaded;
+			 bool SeparateDone;
+
+	private: int numberOfLines;
+	private: Line* Lines; 
 			 
 	
 	//private: Graphics* g;	
@@ -481,6 +487,7 @@ namespace Exercise1
 				if (d == System::Windows::Forms::DialogResult::OK)				 
 				 {			 
 					this->BinaryDone = false;
+					this->SeparateDone=false;
 					this->ImageLoaded = true;
 					// creating a bitmap
 					im = new Bitmap(this->openImageDialog->OpenFile());
@@ -511,12 +518,67 @@ namespace Exercise1
 				 
 			}
 
+		
+		private: void separateChar()
+				 {
+					 Pen* p=new Pen(Color::Blue,1);
+	
+								for(int i=0;i<this->numberOfLines;i++)
+									{
+										for(int j=0;j<this->Lines[i].getTotalWord();j++)
+											{
+												for(int k=0;k<this->Lines[i].Words[j].getTotalUnit();k++)
+													{
+														int x1=this->Lines[i].Words[j].Units[k].getStartColumn();
+														int x2=this->Lines[i].Words[j].Units[k].getEndColumn();
+														int y1=this->Lines[i].getStartRow();
+														int y2=this->Lines[i].getEndRow();
+
+														g->DrawLine(p,x1,y1,x1,y2);
+														g->DrawLine(p,x2,y1,x2,y2);
+													}
+											}
+									}
+
+				 }
 		private: void separate()
 				 {
+					 this->tmpBArray=new bool*[im->Height];
+					 //this->tmpBArray=this->BArray;
+					 for(int i=0;i<im->Height;i++)
+					 {
+						 this->tmpBArray[i]=new bool[im->Width];
+						 for(int j=0;j<im->Width;j++)
+						 {
+							 this->tmpBArray[i][j]=this->BArray[i][j];
+						 }
+
+					 }
 					 if(this->BinaryDone)
 						{
+
+							if(this->SeparateDone==false)
+							{
 							Separate* sp=new Separate(im,BArray,g);
 							sp->LineSeparate();
+
+							this->numberOfLines=sp->getNumberOfLines();
+							this->Lines=sp->getLines();
+							this->SeparateDone=true;
+							this->separateChar();							
+							}
+
+							else
+							{
+								this->separateChar();
+							}
+
+
+
+
+
+
+
 							//sp->drawHorizontalHist();
 							//Pen* p=new Pen(Color::Red,1);
 							//g->DrawLine(p,50,50,150,150);
@@ -587,6 +649,7 @@ private: System::Void deSkew_Click(System::Object *  sender, System::EventArgs *
 private: System::Void train_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 OCR::TrainingForm* tw=new OCR::TrainingForm();
+			 tw->defineVar(this->tmpBArray,this->Lines,this->numberOfLines);
 			 tw->ShowDialog();
 
 

@@ -31,6 +31,8 @@ public:
 	void WordSeparate1(ArrayList* start,ArrayList* end);
 	void CheckMattra(ArrayList* start,ArrayList* end,ArrayList** wordStart,ArrayList** wordEnd);
 	void CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wordStart,ArrayList** wordEnd);
+	int getNumberOfLines();
+	Line* getLines();
 
 };
 
@@ -951,7 +953,7 @@ void Separate::CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wStart,A
 
 		lineCount++;
 	}
-
+/*
 
 Pen* p=new Pen(Color::Red,1);
 	
@@ -972,7 +974,7 @@ Pen* p=new Pen(Color::Red,1);
 		}
 	}
 
-
+*/
 
 /*
 for(int i=0;i<10;i++)
@@ -1312,6 +1314,16 @@ while(startEnumerator->MoveNext() && endEnumerator->MoveNext())
 		
 */
 	
+}
+
+int Separate::getNumberOfLines()
+{
+	return this->numberOfLines;
+}
+
+Line* Separate::getLines()
+{
+	return this->Lines;
 }
 
 
