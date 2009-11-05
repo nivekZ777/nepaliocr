@@ -14,7 +14,6 @@ private:
     float *omega;
     float *mu;
     float mu_t;
-	
 
 	Bitmap* ImageFile;
 	

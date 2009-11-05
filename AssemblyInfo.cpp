@@ -2,23 +2,21 @@
 
 using namespace System::Reflection;
 using namespace System::Runtime::CompilerServices;
-using namespace System::Runtime::InteropServices;
 
- 
 //
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly:AssemblyTitleAttribute("Nepali OCR")];
-[assembly:AssemblyDescriptionAttribute("Nepali OCR Tesseract Loader")];
+[assembly:AssemblyTitleAttribute("")];
+[assembly:AssemblyDescriptionAttribute("")];
 [assembly:AssemblyConfigurationAttribute("")];
-[assembly:AssemblyCompanyAttribute("Madan Puraskar Pustakalaya")];
+[assembly:AssemblyCompanyAttribute("")];
 [assembly:AssemblyProductAttribute("")];
-[assembly:AssemblyCopyrightAttribute("Copyright ©  Rajesh Pandey")];
+[assembly:AssemblyCopyrightAttribute("")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];		
-[assembly: ComVisible(false)];
+
 //
 // Version information for an assembly consists of the following four values:
 //
@@ -31,7 +29,6 @@ using namespace System::Runtime::InteropServices;
 // by using the '*' as shown below:
 
 [assembly:AssemblyVersionAttribute("1.0.*")];
-[assembly: Guid("4BC2D77F-BC60-4a6a-9CF6-4CE491C9C2B0")];
 
 //
 // In order to sign your assembly you must specify a key to use. Refer to the 
