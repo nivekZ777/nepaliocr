@@ -8,6 +8,7 @@
 #include "Deskew.h"
 #include "myWindow.h"
 
+
 #pragma once
 
 
@@ -108,8 +109,10 @@ namespace OCR
 	private: bool **binaryArrayForMagnification; //equivalent to::-> tmpBArry
 	//bool binaryArrayForMagnification is equivalent to bool tmpBArry of separate() function
 
+
+
 	private: int numberOfLines;
-	private: Line* Lines; 
+	private: static Line* Lines; 
 
 	private: String* applicationPath;
 			 String* modelTrainDBPath;
@@ -147,6 +150,7 @@ namespace OCR
 private: System::Windows::Forms::GroupBox *  groupBox1;
 private: System::Windows::Forms::GroupBox *  groupBox2;
 private: System::Windows::Forms::GroupBox *  groupBox3;
+
 
 
 
@@ -1071,9 +1075,12 @@ private: void tryMagnify(){
 							//this->BinaryImage 
 							//TO BE DONE TOMORROW
 							OCR::myWindow* mw = new OCR::myWindow(this->BinaryImage);
+							//This will display the image "binaryimage" in the new window at left pane
 							//mw->pictureBox_myWindow->Image = this->binaryArrayForMagnification;
+
 							mw->defineVar(this->ImgArray,this->binaryArrayForMagnification,this->Lines,this->numberOfLines);
 							 //mw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
+							// " mw->definevar()" This will display a segment of the image in right pane
 
 							mw->ShowDialog();
 							//OCR::myWindow* mw1 = new OCR::myWindow(this->im);
@@ -1243,6 +1250,7 @@ private: System::Void findMagnification_Click(System::Object *  sender, System::
 					//The image magnification is easier if it is separated first
 					//System::Windows::Forms::MessageBox::Show("Looks like the image is separted\n working","Good");
 					this->makeBinary();
+					this->separate();
 					tryMagnify();
 			 //}
 			 //else{
@@ -1251,6 +1259,8 @@ private: System::Void findMagnification_Click(System::Object *  sender, System::
 
 
 		 }
+
+
 
 };
 

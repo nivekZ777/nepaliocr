@@ -126,9 +126,6 @@
 				RelativePath=".\AssemblyInfo.cpp">
 			</File>
 			<File
-				RelativePath=".\featureCounter.cpp">
-			</File>
-			<File
 				RelativePath=".\FileManipulating.cpp">
 			</File>
 			<File
@@ -162,6 +159,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\testDisplayToSeparate.cpp">
+			</File>
+			<File
 				RelativePath=".\testMagnifyWindow.cpp">
 			</File>
 			<File
@@ -183,9 +183,6 @@
 			</File>
 			<File
 				RelativePath=".\Deskew.h">
-			</File>
-			<File
-				RelativePath=".\featureCounter.h">
 			</File>
 			<File
 				RelativePath=".\FileManipulating.h">
