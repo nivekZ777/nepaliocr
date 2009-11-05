@@ -6,8 +6,7 @@
 #include "Separate.h"
 #include "Convolution.h"
 #include "Deskew.h"
-
-
+#include "myWindow.h"
 
 #pragma once
 
@@ -89,6 +88,7 @@ namespace NepaliOCR
 	private: Bitmap* BinaryImage;
 
 	private: Graphics* g;
+	private: Bitmap* ImageForMyWindow;
 
 	private: int intLevel;
 	private: int **ImgArray;
@@ -137,10 +137,10 @@ namespace NepaliOCR
 	private: System::Windows::Forms::Button *  deSkew;
 	private: System::Windows::Forms::Button *  train;
 	private: System::Windows::Forms::Button *  recognize;
-private: System::Windows::Forms::Button *  fastRecognizeButton;
-private: System::Windows::Forms::Label *  myInfo;
-private: System::Windows::Forms::Label *  myInfo1;
-private: System::Windows::Forms::Button *  findMagnification;
+	private: System::Windows::Forms::Button *  fastRecognizeButton;
+	private: System::Windows::Forms::Label *  myInfo;
+	private: System::Windows::Forms::Label *  myInfo1;
+	private: System::Windows::Forms::Button *  findMagnification;
 
 
 
@@ -1013,11 +1013,14 @@ private: void tryMagnify(){
 							//Binary image is saved in : this->BinaryImage;
 							//whole image stored in :: this->ImgArray;
 							
-							
+							//this->BinaryImage 
 							//TO BE DONE TOMORROW
+							OCR::myWindow* mw = new OCR::myWindow(this->BinaryImage);
+							//mw->pictureBox_myWindow->Image = this->binaryArrayForMagnification;
+							mw->ShowDialog();
+							OCR::myWindow* mw1 = new OCR::myWindow(this->im);
+							mw1->ShowDialog();
 							
-
-							//OCR::testMagnifyWindow* tmw = new OCR::testMagnifyWindow();
 
 
 			}
