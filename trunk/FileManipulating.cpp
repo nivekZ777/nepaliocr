@@ -82,13 +82,13 @@ void FileManipulating::CreatePrototypeFile(System::String* fromFile, System::Str
 {
 	System::IO::StreamWriter* sw = System::IO::StreamWriter::Null;
 	System::IO::StreamReader* sr = System::IO::StreamReader::Null;
-    System::String* tempStr = "";
+    System::String* tempStr;
     bool firstLine = true;
 	System::String *mytmp;
 
-	//System::Windows::Forms::MessageBox::Show(fromFile->ToString(),"yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-	//System::Windows::Forms::MessageBox::Show(toFile->ToString(),"yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-	//System::Windows::Forms::MessageBox::Show(modelName->ToString(),"yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+	System::Windows::Forms::MessageBox::Show(fromFile->ToString(),"From: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+	System::Windows::Forms::MessageBox::Show(toFile->ToString(),"To: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+	System::Windows::Forms::MessageBox::Show(modelName->ToString(),"ModelName: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 
     try
@@ -96,8 +96,28 @@ void FileManipulating::CreatePrototypeFile(System::String* fromFile, System::Str
         // read the content and store the specific text to the prototype file
         sr = new System::IO::StreamReader(fromFile);
         sw = new System::IO::StreamWriter(toFile);
+		
 
+		//tempStr=sr->ReadLine();
 
+		while(sr->Peek()>=0)
+		{
+			tempStr=sr->ReadLine();
+			if(firstLine)
+			{
+				mytmp=mytmp->Concat("~h \"",modelName,"\"");
+				sw->WriteLine(mytmp);
+				firstLine = false;
+
+			}
+			else
+			{
+			sw->WriteLine(tempStr);
+			}
+			sw->Flush();
+		}
+
+		/*
 		tempStr= sr->ReadToEnd();
 	
 		mytmp=mytmp->Concat("~h \"",modelName,"\"");
@@ -133,6 +153,7 @@ void FileManipulating::CreatePrototypeFile(System::String* fromFile, System::Str
 
 		sr->Close();
 		sw->Close();
+		
     }
     catch (System::Exception* excp)
     {
@@ -215,8 +236,12 @@ void FileManipulating::AddModelDefToMasterModelFile(System::String *mmfFilePath,
 			// Add the content from line number 4 of the prototype file
 			//while (!System::String::IsNullOrEmpty((tempStr = sr->ReadLine())))
 			tempStr= sr->ReadLine();
+
+			System::Windows::Forms::MessageBox::Show("working gud till here!","HMM File: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
        // while (!System::String::IsNullOrEmpty((tempStr = sr->ReadLine())))
-        while(tempStr->Length!=0)
+        
+			
+		/*while(tempStr->Length!=0)
 		{
 			//tempStr= sr->ReadLine();
 			
@@ -230,6 +255,21 @@ void FileManipulating::AddModelDefToMasterModelFile(System::String *mmfFilePath,
 				}
 				tempStr= sr->ReadLine();
 				
+		}*/
+
+		while(sr->Peek()>=0)
+		{
+			tempStr=sr->ReadLine();
+            lineNum++;
+			
+			if(lineNum<3)
+			{}
+
+			else
+			{
+			sw->WriteLine(tempStr);
+			}
+			sw->Flush();
 		}
 
 		sr->Close();
@@ -294,41 +334,49 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 			System::String *tmp;
 			int  k;
 
+
+			
+
 			// Read and display lines from the file until the end of 
 			// the file is reached.
-			line = sr->ReadLine();
+			//line = sr->ReadLine();
 			//while (!System::String::IsNullOrEmpty(line = sr->ReadLine())) 
-			while(line->Length!=0)
+			while(sr->Peek()>=0)
 			{
-				//line= sr->ReadLine();
+				//tempStr=sr->ReadLine();
+            	line= sr->ReadLine();
+
 				k = line->IndexOf(";");
 				if(k < 0 )
 				{
 					//text += line+"\n";
 					//String * tmp;
-					text = text->Concat(text,line,"\n");
+					text = text->Concat(text,line,(String*)"\n");
 				}
 				else
 				{
 					line = line->Substring(0,k);
 					
-					text=text->Concat(text,line ,(String*)"|",modelName,";" , "\n");
+					text=text->Concat(text,line ,(String*)"|",modelName,(String*)";" ,(String*)"\n");
 					
 					//text += line + "|" + modelName + ";" + "\n";
 				}
-				line=sr->ReadLine();
+				//line=sr->ReadLine();
 			}
+
+
+
 			sr->Close();
 			// write to the grammer file
 			sw = new System::IO::StreamWriter(gramFile);
 			sw->Write(text);
 			sw->Close();
 		}
-		
+		System::Windows::Forms::MessageBox::Show("Building Network working gud till here!","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		// add model name to the dictionary file
 		
 		sw = System::IO::File::AppendText(dictFile);
-		//modelName = modelName + " [" + modelName + "] " + modelName;
+		modelName = modelName->Concat(modelName,(String*)" [",modelName,(String*)"] ",modelName);
 		
 		//modelName = string_handling(modelName," [" + modelName + "] ",modelName);
 		
@@ -362,7 +410,7 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 		/*2. Creating _HSGen.bat*/
 		//System::String* genFile = wdnetFileDir + "_HSGen.bat";
 		System::String* genFile;
-		genFile->Concat(wdnetFileDir ,"_HSGen.bat");
+		genFile=genFile->Concat(wdnetFileDir ,"_HSGen.bat");
 		sw = new System::IO::StreamWriter(genFile);
 //		System::String* invComma="\"";
 		text=invComma;
@@ -389,6 +437,9 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 		p->StartInfo->FileName = genFile;
 		p->Start();
 		p->WaitForExit();
+
+		System::Windows::Forms::MessageBox::Show("Building Network success!","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+
 	}
 	catch(System::Exception* ex)
 	{
