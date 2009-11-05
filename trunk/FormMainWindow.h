@@ -827,9 +827,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 						this->slModelTranscription = rp->LoadModelTranscriptions(this->modelTrainDBPath);
 						 
 						int lineCount = this->numberOfLines;
-						if(this->ImgArray){
-							System::Windows::Forms::MessageBox::Show(this->numberOfLines.ToString(),"image array exists");
-						}
+						
 						int wordCount = 0;
 						int totalUnit = 0;
 						int unitCount = 0;
@@ -900,6 +898,11 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 							//System::IO::File::Delete(dirOfRecFile+i+".txt");
 							System::IO::File::Delete(tmp);
 						}
+						System::Windows::Forms::MessageBox::Show(wordCount.ToString(),"WordCount");
+						System::Windows::Forms::MessageBox::Show(totalUnit.ToString(),"totalUnit");
+						System::Windows::Forms::MessageBox::Show(unitCount.ToString(),"UnitCount");
+						
+						
 
 		}
 
