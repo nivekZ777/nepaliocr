@@ -42,6 +42,9 @@ namespace Exercise1
 			this->BinaryDone=false;
 			this->ImageLoaded=false;
 			this->SeparateDone=false;
+			this->ContrastDone=false;
+			this->meanDone=false;
+			this->deskewDone=false;
 
 			InitializeComponent();
 
@@ -95,6 +98,10 @@ namespace Exercise1
 	private: bool BinaryDone;
 	private: bool ImageLoaded;
 			 bool SeparateDone;
+			 bool ContrastDone;
+			 bool meanDone;
+			 bool deskewDone;
+
 
 	private: int numberOfLines;
 	private: Line* Lines; 
@@ -203,11 +210,10 @@ namespace Exercise1
 			// 
 			// openImageDialog
 			// 
-			this->openImageDialog->DefaultExt = S"*.jpg";
-			this->openImageDialog->Filter = S" \"JPEG Files (*.jpg)|*.jpg|PNG Files (*.png)|*.png|GIF Files (*.gif)|*.gif\"";
-			// 
-			// separate_button
-			// 
+			//this->openImageDialog->DefaultExt = S"*.png";
+			
+			this->openImageDialog->Filter = S"Image Files(*.BMP;*.JPG;*.GIF;*.png)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*";
+			
 			this->separate_button->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->separate_button->Location = System::Drawing::Point(352, 80);
 			this->separate_button->Name = S"separate_button";
@@ -222,6 +228,7 @@ namespace Exercise1
 			// saveImage
 			// 
 			this->saveImage->BackColor = System::Drawing::Color::WhiteSmoke;
+			this->saveImage->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->saveImage->Location = System::Drawing::Point(424, 8);
 			this->saveImage->Name = S"saveImage";
 			this->saveImage->Size = System::Drawing::Size(112, 48);
@@ -260,6 +267,7 @@ namespace Exercise1
 			// train
 			// 
 			this->train->Location = System::Drawing::Point(576, 80);
+			this->train->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->train->Name = S"train";
 			this->train->TabIndex = 8;
 			this->train->Text = S"TRAIN";
@@ -268,6 +276,7 @@ namespace Exercise1
 			// recognize
 			// 
 			this->recognize->Location = System::Drawing::Point(680, 80);
+			this->recognize->Cursor =  System::Windows::Forms::Cursors::Hand;
 			this->recognize->Name = S"recognize";
 			this->recognize->Size = System::Drawing::Size(88, 23);
 			this->recognize->TabIndex = 9;
@@ -406,6 +415,8 @@ namespace Exercise1
 		 */
 		private: void Contrast(int nContrast)
 		{
+
+			
 			this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
 			try{
 			double pixel = 0, contrast = (100.0+nContrast)/100.0;
@@ -480,6 +491,7 @@ namespace Exercise1
 				System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to Improve the Contrast!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 			}
 		this->Cursor = System::Windows::Forms::Cursors::Default;
+	
 
 //			return true;
 		}
@@ -490,7 +502,7 @@ namespace Exercise1
 					//if (this->BinaryDone)
 					//	return;
 				 
-					this->BinaryDone = true;
+					
 					
 					try{
 					 // set the cursor to wait.... 
@@ -525,10 +537,10 @@ namespace Exercise1
 				 this->Update();
 				 }
 	}// end of function 
-// openImageFile
-			private: void openImageFile()
+
+
+		private: void openImageFile()
 			{
-				this->openImageDialog->Filter = "c files (c files(*.c)|*.c)|Jpeg files (JPG files(*.jpg)|*.jpg)|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
 				System::Windows::Forms::DialogResult d = this->openImageDialog->ShowDialog();
 				if (d == System::Windows::Forms::DialogResult::OK)				 
 				 {			 
@@ -543,13 +555,11 @@ namespace Exercise1
 				this->Update();
 				 
 			}
-
-
 		private: void saveImageFile()
 			{
 				if(this->BinaryDone)
 				{	
-					saveImageDialog->Filter= "files (PNG files (*.png)|*.png|JPG files *.jpg)|*.jpg|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
+					saveImageDialog->Filter= "PNG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
 					saveImageDialog->FilterIndex = 1 ;
 					saveImageDialog->RestoreDirectory = true ;
 
@@ -562,6 +572,10 @@ namespace Exercise1
 							save->Save(saveImageDialog->FileName);
 							
 							}
+				}
+				else{
+					System::Windows::Forms::MessageBox::Show("The file was not saved because \n the image processing is not completed", "Action Incomplete");
+					
 				}
 				 
 			}
@@ -639,26 +653,39 @@ namespace Exercise1
 
 		private: void doDeSkew()
 				  {
-					  if(ds){
-						undef ds;
-					  }
-					  Deskew* ds=new Deskew(im);
-					  double skewAngle;
-					  skewAngle=ds->GetSkewAngle();
+						static bool skewedFlag;
+						/*
+						*SkewedFlag checks whether the image is deskewed or not.
+						*/
+
+
+					if(skewedFlag==true){
+											 
+						 System::Windows::Forms::MessageBox::Show(" The image is already rotated","Repeated Action");
+						 					  }
+				
+					Deskew* ds=new Deskew(im);
+					
+					/*
+					*If the image is not deskewed even once .. then do deskew
+					*/
+					if(skewedFlag==false){
+					  double skewAngle=ds->GetSkewAngle();
+
 					  System::Windows::Forms::MessageBox::Show(skewAngle.ToString(),"Skew Angle");
-					  if(skewAngle<(-10)){
-							System::Windows::Forms::MessageBox::Show(skewAngle.ToString(),"Skew Angle is higher");
-					  }
-										  
-					  static int rotatedflag =0;
-					  if(rotatedflag== 0){
-							im=this->RotateImage(-skewAngle); 
-							rotatedflag = 1;
-					  } 
-					  else{
-						  System::Windows::Forms::MessageBox::Show("Image already rotated");
-					  }
+
+					  im=this->RotateImage(-skewAngle); 
+
 					  this->pictureBox1->Image = im;
+					  skewedFlag = true;
+					  /*
+					  *Set skewedFlag to true after one successful deskew action
+					  */
+					  System::Windows::Forms::MessageBox::Show(" Image rotated successfully","Action Complete");
+
+					}
+					
+					
 				  }
 		private: Bitmap* RotateImage(double angle)
 					{
@@ -889,6 +916,8 @@ private: System::Void close_button_Click_1(System::Object *  sender, System::Eve
 			 {
 				//this->Dispose(true);
 				this->makeBinary();
+				this->BinaryDone = true;
+
 			 }
 
 
@@ -910,29 +939,37 @@ private: System::Void saveImage_Click(System::Object *  sender, System::EventArg
 private: System::Void imContrast_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			this->Contrast(10);
+			this->ContrastDone=true;
 			this->Update();
 		 }
 
 private: System::Void meanRemoval_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 this->MeanRemoval(9);
+			 this->meanDone= true;
 			 this->Update();
 		 }
 
 private: System::Void deSkew_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 this->doDeSkew();
+			 
 		 }
 
 private: System::Void train_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
+			 if(this->ImageLoaded){
+
 			 OCR::TrainingForm* tw=new OCR::TrainingForm();
 			 tw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
 			 //this->slForCharacters=tw->getSortedList();
 			 //tw->defineVar(this->BArray,this->Lines,this->numberOfLines);
 			 tw->ShowDialog();
 
-
+				}
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Image not loaded, Please load image first ","Image Not loaded");
+			 }
 			 //TrainWindow* tr=new TrainWindow();
 			
 		 }
