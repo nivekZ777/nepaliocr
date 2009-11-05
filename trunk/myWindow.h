@@ -30,31 +30,31 @@ namespace OCR
 	{
 	public: 
 		myWindow(
-			Bitmap* im,
-			Bitmap* BinaryImage,
-			Graphics* g,
-			int intLevel,
-			int **ImgArray,
-			bool **BArray,
-			bool **tmpBArray,
-			bool BinaryDone,
-			bool ImageLoaded,
-			bool SeparateDone,
-			bool ContrastDone,
-			bool meanDone,
-			bool deskewDone,
-			int numberOfLines,
-			Line* Lines, 
-			String* applicationPath,
-			String* modelTrainDBPath,
-			String* scriptFilePath,
-			String* characterDBPath,
-			System::Collections::SortedList* slForCharacters,
-			System::Collections::SortedList* slModelTranscription,	// for storing the model transcriptions
-			System::Collections::ArrayList* alModelRec
-			
-			)
-		{
+						Bitmap* im,
+						Bitmap* BinaryImage,
+						Graphics* g,
+						int intLevel,
+						int **ImgArray,
+						bool **BArray,
+						bool **tmpBArray,
+						bool BinaryDone,
+						bool ImageLoaded,
+						bool SeparateDone,
+						bool ContrastDone,
+						bool meanDone,
+						bool deskewDone,
+						int numberOfLines,
+						Line* Lines, 
+						String* applicationPath,
+						String* modelTrainDBPath,
+						String* scriptFilePath,
+						String* characterDBPath,
+						System::Collections::SortedList* slForCharacters,
+						System::Collections::SortedList* slModelTranscription,	// for storing the model transcriptions
+						System::Collections::ArrayList* alModelRec
+						
+	){
+
 			InitializeComponent();
 			this->im = im;
 			this->BinaryImage = BinaryImage;
@@ -651,11 +651,11 @@ private: void LoadFromFile()
 			}
  	void display(int lineno,int wordno,int charno)
 		{
-			x1=this->LineInfo[lineno].Words[wordno].Units[charno].getStartColumn();
-			x2=this->LineInfo[lineno].Words[wordno].Units[charno].getEndColumn();
-			y1=this->LineInfo[lineno].getStartRow();
-			y2=this->LineInfo[lineno].getEndRow();
-			 
+			x1=this->LineInfo[lineno].Words[wordno].Units[charno].getStartColumn(); //Equivalent to :: left_x
+			x2=this->LineInfo[lineno].Words[wordno].Units[charno].getEndColumn();	//Equivalent to :: right_x
+			y1=this->LineInfo[lineno].getStartRow();		//Equivalent to :: top_y
+			y2=this->LineInfo[lineno].getEndRow();			 //Equivalent to :: bottom_y
+			
 			int xsize=x2-x1+1;
 			int ysize=y2-y1+1;
 			 
@@ -679,17 +679,28 @@ private: void LoadFromFile()
 			this->pictureBoxSmall->Image=cropImage;
 			this->smallHeightLabel->Text = this->cropImage->Height.ToString();
 			this->smallWidthLabel->Text = this->cropImage->Width.ToString();
+			singleRecognize(x1,x2,y1,y2,charno) ;
 		}
-	/*
-	private: void singleRecognize(int left_x,int right_x,int top_x,int bottom_y){
-			//int left_x,right_x,top_y,bottom_y;
+	
+	private: void singleRecognize(int left_x,int right_x,int top_y,int bottom_y,int charno){
+				 //Assumption: int left_x  :::word start
+				 //int right_x				::: word end
+				 //int top_y ~ equivalent to :: int top_x :::Line start
+				 //int bottom_y ~ equivalent to :: int bottom_y :::Line end
+			
 			System::String* wordToRec;
-			System::String* dirOfRecFile = rp->recognitionTempFileDir;
 			RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImgArray);
+			
+			System::String* dirOfRecFile = rp->recognitionTempFileDir;
 			this->slModelTranscription = rp->LoadModelTranscriptions(this->modelTrainDBPath);
 			rp->SetImageBoundary(left_x,right_x,top_y,bottom_y);
+				 
+			//Assumption : totalunit for single recognize is 1
+			/*
+			int totalUnit =charno;
 			wordToRec = wordToRec->Concat(dirOfRecFile,totalUnit.ToString(),".txt");	
 			rp->PrepareWordData(wordToRec);
+			
 			try
 			{
 				System::IO::StreamWriter* sw = System::IO::File::AppendText(rp->scriptFilePath);	
@@ -714,9 +725,10 @@ private: void LoadFromFile()
 				System::String* tmp=tmp->Concat(dirOfRecFile,i.ToString(),".txt");
 				System::IO::File::Delete(tmp);
 			}
- 
-	} //End singleRecognize
-	*/
+			*/
+
+}	 //End singleRecognize
+	
 	private: void Recognize()
 		{		 
 						RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImgArray);
@@ -740,7 +752,7 @@ private: void LoadFromFile()
 								unitCount = this->Lines[i].Words[j].getTotalUnit();					 
 								for(int k=0; k<unitCount; k++)
 								{
-									left_x = this->Lines[i].Words[j].Units[k].getStartColumn();//wrod start
+									left_x = this->Lines[i].Words[j].Units[k].getStartColumn();//word start
 									right_x = this->Lines[i].Words[j].Units[k].getEndColumn();//word end
 
 									// setting the actual image boundary
