@@ -1,4 +1,6 @@
 #include "TrainingForm.h"
+#include "RecognitionForm.h"
+#include "RecognitionProcess.h"
 #include "ThresholedValue.h"
 #include "rgbConvert.h"
 #include "Separate.h"
@@ -40,10 +42,31 @@ namespace Exercise1
 			this->BinaryDone=false;
 			this->ImageLoaded=false;
 			this->SeparateDone=false;
-//			num_bins=256;
 
-			
 			InitializeComponent();
+
+			this->applicationPath=Application::StartupPath->ToString();
+			
+			int len = this->applicationPath->Length -1;			
+			if(this->applicationPath->Substring(len)->Equals("\\"))
+			{
+				this->applicationPath = this->applicationPath->Substring(0,len);				
+			}
+
+			// getting the character database path
+			//System::Windows::Forms::MessageBox::Show(this->applicationPath,"Path of characterDB path");
+
+//			this->characterDBPath=this->characterDBPath->Concat(this->applicationPath ,"\\htk\\DataBaseFile\\characters.txt");	
+			//System::Windows::Forms::MessageBox::Show(this->characterDBPath,"Path of characterDB path");
+			
+			this->modelTrainDBPath = this->modelTrainDBPath->Concat(this->applicationPath , "\\htk\\DataBaseFile\\modelTrainDataBase.txt");
+			
+			this->alModelRec = new System::Collections::ArrayList();
+			this->characterDBPath=this->characterDBPath->Concat(this->applicationPath ,"\\htk\\DataBaseFile\\characters.txt");	
+			this->scriptFilePath = this->scriptFilePath->Concat(this->applicationPath ,"\\htk\\recognizer\\script.txt");
+
+			this->LoadFromFile();
+			
 		}
   
 	protected:
@@ -75,6 +98,17 @@ namespace Exercise1
 
 	private: int numberOfLines;
 	private: Line* Lines; 
+
+	private: String* applicationPath;
+			 String* modelTrainDBPath;
+			 String* scriptFilePath;
+			 String* characterDBPath;
+
+	
+	private: System::Collections::SortedList* slForCharacters;
+	private: System::Collections::SortedList* slModelTranscription;	// for storing the model transcriptions
+	private: System::Collections::ArrayList* alModelRec;			// for models that already recognized
+	
 			 
 	
 	//private: Graphics* g;	
@@ -93,6 +127,8 @@ namespace Exercise1
 	private: System::Windows::Forms::Button *  meanRemoval;
 	private: System::Windows::Forms::Button *  deSkew;
 	private: System::Windows::Forms::Button *  train;
+	private: System::Windows::Forms::Button *  recognize;
+
 
 
 
@@ -120,13 +156,14 @@ namespace Exercise1
 			this->meanRemoval = new System::Windows::Forms::Button();
 			this->deSkew = new System::Windows::Forms::Button();
 			this->train = new System::Windows::Forms::Button();
+			this->recognize = new System::Windows::Forms::Button();
 			this->picture_panel->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// convertToBinary_button
 			// 
 			this->convertToBinary_button->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->convertToBinary_button->Location = System::Drawing::Point(342, 80);
+			this->convertToBinary_button->Location = System::Drawing::Point(240, 80);
 			this->convertToBinary_button->Name = S"convertToBinary_button";
 			this->convertToBinary_button->Size = System::Drawing::Size(72, 24);
 			this->convertToBinary_button->TabIndex = 5;
@@ -172,7 +209,7 @@ namespace Exercise1
 			// separate_button
 			// 
 			this->separate_button->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->separate_button->Location = System::Drawing::Point(461, 80);
+			this->separate_button->Location = System::Drawing::Point(352, 80);
 			this->separate_button->Name = S"separate_button";
 			this->separate_button->TabIndex = 6;
 			this->separate_button->Text = S"SEPARATE";
@@ -196,7 +233,7 @@ namespace Exercise1
 			// 
 			this->imContrast->BackColor = System::Drawing::Color::Transparent;
 			this->imContrast->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->imContrast->Location = System::Drawing::Point(96, 80);
+			this->imContrast->Location = System::Drawing::Point(24, 80);
 			this->imContrast->Name = S"imContrast";
 			this->imContrast->TabIndex = 3;
 			this->imContrast->Text = S"CONTRAST";
@@ -205,7 +242,7 @@ namespace Exercise1
 			// meanRemoval
 			// 
 			this->meanRemoval->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->meanRemoval->Location = System::Drawing::Point(222, 80);
+			this->meanRemoval->Location = System::Drawing::Point(128, 80);
 			this->meanRemoval->Name = S"meanRemoval";
 			this->meanRemoval->TabIndex = 4;
 			this->meanRemoval->Text = S"MEAN";
@@ -214,7 +251,7 @@ namespace Exercise1
 			// deSkew
 			// 
 			this->deSkew->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->deSkew->Location = System::Drawing::Point(578, 79);
+			this->deSkew->Location = System::Drawing::Point(464, 79);
 			this->deSkew->Name = S"deSkew";
 			this->deSkew->TabIndex = 7;
 			this->deSkew->Text = S"DE-SKEW";
@@ -222,11 +259,20 @@ namespace Exercise1
 			// 
 			// train
 			// 
-			this->train->Location = System::Drawing::Point(701, 80);
+			this->train->Location = System::Drawing::Point(576, 80);
 			this->train->Name = S"train";
 			this->train->TabIndex = 8;
-			this->train->Text = S"Train";
+			this->train->Text = S"TRAIN";
 			this->train->Click += new System::EventHandler(this, train_Click);
+			// 
+			// recognize
+			// 
+			this->recognize->Location = System::Drawing::Point(680, 80);
+			this->recognize->Name = S"recognize";
+			this->recognize->Size = System::Drawing::Size(88, 23);
+			this->recognize->TabIndex = 9;
+			this->recognize->Text = S"RECOGNIZE";
+			this->recognize->Click += new System::EventHandler(this, recognize_Click);
 			// 
 			// Form1
 			// 
@@ -235,6 +281,7 @@ namespace Exercise1
 			this->AutoScroll = true;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->ClientSize = System::Drawing::Size(794, 518);
+			this->Controls->Add(this->recognize);
 			this->Controls->Add(this->train);
 			this->Controls->Add(this->meanRemoval);
 			this->Controls->Add(this->imContrast);
@@ -248,7 +295,6 @@ namespace Exercise1
 			this->MaximizeBox = false;
 			this->Name = S"Form1";
 			this->Text = S" Image Processing Part Of Nepali OCR";
-			this->TopMost = false;
 			this->picture_panel->ResumeLayout(false);
 			this->ResumeLayout(false);
 
@@ -609,6 +655,217 @@ namespace Exercise1
 						gr->Dispose();
 						return tmp;
 					}
+		private: void Recognize()
+				 {
+					 RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImgArray);
+
+			 // load the transcription of the models
+			 this->slModelTranscription = rp->LoadModelTranscriptions(this->modelTrainDBPath);
+			 
+			 int lineCount = this->numberOfLines;
+			 int wordCount = 0;
+			 int totalUnit = 0;
+			 int unitCount = 0;
+			 int left_x,right_x,top_y,bottom_y;
+			 System::String* wordToRec;
+			 System::String* dirOfRecFile = rp->recognitionTempFileDir;
+
+			 for(int i=0; i<lineCount;i++)
+			 {				 
+				 top_y = this->Lines[i].getStartRow();//line start
+				 bottom_y = this->Lines[i].getEndRow();//line end
+
+				 wordCount = this->Lines[i].getTotalWord();
+				 for(int j=0;j<wordCount;j++)
+				 {					 
+					 unitCount = this->Lines[i].Words[j].getTotalUnit();					 
+					 for(int k=0; k<unitCount; k++)
+					 {
+						 left_x = this->Lines[i].Words[j].Units[k].getStartColumn();//wrod start
+						 right_x = this->Lines[i].Words[j].Units[k].getEndColumn();//word end
+
+						 // setting the actual image boundary
+						 rp->SetImageBoundary(left_x,right_x,top_y,bottom_y);
+						 totalUnit++;
+						 wordToRec = wordToRec->Concat(dirOfRecFile,totalUnit.ToString(),".txt");	
+						 rp->PrepareWordData(wordToRec);
+					 } 
+				 }//wordcount
+			 }
+			  
+			 // preparing the script file to be recognized
+			 try
+			 {
+				 System::IO::StreamWriter* sw = System::IO::File::AppendText(rp->scriptFilePath);	
+				 for(int i=1;i<=totalUnit;i++)	
+				 {
+					 System::String* tmp=tmp->Concat((String*)"\"",dirOfRecFile,i.ToString(),(String*)".txt",(String*)"\"");
+					 sw->WriteLine(tmp);
+					 sw->Flush();
+					 //sw->WriteLine("\"" + dirOfRecFile+i + ".txt" + "\"");
+				 }
+				 sw->Close();
+			 }
+			 catch(System::Exception* ex)
+			 {
+				 System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to prepare the script file!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+				 exit(0);
+			 }
+
+			 // recognize the words from the features file using the Viterbi decoder of the HTK Toolkit HVite
+			 // then read the Master Labeled File(MLF) and fetch the output models
+			 this->alModelRec = rp->RecognizeByHTK();
+			 this->ProvideOutput();
+
+			 /* after recognizing is done remove the script file and also the associated image features files */
+			 // remove the script file
+			 
+			 System::IO::File::Delete(rp->scriptFilePath);
+
+			 // remove all the temporary word image feature files
+			 for(int i=1;i<=totalUnit;i++)	
+			 {
+				 System::String* tmp=tmp->Concat(dirOfRecFile,i.ToString(),".txt");
+				 //System::IO::File::Delete(dirOfRecFile+i+".txt");
+				 System::IO::File::Delete(tmp);
+			 }
+
+			 }
+		private: void LoadFromFile()
+		 {
+			System::IO::StreamReader* sr = System::IO::StreamReader::Null;
+			System::String* tempStr;
+			System::String* charStr;
+			System::String* unicodeStr;
+			int index;
+
+			try
+			{
+				this->slForCharacters = new System::Collections::SortedList();
+				// read the characters and store
+				sr = new System::IO::StreamReader(this->characterDBPath);
+				tempStr = sr->ReadLine();
+				while (tempStr->Length!=0)
+				{
+					index = tempStr->IndexOf(" ");
+					charStr = tempStr->Substring(0,index);
+					unicodeStr = tempStr->Substring(index+1);
+					slForCharacters->Add(charStr,unicodeStr);
+					tempStr = sr->ReadLine();
+				}
+				sr->Close();
+			}
+			catch(System::Exception* ex)
+			{
+				System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Can't load the Combo box!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+				exit(0);
+			}
+		 }
+
+		private: void ProvideOutput()
+		 {
+
+			 
+		    System::String* tempStr = "";
+			System::String* text = "";
+			System::Collections::ArrayList* tempAl;	// temporary working array list
+			System::String* ucodeStr;	
+
+			try
+			{	
+				int index = 0;
+				int ind = 0;
+				for (int i = 0; i < this->numberOfLines; i++  )
+				{
+					for (int j = 0; j < this->Lines[i].getTotalWord(); j++)
+					{
+						for (int k = 0; k < this->Lines[i].Words[j].getTotalUnit(); k++)
+						{
+							if ( ind < this->alModelRec->Count)
+							{
+								ucodeStr = "";
+									
+								System::Collections::IEnumerator* tempNum0;
+								tempNum0=this->alModelRec->GetEnumerator();
+								System::String* tmpStr;
+								
+								int tempCount=0;
+									while(tempNum0->MoveNext())
+									{
+										//if(tempCount==ind)
+										//{
+										tmpStr=(String*)tempNum0->Current;
+										System::Windows::Forms::MessageBox::Show(tempStr,"Keys",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+
+										//break;
+										//}
+										//tempCount++;
+
+									}
+								//System::Windows::Forms::MessageBox::Show(index.ToString(),"Index Value!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+								//index = slModelTranscription->IndexOfKey(alModelRec[ind++]);
+								System::Windows::Forms::MessageBox::Show(tempStr,"First Key",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+								exit(0);
+
+								index = this->slModelTranscription->IndexOfKey(tempStr)+1;
+								ind++;
+								tempAl = (System::Collections::ArrayList*)slModelTranscription->GetByIndex(index);
+								System::Collections::IEnumerator* tempNum=tempAl->GetEnumerator();
+								while(tempNum->MoveNext())
+								{
+									tempStr = (String*)tempNum->Current;
+									ucodeStr = ucodeStr->Concat(ucodeStr,slForCharacters->GetKey(slForCharacters->IndexOfValue(tempStr)));
+								}
+								/*for(int l=0;l<tempAl->Count;l++)
+								{
+									tempStr = tempAl[l]->ToString();
+									ucodeStr = ucodeStr->Concat(ucodeStr,slForCharacters->GetKey(slForCharacters->IndexOfValue(tempStr)));
+								}		*/					
+								text = text->Concat(text,ucodeStr);
+							}// end if
+						}
+						text = text->Concat(text,(String*)" ");						
+					}
+					text = text->Concat(text,(String*)"\n");
+				}
+			}
+			catch(System::Exception* ex)
+			{
+				System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to provide the output!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+				exit(0);
+			}
+			// resize the window, show the output into a rich text box
+			//this->richTextBoxOutput->Visible = true;
+			//PostProcessor^ pr = gcnew PostProcessor(text);
+			//this->richTextBoxOutput->Text = pr->TextPostProcessor();
+
+			/*System::Collections::IEnumerator* tempNum;
+			System::String* tmpStr;
+			System::String* text;
+			tempNum=this->alModelRec->GetEnumerator();
+			while(tempNum->MoveNext())
+			{
+				tmpStr=(String*) tempNum->Current;
+				tmpStr=tmpStr->Concat(tmpStr,(String*)"\n");
+			}
+
+			text=tmpStr;
+					*/			
+
+			OCR::RecognitionForm* rw=new OCR::RecognitionForm();
+			rw->showText(text);
+			rw->ShowDialog();
+
+		 }
+
+
+		
+
+
+
+
+
+
 
 private: System::Void close_button_Click_1(System::Object *  sender, System::EventArgs *  e)
 			 {
@@ -653,12 +910,20 @@ private: System::Void train_Click(System::Object *  sender, System::EventArgs * 
 		 {
 			 OCR::TrainingForm* tw=new OCR::TrainingForm();
 			 tw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
+			 //this->slForCharacters=tw->getSortedList();
 			 //tw->defineVar(this->BArray,this->Lines,this->numberOfLines);
 			 tw->ShowDialog();
 
 
 			 //TrainWindow* tr=new TrainWindow();
 			
+		 }
+
+private: System::Void recognize_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 this->Recognize();
+			 //OCR::RecognitionForm* rw=new OCR::RecognitionForm();
+			 //rw->ShowDialog();
 		 }
 
 };

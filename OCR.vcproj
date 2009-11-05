@@ -135,6 +135,12 @@
 				RelativePath=".\HShell.cpp">
 			</File>
 			<File
+				RelativePath=".\RecognitionForm.cpp">
+			</File>
+			<File
+				RelativePath=".\RecognitionProcess.cpp">
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -199,6 +205,28 @@
 			</File>
 			<File
 				RelativePath=".\Line.h">
+			</File>
+			<File
+				RelativePath=".\RecognitionForm.h"
+				FileType="3">
+				<File
+					RelativePath=".\RecognitionForm.resX">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCManagedResourceCompilerTool"
+							ResourceFileName="$(IntDir)/OCR.RecognitionForm.resources"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCManagedResourceCompilerTool"
+							ResourceFileName="$(IntDir)/OCR.RecognitionForm.resources"/>
+					</FileConfiguration>
+				</File>
+			</File>
+			<File
+				RelativePath=".\RecognitionProcess.h">
 			</File>
 			<File
 				RelativePath=".\resource.h">
