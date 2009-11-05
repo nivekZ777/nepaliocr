@@ -457,11 +457,7 @@ void FileManipulating::RecognizeByHMM(System::String* recDir, System::String* ex
 		//batchFileName->Concat(recDir,"_HVite.bat");
 		System::IO::StreamWriter* sw = new System::IO::StreamWriter(batchFileName);
 		System::String* tempStr = "";
-
-		/*System::String *a,*b,*c;
-		a="ashish";
-		b="lamichhan";
-		a->Concat("ashish");*/
+ 
 
 
 		// building the associate command for the initialization
@@ -710,13 +706,7 @@ void FileManipulating::PrepareData(System::String* dataFileName, int **imageArr,
 		char *userFile;
 		userFile=new char[500];
 
-//		char ashish[500];
-		//std::string *as;
-		//as->
-		
-//		System::String sdf;
-//		sdf.get_Chars(i);
-		
+  		
 		
 		for(int i=0;i<len;i++)
 		{
