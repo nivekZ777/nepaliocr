@@ -6,6 +6,7 @@
 #include "Separate.h"
 #include "Convolution.h"
 #include "Deskew.h"
+#include "myBitmapLoader.h"
 
 
 
@@ -136,6 +137,9 @@ namespace NepaliOCR
 	private: System::Windows::Forms::Button *  train;
 	private: System::Windows::Forms::Button *  recognize;
 private: System::Windows::Forms::Button *  fastRecognizeButton;
+private: System::Windows::Forms::Label *  myInfo;
+private: System::Windows::Forms::Label *  myInfo1;
+
 
 
 
@@ -166,6 +170,8 @@ private: System::Windows::Forms::Button *  fastRecognizeButton;
 			this->train = new System::Windows::Forms::Button();
 			this->recognize = new System::Windows::Forms::Button();
 			this->fastRecognizeButton = new System::Windows::Forms::Button();
+			this->myInfo = new System::Windows::Forms::Label();
+			this->myInfo1 = new System::Windows::Forms::Label();
 			this->picture_panel->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -203,7 +209,7 @@ private: System::Windows::Forms::Button *  fastRecognizeButton;
 			// 
 			this->openImage->BackColor = System::Drawing::Color::Transparent;
 			this->openImage->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->openImage->Location = System::Drawing::Point(64, 8);
+			this->openImage->Location = System::Drawing::Point(32, 8);
 			this->openImage->Name = S"openImage";
 			this->openImage->Size = System::Drawing::Size(112, 48);
 			this->openImage->TabIndex = 1;
@@ -231,7 +237,7 @@ private: System::Windows::Forms::Button *  fastRecognizeButton;
 			// 
 			this->saveImage->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->saveImage->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->saveImage->Location = System::Drawing::Point(640, 8);
+			this->saveImage->Location = System::Drawing::Point(304, 0);
 			this->saveImage->Name = S"saveImage";
 			this->saveImage->Size = System::Drawing::Size(112, 48);
 			this->saveImage->TabIndex = 2;
@@ -287,12 +293,26 @@ private: System::Windows::Forms::Button *  fastRecognizeButton;
 			// 
 			// fastRecognizeButton
 			// 
-			this->fastRecognizeButton->Location = System::Drawing::Point(256, 8);
+			this->fastRecognizeButton->Location = System::Drawing::Point(184, 8);
 			this->fastRecognizeButton->Name = S"fastRecognizeButton";
 			this->fastRecognizeButton->Size = System::Drawing::Size(88, 48);
 			this->fastRecognizeButton->TabIndex = 10;
 			this->fastRecognizeButton->Text = S"Fast Recognize";
 			this->fastRecognizeButton->Click += new System::EventHandler(this, fastRecognizeButton_Click);
+			// 
+			// myInfo
+			// 
+			this->myInfo->Location = System::Drawing::Point(520, 16);
+			this->myInfo->Name = S"myInfo";
+			this->myInfo->Size = System::Drawing::Size(264, 24);
+			this->myInfo->TabIndex = 11;
+			// 
+			// myInfo1
+			// 
+			this->myInfo1->Location = System::Drawing::Point(440, 16);
+			this->myInfo1->Name = S"myInfo1";
+			this->myInfo1->Size = System::Drawing::Size(72, 24);
+			this->myInfo1->TabIndex = 12;
 			// 
 			// Form1
 			// 
@@ -301,6 +321,8 @@ private: System::Windows::Forms::Button *  fastRecognizeButton;
 			this->AutoScroll = true;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->ClientSize = System::Drawing::Size(794, 518);
+			this->Controls->Add(this->myInfo1);
+			this->Controls->Add(this->myInfo);
 			this->Controls->Add(this->fastRecognizeButton);
 			this->Controls->Add(this->recognize);
 			this->Controls->Add(this->train);
@@ -539,7 +561,9 @@ private: System::Windows::Forms::Button *  fastRecognizeButton;
 						
 					 // set the cursor to Default.... 
 						this->Cursor = System::Windows::Forms::Cursors::Default;
-						System::Windows::Forms::MessageBox::Show(this->intLevel.ToString()/*fLevel.ToString()*/,"Threshold Value");
+						//System::Windows::Forms::MessageBox::Show(this->intLevel.ToString()/*fLevel.ToString()*/,"Threshold Value");
+						myInfo1->Text = "Threshold Value";
+						myInfo->Text = this->intLevel.ToString();
 						this->BinaryDone=true;
 					}
 				 catch(System::Exception* ex)
@@ -571,6 +595,8 @@ private: System::Windows::Forms::Button *  fastRecognizeButton;
 					im = new Bitmap(this->openImageDialog->OpenFile());
 					this->pictureBox1->Image = im;
 					g=this->pictureBox1->CreateGraphics();
+					myInfo->Text="";
+					myInfo1->Text="";
 					
 					
 					//System::Windows::Forms::MessageBox::Show("Image successfully loaded","Success");
@@ -629,7 +655,16 @@ private: System::Windows::Forms::Button *  fastRecognizeButton;
 		private: void separate()
 				 {
 					 this->tmpBArray=new bool*[im->Height];
+					 //System::Windows::Forms::MessageBox::Show(im->Height.ToString(),"Height");
+					 myInfo1->Text = "Image Height";
+					 myInfo->Text = im->Height.ToString();
+					  //OCR::TrainingForm* tw1=new OCR::TrainingForm();
+					  OCR::myBitmapLoader* mbl = new OCR::myBitmapLoader();
+
+					  // I am here Aug20
+					  //mbl->bmpLoaderNew();
 					 //this->tmpBArray=this->BArray;
+					
 					 for(int i=0;i<im->Height;i++)
 					 {
 						 this->tmpBArray[i]=new bool[im->Width];
@@ -645,17 +680,17 @@ private: System::Windows::Forms::Button *  fastRecognizeButton;
 							if(this->SeparateDone==false)
 							{
 							Separate* sp=new Separate(im,BArray,g);
-							sp->LineSeparate();
+							sp->LineSeparate();						//Separate Lines from the image
 
-							this->numberOfLines=sp->getNumberOfLines();
-							this->Lines=sp->getLines();
+							this->numberOfLines=sp->getNumberOfLines(); //Get Number of Lines
+							this->Lines=sp->getLines();			//Get Lines
 							this->SeparateDone=true;
-							this->separateChar();							
+							this->separateChar();				//separate Characters					
 							}
 
 							else
 							{
-								this->separateChar();
+								this->separateChar();			//separate Characters
 							}
 
 							//sp->drawHorizontalHist();
@@ -678,14 +713,18 @@ private: System::Windows::Forms::Button *  fastRecognizeButton;
 
 					Deskew* ds=new Deskew(im);
 					double skewAngle=ds->GetSkewAngle();
+					
+					myInfo1->Text = "Skew Angle:";
+					myInfo->Text = skewAngle.ToString();
 
 					
 
-   				    System::Windows::Forms::MessageBox::Show(skewAngle.ToString(),"Skew Angle");
-					im=this->RotateImage(-skewAngle); 
-										
-					
-					this->pictureBox1->Image = im;
+   				    //System::Windows::Forms::MessageBox::Show(skewAngle.ToString(),"Skew Angle");
+
+					if(skewAngle !=0){
+						im=this->RotateImage(-skewAngle); 
+						this->pictureBox1->Image = im;
+						}
 					//System::Windows::Forms::MessageBox::Show(" Image rotated successfully","Action Complete");
 
 				 
