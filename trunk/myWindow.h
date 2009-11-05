@@ -2,6 +2,9 @@
 #include "RecognitionProcess.h"
 #include "RecognitionForm.h"
 #include "ThresholedValue.h"
+//#include "Separate.h"
+//#include "myWindowSeparate.h"
+
 #include "rgbConvert.h"
 
 #pragma once
@@ -328,7 +331,7 @@ namespace OCR
 				this->LineInfo=Lines;
 				this->lineCount=numberOfLines;
 				this->display(this->lineno,this->wordno,this->charno);
-				//this->LoadComboBoxFromFile();
+//				this->LoadComboBoxFromFile();
 			}
 
 
@@ -443,8 +446,9 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 						//int** whymakeBinary;
 						this->smallBinary();			
 						
-
+						
 						RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,ImgArray);
+						
 						//RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImageArray);
 						//from:: //	RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImgArray);
 
@@ -454,6 +458,10 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 						
 
 						int lineCount = this->numberOfLines;
+						
+						if(this->ImgArray){
+							System::Windows::Forms::MessageBox::Show(this->numberOfLines.ToString(),"image array exists");
+						}
 						int wordCount = 0;
 						int totalUnit = 0;
 						int unitCount = 0;
@@ -528,7 +536,9 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 
 		
 		}
-
+		private: void recognize_small_chars(){
+						
+				 }
 		private: void ProvideOutput(){
 
 					System::String* tempStr = "";
@@ -652,6 +662,11 @@ private: void LoadFromFile()
 				}
 
 			}
+	private: void smallSeparate(){
+
+			 }
+
+
 private: System::Void button3_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 this->recognize();

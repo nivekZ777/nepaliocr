@@ -105,8 +105,8 @@ namespace OCR
 			 bool meanDone;
 			 bool deskewDone;
 
-	private: bool **binaryArrayForMagnification;
-
+	private: bool **binaryArrayForMagnification; //equivalent to::-> tmpBArry
+	//bool binaryArrayForMagnification is equivalent to bool tmpBArry of separate() function
 
 	private: int numberOfLines;
 	private: Line* Lines; 
@@ -819,11 +819,13 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 		{
 								 
 						RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImgArray);
-
 						// load the transcription of the models
 						this->slModelTranscription = rp->LoadModelTranscriptions(this->modelTrainDBPath);
 						 
 						int lineCount = this->numberOfLines;
+						if(this->ImgArray){
+							System::Windows::Forms::MessageBox::Show(this->numberOfLines.ToString(),"image array exists");
+						}
 						int wordCount = 0;
 						int totalUnit = 0;
 						int unitCount = 0;
