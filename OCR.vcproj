@@ -126,6 +126,9 @@
 				RelativePath=".\AssemblyInfo.cpp">
 			</File>
 			<File
+				RelativePath=".\featureCounter.cpp">
+			</File>
+			<File
 				RelativePath=".\FileManipulating.cpp">
 			</File>
 			<File
@@ -182,6 +185,9 @@
 				RelativePath=".\Deskew.h">
 			</File>
 			<File
+				RelativePath=".\featureCounter.h">
+			</File>
+			<File
 				RelativePath=".\FileManipulating.h">
 			</File>
 			<File
@@ -230,6 +236,9 @@
 							ResourceFileName="$(IntDir)/OCR.myWindow.resources"/>
 					</FileConfiguration>
 				</File>
+			</File>
+			<File
+				RelativePath=".\myWindowSeparate.h">
 			</File>
 			<File
 				RelativePath=".\RecognitionForm.h"
