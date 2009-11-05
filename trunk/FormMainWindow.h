@@ -1017,6 +1017,9 @@ private: void tryMagnify(){
 							//TO BE DONE TOMORROW
 							OCR::myWindow* mw = new OCR::myWindow(this->BinaryImage);
 							//mw->pictureBox_myWindow->Image = this->binaryArrayForMagnification;
+							mw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
+
+							 //mw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
 							mw->ShowDialog();
 							OCR::myWindow* mw1 = new OCR::myWindow(this->im);
 							mw1->ShowDialog();
