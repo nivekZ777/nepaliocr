@@ -331,7 +331,7 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 			// create streamreader
 			System::IO::StreamReader* sr = new System::IO::StreamReader(gramFile);
 			System::String* line;
-			System::String *tmp;
+			//	System::String *tmp;
 			int  k;
 
 
@@ -646,7 +646,7 @@ void FileManipulating::PrepareData(System::String* dataFileName, int **imageArr,
 				ApplyDCT();
 
 				NoOfWindow++;
-				int val;
+				//	int val;
 				int k1=0;
 				for(int p = 0; p < FRAME_HT ;p++ )
 				{
@@ -755,7 +755,7 @@ void FileManipulating::PrepareData(System::String* dataFileName, int **imageArr,
 
 void FileManipulating::ApplyDCT()
 {
-  float cucv, temp;
+  float cucv;
 
 	for (int u=0;u<FRAME_HT;u++)
     {

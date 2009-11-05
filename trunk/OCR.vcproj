@@ -135,9 +135,6 @@
 				RelativePath=".\HShell.cpp">
 			</File>
 			<File
-				RelativePath=".\myBitmapLoader.cpp">
-			</File>
-			<File
 				RelativePath=".\RecognitionForm.cpp">
 			</File>
 			<File
@@ -208,25 +205,6 @@
 			</File>
 			<File
 				RelativePath=".\Line.h">
-			</File>
-			<File
-				RelativePath=".\myBitmapLoader.h"
-				FileType="3">
-				<File
-					RelativePath=".\myBitmapLoader.resX">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/OCR.myBitmapLoader.resources"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/OCR.myBitmapLoader.resources"/>
-					</FileConfiguration>
-				</File>
 			</File>
 			<File
 				RelativePath=".\RecognitionForm.h"

@@ -6,7 +6,6 @@
 #include "Separate.h"
 #include "Convolution.h"
 #include "Deskew.h"
-#include "myBitmapLoader.h"
 
 
 
@@ -139,6 +138,7 @@ namespace NepaliOCR
 private: System::Windows::Forms::Button *  fastRecognizeButton;
 private: System::Windows::Forms::Label *  myInfo;
 private: System::Windows::Forms::Label *  myInfo1;
+private: System::Windows::Forms::Button *  findMagnification;
 
 
 
@@ -172,6 +172,7 @@ private: System::Windows::Forms::Label *  myInfo1;
 			this->fastRecognizeButton = new System::Windows::Forms::Button();
 			this->myInfo = new System::Windows::Forms::Label();
 			this->myInfo1 = new System::Windows::Forms::Label();
+			this->findMagnification = new System::Windows::Forms::Button();
 			this->picture_panel->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -223,7 +224,7 @@ private: System::Windows::Forms::Label *  myInfo1;
 			// separate_button
 			// 
 			this->separate_button->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->separate_button->Location = System::Drawing::Point(344, 80);
+			this->separate_button->Location = System::Drawing::Point(320, 80);
 			this->separate_button->Name = S"separate_button";
 			this->separate_button->TabIndex = 6;
 			this->separate_button->Text = S"SEPARATE";
@@ -266,7 +267,7 @@ private: System::Windows::Forms::Label *  myInfo1;
 			// deSkew
 			// 
 			this->deSkew->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->deSkew->Location = System::Drawing::Point(456, 79);
+			this->deSkew->Location = System::Drawing::Point(512, 80);
 			this->deSkew->Name = S"deSkew";
 			this->deSkew->TabIndex = 7;
 			this->deSkew->Text = S"DE-SKEW";
@@ -275,7 +276,7 @@ private: System::Windows::Forms::Label *  myInfo1;
 			// train
 			// 
 			this->train->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->train->Location = System::Drawing::Point(568, 80);
+			this->train->Location = System::Drawing::Point(600, 80);
 			this->train->Name = S"train";
 			this->train->TabIndex = 8;
 			this->train->Text = S"TRAIN";
@@ -314,6 +315,15 @@ private: System::Windows::Forms::Label *  myInfo1;
 			this->myInfo1->Size = System::Drawing::Size(72, 24);
 			this->myInfo1->TabIndex = 12;
 			// 
+			// findMagnification
+			// 
+			this->findMagnification->Location = System::Drawing::Point(408, 80);
+			this->findMagnification->Name = S"findMagnification";
+			this->findMagnification->Size = System::Drawing::Size(88, 24);
+			this->findMagnification->TabIndex = 13;
+			this->findMagnification->Text = S"Magnification";
+			this->findMagnification->Click += new System::EventHandler(this, findMagnification_Click);
+			// 
 			// Form1
 			// 
 			this->AccessibleRole = System::Windows::Forms::AccessibleRole::Application;
@@ -321,6 +331,7 @@ private: System::Windows::Forms::Label *  myInfo1;
 			this->AutoScroll = true;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->ClientSize = System::Drawing::Size(794, 518);
+			this->Controls->Add(this->findMagnification);
 			this->Controls->Add(this->myInfo1);
 			this->Controls->Add(this->myInfo);
 			this->Controls->Add(this->fastRecognizeButton);
@@ -632,8 +643,12 @@ private: System::Windows::Forms::Label *  myInfo1;
 		
 		private: void separateChar()
 				 {
+					 float myPenSum=0;
+					 int myPenCount = 0;
+					 
 					 Pen* p=new Pen(Color::Blue,1);
-	
+
+					 
 								for(int i=0;i<this->numberOfLines;i++)
 									{
 										for(int j=0;j<this->Lines[i].getTotalWord();j++)
@@ -644,6 +659,12 @@ private: System::Windows::Forms::Label *  myInfo1;
 														int x2=this->Lines[i].Words[j].Units[k].getEndColumn();
 														int y1=this->Lines[i].getStartRow();
 														int y2=this->Lines[i].getEndRow();
+														
+														 myPenSum+=(y2-y1)/(x2-x1);
+														 myPenCount++;
+
+														
+														// System::Windows::Forms::MessageBox::Show((myPenSum/myPenCount).ToString(),"Transformation Factor");
 
 														g->DrawLine(p,x1,y1,x1,y2);
 														g->DrawLine(p,x2,y1,x2,y2);
@@ -658,13 +679,7 @@ private: System::Windows::Forms::Label *  myInfo1;
 					 //System::Windows::Forms::MessageBox::Show(im->Height.ToString(),"Height");
 					 myInfo1->Text = "Image Height";
 					 myInfo->Text = im->Height.ToString();
-					  //OCR::TrainingForm* tw1=new OCR::TrainingForm();
-					  OCR::myBitmapLoader* mbl = new OCR::myBitmapLoader();
-
-					  // I am here Aug20
-					  //mbl->bmpLoaderNew();
 					 //this->tmpBArray=this->BArray;
-					
 					 for(int i=0;i<im->Height;i++)
 					 {
 						 this->tmpBArray[i]=new bool[im->Width];
@@ -1104,6 +1119,90 @@ private: System::Void fastRecognizeButton_Click(System::Object *  sender, System
 
 			 }
 
+		 }
+		 private: void separateToCheckMagnification()
+				 {
+					 this->tmpBArray=new bool*[im->Height];
+					 //System::Windows::Forms::MessageBox::Show(im->Height.ToString(),"Height");
+					 myInfo1->Text = "Image Height";
+					 myInfo->Text = im->Height.ToString();
+					 //this->tmpBArray=this->BArray;
+					 for(int i=0;i<im->Height;i++)
+					 {
+						 this->tmpBArray[i]=new bool[im->Width];
+						 for(int j=0;j<im->Width;j++)
+						 {
+							 this->tmpBArray[i][j]=this->BArray[i][j];
+						 }
+
+					 }
+					 if(this->BinaryDone==true) //If binarization is done
+						{
+
+							if(this->SeparateDone==false)
+							{
+							Separate* sp=new Separate(im,BArray,g);
+							sp->LineSeparate();						//Separate Lines from the image
+
+							this->numberOfLines=sp->getNumberOfLines(); //Get Number of Lines
+							this->Lines=sp->getLines();			//Get Lines
+							this->SeparateDone=true;
+							float myMagnificationFoactor = this->imageTransformerCounter();				//separate Characters					
+							}
+
+							else
+							{
+							float myMagnificationFoactor =	this->imageTransformerCounter();			//separate Characters
+							}
+
+							//sp->drawHorizontalHist();
+							//Pen* p=new Pen(Color::Red,1);
+							//g->DrawLine(p,50,50,150,150);
+							//g->DrawRectangle(p,50,50,150,150);//x,y,width,height
+						}
+					 
+					this->Update();
+				 }
+		 private: float imageTransformerCounter()
+				 {
+					 static float myPenSum=0;
+					 static int myPenCount = 0;
+					 
+					 Pen* p=new Pen(Color::Blue,1);
+
+					 
+								for(int i=0;i<this->numberOfLines;i++)
+									{
+										for(int j=0;j<this->Lines[i].getTotalWord();j++)
+											{
+												for(int k=0;k<this->Lines[i].Words[j].getTotalUnit();k++)
+													{
+														int x1=this->Lines[i].Words[j].Units[k].getStartColumn();
+														int x2=this->Lines[i].Words[j].Units[k].getEndColumn();
+														int y1=this->Lines[i].getStartRow();
+														int y2=this->Lines[i].getEndRow();
+														
+														 myPenSum+=(y2-y1)/(x2-x1);
+														 myPenCount++;
+
+														
+														// System::Windows::Forms::MessageBox::Show((myPenSum/myPenCount).ToString(),"Transformation Factor");
+
+														g->DrawLine(p,x1,y1,x1,y2);
+														g->DrawLine(p,x2,y1,x2,y2);
+													}
+											}
+									}
+					 myInfo1->Text = "Magnification";
+					 myInfo->Text = (myPenSum/myPenCount).ToString();
+					 //reset counter for separate
+					this->SeparateDone=false;
+					return myPenSum/myPenCount;
+				 }
+
+private: System::Void findMagnification_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			separateToCheckMagnification();
 		 }
 
 };
