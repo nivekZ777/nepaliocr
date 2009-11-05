@@ -1160,18 +1160,12 @@ private: System::Void fastRecognizeButton_Click(System::Object *  sender, System
 						
 							//im->Size= (im->Size)* (myMagnificationFactor/3.3);
 							//im->Height = im->Height * 2// (myMagnificationFactor/3.3);
-										
 							//int pixel1, pixel2;
 							//im->GetPixel(pixel1,pixel2);
-							
-							
 							//System::Drawing::Bitmap * myBmp1;
-							
-							
 							//myBmp1* = new Bitmap(im*2);
 							//myBmp1->SetPixel(im->100,100.100);
-
-						//	myBmp* = new __gc Bitmap;
+							//	myBmp* = new __gc Bitmap;
 
 							this->pictureBox1->Image = im;
 							g=this->pictureBox1->CreateGraphics();
