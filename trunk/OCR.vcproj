@@ -146,6 +146,9 @@
 			<File
 				RelativePath=".\ThresholedValue.cpp">
 			</File>
+			<File
+				RelativePath=".\TrainingForm.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -180,6 +183,9 @@
 				RelativePath=".\HoughLine.h">
 			</File>
 			<File
+				RelativePath=".\Line.h">
+			</File>
+			<File
 				RelativePath=".\resource.h">
 			</File>
 			<File
@@ -193,6 +199,31 @@
 			</File>
 			<File
 				RelativePath=".\ThresholedValue.h">
+			</File>
+			<File
+				RelativePath=".\TrainingForm.h"
+				FileType="3">
+				<File
+					RelativePath=".\TrainingForm.resX">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCManagedResourceCompilerTool"
+							ResourceFileName="$(IntDir)/OCR.TrainingForm.resources"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCManagedResourceCompilerTool"
+							ResourceFileName="$(IntDir)/OCR.TrainingForm.resources"/>
+					</FileConfiguration>
+				</File>
+			</File>
+			<File
+				RelativePath=".\Unit.h">
+			</File>
+			<File
+				RelativePath=".\Word.h">
 			</File>
 		</Filter>
 		<Filter

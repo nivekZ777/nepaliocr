@@ -1,3 +1,4 @@
+#include "Line.h"
 #pragma once
 //#include <vector>
 
@@ -15,7 +16,7 @@ private:
 	int ySize;
 	int *Horizontal;
 	int **Vertical;
-	int **VerticalC;
+	//int **VerticalC;
 	int numberOfLines;
 	static int thresh_char_gap=2;
 
@@ -23,12 +24,13 @@ private:
 
 public:
 	Separate(Bitmap* im,bool **B,Graphics* gr);
+	Line *Lines;
 	void LineSeparate();
 	void drawHorizontalHist();
 	void WordSeparate(ArrayList* start,ArrayList* end);
 	void WordSeparate1(ArrayList* start,ArrayList* end);
-	void CheckMattra(ArrayList* start,ArrayList* end);
-	void CharSeparate(ArrayList* start,ArrayList* end);
+	void CheckMattra(ArrayList* start,ArrayList* end,ArrayList** wordStart,ArrayList** wordEnd);
+	void CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wordStart,ArrayList** wordEnd);
 
 };
 
@@ -528,7 +530,7 @@ while(startEnumerator->MoveNext() && endEnumerator->MoveNext())
 		cnt++;
 	}
 
-
+/*
 	//draws Word Boundary
 
 	startEnumerator=start->GetEnumerator();
@@ -558,8 +560,9 @@ while(startEnumerator->MoveNext() && endEnumerator->MoveNext())
 		}
 		cnt++;
 	}
+*/
 		
-CheckMattra(start,end);
+CheckMattra(start,end,wordStart1,wordEnd1);
 	
 }
 
@@ -567,7 +570,7 @@ CheckMattra(start,end);
 
 
 
-void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd)//,ArrayList** wordStart,ArrayList** wordEnd)
+void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd,ArrayList** wordStart,ArrayList** wordEnd)
 {
 	//ArrayList** charStart=new ArrayList*();
 	//ArrayList** charEnd=new ArrayList*();
@@ -581,7 +584,7 @@ void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd)//,ArrayList*
 	lineStartEnumerator=lineStart->GetEnumerator();
 	lineEndEnumerator=lineEnd->GetEnumerator();
 
-	//Pen* p=new Pen(Color::White,1);
+	Pen* p=new Pen(Color::White,1);
 
 	//int cnt=0;
 	//drawHorizontalHist();
@@ -609,7 +612,6 @@ void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd)//,ArrayList*
 		}
 		//static int i=1;
 
-		this->CharSeparate(lineStart,lineEnd);
 		
 
 		
@@ -632,36 +634,364 @@ void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd)//,ArrayList*
 	
 	}
 
+	this->CharSeparate(lineStart,lineEnd,wordStart,wordEnd);
+		
+
 }
 
 
 
-
-
-void Separate::CharSeparate(ArrayList* start,ArrayList* end)
+void Separate::CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wStart,ArrayList** wEnd)
 {
-	ArrayList** wordStart=new ArrayList*();
-	ArrayList** wordEnd=new ArrayList*();
-	IEnumerator *wordStartEnumerator,*wordEndEnumerator;
-	ArrayList** wordStart1=new ArrayList*();
-	ArrayList** wordEnd1=new ArrayList*();
-	IEnumerator *wordStartEnumerator1,*wordEndEnumerator1;
+	//ArrayList*** wordStart=new ArrayList*();
+	//ArrayList** wordEnd=new ArrayList*();
+	//ArrayList** wordStart1=new ArrayList*();
+	//ArrayList** wordEnd1=new ArrayList*();
+	//IEnumerator *wordStartEnumerator1,*wordEndEnumerator1;
 
 	
-	IEnumerator *startEnumerator;
-	IEnumerator *endEnumerator;
 
-	int start_of_word2=0;
-	int end_of_word1=0;
-	int _sum_word_gap=0;
-	int _number_of_gaps=0;
+	int** VerticalC;
+	//ArrayList*** charStart=new ArrayList**();
+	//ArrayList*** charEnd=new ArrayList**();
 
+	
+	//enumerator for Line
+	IEnumerator *startEnumerator, *endEnumerator;
+
+	//enumerator for word
+	IEnumerator *wordStartEnumerator,*wordEndEnumerator;
+
+	//enumerator for char
+	//IEnumerator *charStartEnumerator,*charEndEnumerator;
 
 	startEnumerator=start->GetEnumerator();
 	endEnumerator=end->GetEnumerator();
 	
 	VerticalC=new int*[numberOfLines];
+	//this->Lines=new Line[this->numberOfLines];
+
+	int verticalCount=0;
 	
+	while(startEnumerator->MoveNext() && endEnumerator->MoveNext())
+	{
+		int y1=*dynamic_cast<__box int*> (startEnumerator->Current);
+		int y2=*dynamic_cast<__box int*> (endEnumerator->Current);
+
+		VerticalC[verticalCount]=new int[xSize];
+	
+		for(int i=0;i<this->xSize;i++)
+			{
+				int count=0;
+				
+				for(int j=y1;j<=y2;j++)
+					{
+						if(BinaryArray[j][i]==false)
+							{
+							count++;
+							}
+					}
+				VerticalC[verticalCount][i]=count;
+			}
+
+		verticalCount++;
+	}
+
+
+	startEnumerator=start->GetEnumerator();
+	endEnumerator=end->GetEnumerator();
+
+	int totalNoOfWord=0;
+	int lineCount=0;
+	while(startEnumerator->MoveNext() && endEnumerator->MoveNext())
+	{
+		int y1=*dynamic_cast<__box int*> (startEnumerator->Current);
+		int y2=*dynamic_cast<__box int*> (endEnumerator->Current);
+		
+		wordStartEnumerator=wStart[lineCount]->GetEnumerator();
+		wordEndEnumerator=wEnd[lineCount]->GetEnumerator();
+
+		//*charStart[lineCount]=new System::Collections::ArrayList();
+		//*charEnd[lineCount]=new System::Collections::ArrayList();
+
+		int wordCount=0;
+			
+			while(wordStartEnumerator->MoveNext() && wordEndEnumerator->MoveNext())
+				{
+					int x1 = *dynamic_cast<__box int*>(wordStartEnumerator->Current);
+					int x2 = *dynamic_cast<__box int*>(wordEndEnumerator->Current);
+					
+					//charStart[lineCount][wordCount]=new ArrayList();
+					//charEnd[lineCount][wordCount]=new ArrayList();
+
+					bool hasCharStarted=false;
+
+					int charCount=0;
+
+						for(int j=x1;j<=x2;j++)
+							{
+								if(hasCharStarted==false)
+									{
+										if(VerticalC[lineCount][j]>0)
+											{
+												charCount++;
+												//charStart[lineCount][wordCount]->Add(__box(j));
+												hasCharStarted=true;
+											}
+									}
+								else
+									{
+										if(VerticalC[lineCount][j]<=0)
+											{
+												//charEnd[lineCount][wordCount]->Add(__box(j));
+												hasCharStarted=false;
+											}
+									}
+									
+									//there are 'charCount' number of characters at 'wordCount' th word of line number 'lineCount'
+
+							}
+
+							//System::Windows::Forms::MessageBox::Show(charCount.ToString(),"Number Of Characters");
+							//System::Windows::Forms::MessageBox::Show(wordCount.ToString(),"In WordNo.");
+							//System::Windows::Forms::MessageBox::Show(lineCount.ToString(),"Of LineNo.");
+
+
+					wordCount++;
+					totalNoOfWord++;
+				}
+
+		lineCount++;
+	}
+
+	int **allInOne=new int*[totalNoOfWord];
+
+	
+	startEnumerator=start->GetEnumerator();
+	endEnumerator=end->GetEnumerator();
+
+	int arrayCount=0;
+
+	lineCount=0;
+	while(startEnumerator->MoveNext() && endEnumerator->MoveNext())
+	{
+		int y1=*dynamic_cast<__box int*> (startEnumerator->Current);
+		int y2=*dynamic_cast<__box int*> (endEnumerator->Current);
+		
+		wordStartEnumerator=wStart[lineCount]->GetEnumerator();
+		wordEndEnumerator=wEnd[lineCount]->GetEnumerator();
+
+		//*charStart[lineCount]=new System::Collections::ArrayList();
+		//*charEnd[lineCount]=new System::Collections::ArrayList();
+
+		int wordCount=0;
+			
+			while(wordStartEnumerator->MoveNext() && wordEndEnumerator->MoveNext())
+				{
+					int x1 = *dynamic_cast<__box int*>(wordStartEnumerator->Current);
+					int x2 = *dynamic_cast<__box int*>(wordEndEnumerator->Current);
+					
+					//charStart[lineCount][wordCount]=new ArrayList();
+					//charEnd[lineCount][wordCount]=new ArrayList();
+
+					bool hasCharStarted=false;
+
+					int charCount=0;
+
+						for(int j=x1;j<=x2;j++)
+							{
+								if(hasCharStarted==false)
+									{
+										if(VerticalC[lineCount][j]>0)
+											{
+												//totalNoOfChar++;
+												charCount++;
+												//charStart[lineCount][wordCount]->Add(__box(j));
+												hasCharStarted=true;
+											}
+									}
+								else
+									{
+										if(VerticalC[lineCount][j]<=0)
+											{
+												//charEnd[lineCount][wordCount]->Add(__box(j));
+												hasCharStarted=false;
+											}
+									}
+									
+									//there are 'charCount' number of characters at 'wordCount' th word of line number 'lineCount'
+
+							}
+
+							allInOne[arrayCount]=new int[3];
+
+							allInOne[arrayCount][0]=lineCount;
+							allInOne[arrayCount][1]=wordCount;
+							allInOne[arrayCount][2]=charCount;
+
+							arrayCount++;
+							
+
+							//System::Windows::Forms::MessageBox::Show(charCount.ToString(),"Number Of Characters");
+							//System::Windows::Forms::MessageBox::Show(wordCount.ToString(),"In WordNo.");
+							//System::Windows::Forms::MessageBox::Show(lineCount.ToString(),"Of LineNo.");
+
+
+					wordCount++;
+				}
+
+		lineCount++;
+	}
+
+
+	//Start Of the creation of the data structure
+	startEnumerator=start->GetEnumerator();
+	endEnumerator=end->GetEnumerator();
+
+	this->Lines=new Line[this->numberOfLines];
+
+	lineCount=0;
+	while(startEnumerator->MoveNext() && endEnumerator->MoveNext())
+	{
+		int y1=*dynamic_cast<__box int*> (startEnumerator->Current);
+		int y2=*dynamic_cast<__box int*> (endEnumerator->Current);
+		
+		this->Lines[lineCount].set(y1,y2);
+
+		wordStartEnumerator=wStart[lineCount]->GetEnumerator();
+		wordEndEnumerator=wEnd[lineCount]->GetEnumerator();
+
+		//*charStart[lineCount]=new System::Collections::ArrayList();
+		//*charEnd[lineCount]=new System::Collections::ArrayList();
+
+		
+					int wordCountInLine=0;
+					
+					for(int i=0;i<totalNoOfWord;i++)
+					{
+						if(allInOne[i][0]==lineCount)
+						{
+							wordCountInLine++;
+						}
+						else if(allInOne[i][0]>lineCount)
+						{
+							break;
+						}
+					}
+
+					this->Lines[lineCount].setWord(wordCountInLine);
+
+			int wordCount=0;
+
+			while(wordStartEnumerator->MoveNext() && wordEndEnumerator->MoveNext())
+				{
+					int x1 = *dynamic_cast<__box int*>(wordStartEnumerator->Current);
+					int x2 = *dynamic_cast<__box int*>(wordEndEnumerator->Current);
+					
+					this->Lines[lineCount].Words[wordCount].set(x1,x2);
+
+					int charCountInWord=0;
+					for(int i=0;i<totalNoOfWord;i++)
+					{
+						if(allInOne[i][0]==lineCount && allInOne[i][1]==wordCount)
+						{
+							charCountInWord=allInOne[i][2];
+							break;
+						}
+					}
+
+					this->Lines[lineCount].Words[wordCount].setUnit(charCountInWord);
+
+					
+					//charStart[lineCount][wordCount]=new ArrayList();
+					//charEnd[lineCount][wordCount]=new ArrayList();
+
+					bool hasCharStarted=false;
+
+					int charCount=0;
+
+					int x11,x22;
+
+						for(int j=x1;j<=x2;j++)
+							{
+								
+								if(hasCharStarted==false)
+									{
+										if(VerticalC[lineCount][j]>0)
+											{
+												//charStart[lineCount][wordCount]->Add(__box(j));
+												x11=j;
+												hasCharStarted=true;
+											}
+									}
+								else
+									{
+										if(VerticalC[lineCount][j]<=0)
+											{
+												//charEnd[lineCount][wordCount]->Add(__box(j));
+												x22=j;
+												
+												this->Lines[lineCount].Words[wordCount].Units[charCount].set(x11,x22);
+												charCount++;
+												
+												hasCharStarted=false;
+											}
+									}
+									
+									
+							}
+
+							//System::Windows::Forms::MessageBox::Show(charCount.ToString(),"Number Of Characters");
+							//System::Windows::Forms::MessageBox::Show(wordCount.ToString(),"In WordNo.");
+							//System::Windows::Forms::MessageBox::Show(lineCount.ToString(),"Of LineNo.");
+
+
+					wordCount++;
+				}
+
+		lineCount++;
+	}
+
+
+Pen* p=new Pen(Color::Red,1);
+	
+	for(int i=0;i<this->numberOfLines;i++)
+	{
+		for(int j=0;j<this->Lines[i].getTotalWord();j++)
+		{
+			for(int k=0;k<this->Lines[i].Words[j].getTotalUnit();k++)
+			{
+				int x1=this->Lines[i].Words[j].Units[k].getStartColumn();
+				int x2=this->Lines[i].Words[j].Units[k].getEndColumn();
+				int y1=this->Lines[i].getStartRow();
+				int y2=this->Lines[i].getEndRow();
+
+					g->DrawLine(p,x1,y1,x1,y2);
+					g->DrawLine(p,x2,y1,x2,y2);
+			}
+		}
+	}
+
+
+
+/*
+for(int i=0;i<10;i++)
+{
+	charStart[i]=new ArrayList*();
+	for(int j=0;j<10;j++)
+	{
+		charStart[i][j]=new ArrayList();
+
+		for(int k=0;k<10;k++)
+		{
+			charStart[i][j]->Add(__box(k));
+	
+		}
+	}
+}
+*/
+
+	/*
 	
 	int verticalCount=0;
 	
@@ -683,14 +1013,110 @@ void Separate::CharSeparate(ArrayList* start,ArrayList* end)
 							count++;
 							}
 					}
-				this->VerticalC[verticalCount][i]=count;
+				VerticalC[verticalCount][i]=count;
 			}
 
 		verticalCount++;
 	}
 
+	startEnumerator=start->GetEnumerator();
+	endEnumerator=end->GetEnumerator();
+
+	int lineCount=0;
+	while(startEnumerator->MoveNext() && endEnumerator->MoveNext())
+	{
+		int y1=*dynamic_cast<__box int*> (startEnumerator->Current);
+		int y2=*dynamic_cast<__box int*> (endEnumerator->Current);
+		
+		wordStartEnumerator=wStart[lineCount]->GetEnumerator();
+		wordEndEnumerator=wEnd[lineCount]->GetEnumerator();
+
+		*charStart[lineCount]=new System::Collections::ArrayList();
+		*charEnd[lineCount]=new System::Collections::ArrayList();
+
+		int wordCount=0;
+			
+			while(wordStartEnumerator->MoveNext() && wordEndEnumerator->MoveNext())
+				{
+					int x1 = *dynamic_cast<__box int*>(wordStartEnumerator->Current);
+					int x2 = *dynamic_cast<__box int*>(wordEndEnumerator->Current);
+					
+					charStart[lineCount][wordCount]=new ArrayList();
+					charEnd[lineCount][wordCount]=new ArrayList();
+
+					bool hasCharStarted=false;
+
+						for(int j=x1-1;j<=x2+1;j++)
+							{
+								if(hasCharStarted==false)
+									{
+										if(VerticalC[lineCount][j]>0)
+											{
+												charStart[lineCount][wordCount]->Add(__box(j));
+												hasCharStarted=true;
+											}
+									}
+								else
+									{
+										if(VerticalC[lineCount][j]<=0)
+											{
+												charEnd[lineCount][wordCount]->Add(__box(j));
+												hasCharStarted=false;
+											}
+									}
+
+							}
+					wordCount++;
+				}
+
+		lineCount++;
+	}
+
+
+//draw Character Boundary;
+	startEnumerator=start->GetEnumerator();
+	endEnumerator=end->GetEnumerator();
+	
+	lineCount=0;
+
+	Pen* p=new Pen(Color::Red,1);
+	
+	while(startEnumerator->MoveNext() && endEnumerator->MoveNext())
+	{
+		int y1=*dynamic_cast<__box int*> (startEnumerator->Current);
+		int y2=*dynamic_cast<__box int*> (endEnumerator->Current);
+	
+		wordStartEnumerator=wStart[lineCount]->GetEnumerator();
+		wordEndEnumerator=wEnd[lineCount]->GetEnumerator();
+		
+		int wordCount=0;
+			
+		while(wordStartEnumerator->MoveNext() && wordEndEnumerator->MoveNext())
+			{
+				int x1 = *dynamic_cast<__box int*>(wordStartEnumerator->Current);
+				int x2 = *dynamic_cast<__box int*>(wordEndEnumerator->Current);
+				
+					charStartEnumerator=charStart[lineCount][wordCount]->GetEnumerator();
+					charEndEnumerator=charEnd[lineCount][wordCount]->GetEnumerator();
+						while(charStartEnumerator->MoveNext() && charEndEnumerator->MoveNext())
+							{
+								int x11= *dynamic_cast<__box int*> (charStartEnumerator->Current);
+								int x22= *dynamic_cast<__box int*> (charEndEnumerator->Current);
+								
+								g->DrawLine(p,x11,y1,x11,y2);
+								g->DrawLine(p,x22,y1,x22,y2);
+
+							
+							}
+				wordCount++;
+			}
+		lineCount++;
+	}
 
 	
+
+
+	/*
 	Pen* p=new Pen(Color::Red,1);
 	
 	int cnt=0;
@@ -884,8 +1310,11 @@ while(startEnumerator->MoveNext() && endEnumerator->MoveNext())
 		cnt++;
 	}
 		
+*/
 	
 }
+
+
 
 
 	
