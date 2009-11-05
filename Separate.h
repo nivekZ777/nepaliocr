@@ -597,6 +597,8 @@ void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd,ArrayList** w
 		int y2=*dynamic_cast<__box int*> (lineEndEnumerator->Current);
 		int max=0;
 		int maxIndex;
+		int *mIndex=new int[100];
+		int cntMattra=0;
 		for(int i=y1;i<=y2;i++)
 		{
 			if(Horizontal[i]>max)
@@ -606,11 +608,27 @@ void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd,ArrayList** w
 			}
 		}
 
+		for(i=y1;i<=y2;i++)
+		{
+			if((double)Horizontal[i] >= (double)Horizontal[maxIndex]*(0.9))
+			{
+				//max=Horizontal[i];
+				mIndex[cntMattra]=i;
+				cntMattra++;
+			}
+		}
+
+
+
 		//g->DrawLine(p,0,maxIndex,this->xSize,maxIndex);
 		
 		for(int j=0;j<this->xSize;j++)
 		{
-		this->BinaryArray[maxIndex][j]=true;
+			for(int k=0;k<cntMattra;k++)
+			{
+				this->BinaryArray[mIndex[k]][j]=true;
+				g->DrawLine(p,0,mIndex[k],this->xSize,mIndex[k]);
+			}
 		}
 		//static int i=1;
 
