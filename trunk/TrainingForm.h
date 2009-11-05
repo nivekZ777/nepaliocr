@@ -143,6 +143,11 @@ namespace OCR
 			this->pictureBox1->Image=cropImage;
 		}
 
+		public: System::Collections::SortedList* getSortedList()
+				 {
+					 return this->slForCharacters;
+				 }
+
 		private: void LoadComboBoxFromFile()
 		 {
 			System::IO::StreamReader* sr = System::IO::StreamReader::Null;

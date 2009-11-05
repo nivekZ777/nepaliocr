@@ -524,10 +524,11 @@ System::Collections::ArrayList* FileManipulating::FetchOutputModels(System::Stri
 		int length = 0;
 		System::String* str;
 
-		tempStr=sr->ReadLine();
+		//tempStr=sr->ReadLine();
 		//while(!System::String::IsNullOrEmpty(tempStr = sr->ReadLine()))
-		while (tempStr->Length!=0)
+		while (sr->Peek()>=0)
 		{
+			tempStr=sr->ReadLine();
 			
 			lineNo++;
 			if(lineNo==3)
@@ -538,11 +539,11 @@ System::Collections::ArrayList* FileManipulating::FetchOutputModels(System::Stri
 				length = enIndex - stIndex;
 				str = tempStr->Substring(stIndex,length);
 				//text += str + "\n";
-				text=text->Concat(text,str,"\n");
+				text=text->Concat(text,str,(String*)"\n");
 				lineNo = 0;							
 				alWord->Add(str);
 			}
-			tempStr=sr->ReadLine();
+			//tempStr=sr->ReadLine();
 		}
 		sr->Close();
 
