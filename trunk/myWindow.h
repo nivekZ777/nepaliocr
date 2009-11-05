@@ -1,14 +1,10 @@
+//#include "Separate.h"
 #include "Line.h"
 #include "RecognitionProcess.h"
 #include "RecognitionForm.h"
 #include "ThresholedValue.h"
-//#include "Separate.h"
-
-
-//#include "Separate.h"
-//#include "myWindowSeparate.h"
-
 #include "rgbConvert.h"
+
 
 #pragma once
 
@@ -82,6 +78,17 @@ namespace OCR
 	private: 
 		bool** BinArray;
 		int **ImageArray;
+
+		private: bool **BArray;
+				 bool **tmpBArray;
+		private: bool BinaryDone;
+		private: bool ImageLoaded;
+                 bool SeparateDone;
+                 bool ContrastDone;
+				 bool meanDone;
+                 bool deskewDone;
+	 Bitmap* imageReceivedToForm;
+	 private: Graphics* g;
 		
 		Line* LineInfo;
 		int lineCount;
@@ -92,9 +99,10 @@ namespace OCR
 		Bitmap* cropImage;
 		private: int **ImgArray;
 		private: int intLevel;
-		Bitmap* imageReceivedToForm;
+		
 		String* meroText;
 		private: static float counterForAveragingHeightWeight=0;
+		
 
 	private: int numberOfLines;
 	private: Line* Lines; 
@@ -908,5 +916,82 @@ private: System::Void avgButton_Click(System::Object *  sender, System::EventArg
 			checkParameters();
 		 }
 
+		 /*
+		 	private: void separate()
+				 {
+					 this->tmpBArray=new bool*[imageReceivedToForm->Height]; 
+					 //Declaring array of size image height
+			 
+					 
+					 //this->tmpBArray=this->BArray;
+					 for(int i=0;i<imageReceivedToForm->Height;i++)
+					 {
+						 this->tmpBArray[i]=new bool[imageReceivedToForm->Width];
+						 for(int j=0;j<imageReceivedToForm->Width;j++)
+						 {
+							 this->tmpBArray[i][j]=this->BArray[i][j];
+						 }
+
+					 }
+					/// if(this->BinaryDone==true) //If binarization is done
+					///	{
+
+							if(this->SeparateDone==false)
+							{
+//							Separate* sp=new Separate(imageReceivedToForm,BArray,g);
+//							sp->LineSeparate();						//Separate Lines from the image
+
+							this->numberOfLines=sp->getNumberOfLines(); //Get Number of Lines
+							this->Lines=sp->getLines();			//Get Lines
+							this->SeparateDone=true;
+							this->separateChar();				//separate Characters					
+							}
+
+							else
+							{
+								this->separateChar();			//separate Characters
+							}
+
+							//sp->drawHorizontalHist();
+							//Pen* p=new Pen(Color::Red,1);
+							//g->DrawLine(p,50,50,150,150);
+							//g->DrawRectangle(p,50,50,150,150);//x,y,width,height
+					///	}
+					 
+					this->Update();
+				 }
+	 		private: void separateChar()
+				 {
+					 float myPenSum=0;
+					 int myPenCount = 0;
+					 
+					 Pen* p=new Pen(Color::Blue,1);
+
+					 
+								for(int i=0;i<this->numberOfLines;i++)
+									{
+										for(int j=0;j<this->Lines[i].getTotalWord();j++)
+											{
+												for(int k=0;k<this->Lines[i].Words[j].getTotalUnit();k++)
+													{
+														int x1=this->Lines[i].Words[j].Units[k].getStartColumn();
+														int x2=this->Lines[i].Words[j].Units[k].getEndColumn();
+														int y1=this->Lines[i].getStartRow();
+														int y2=this->Lines[i].getEndRow();
+														
+														 myPenSum+=(y2-y1)/(x2-x1);
+														 myPenCount++;
+
+														
+														// System::Windows::Forms::MessageBox::Show((myPenSum/myPenCount).ToString(),"Transformation Factor");
+
+														g->DrawLine(p,x1,y1,x1,y2);
+														g->DrawLine(p,x2,y1,x2,y2);
+													}
+											}
+									}
+
+				 }
+				 */
 };
 }

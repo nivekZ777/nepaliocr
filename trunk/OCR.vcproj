@@ -144,6 +144,9 @@
 				RelativePath=".\RecognitionProcess.cpp">
 			</File>
 			<File
+				RelativePath=".\Separate.cpp">
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
