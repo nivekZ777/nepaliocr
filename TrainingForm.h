@@ -139,10 +139,10 @@ namespace OCR
 
 			 //System::Windows::Forms::MessageBox::Show("Please Load the image first","Image not loaded");
 
-			System::Windows::Forms::MessageBox::Show(x1.ToString(),"x1");
-			System::Windows::Forms::MessageBox::Show(x2.ToString(),"x2");
-			System::Windows::Forms::MessageBox::Show(y1.ToString(),"y1");
-			System::Windows::Forms::MessageBox::Show(y2.ToString(),"y2");
+			//System::Windows::Forms::MessageBox::Show(x1.ToString(),"x1");
+			//System::Windows::Forms::MessageBox::Show(x2.ToString(),"x2");
+			//System::Windows::Forms::MessageBox::Show(y1.ToString(),"y1");
+			//System::Windows::Forms::MessageBox::Show(y2.ToString(),"y2");
 			int xsize=x2-x1+1;
 			int ysize=y2-y1+1;
 			
