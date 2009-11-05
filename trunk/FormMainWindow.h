@@ -53,12 +53,6 @@ namespace OCR
 			this->meanDone=false;
 			this->deskewDone=false;
 
-			private System::ComponentModel::IContainer components = null;
-			this->components = new System::ComponentModel::Container();
-			this->icon = ((System::Drawing::Icon)(resources.GetObject("$this.Icon")));
-			private System::Drawing::Icon *a = new System::Drawing::Icon();
-			
-
 			InitializeComponent();
 
 			this->applicationPath=Application::StartupPath->ToString();
@@ -329,6 +323,7 @@ namespace OCR
 			// 
 			// findMagnification
 			// 
+			this->findMagnification->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->findMagnification->Location = System::Drawing::Point(392, 64);
 			this->findMagnification->Name = S"findMagnification";
 			this->findMagnification->Size = System::Drawing::Size(88, 24);
@@ -360,7 +355,7 @@ namespace OCR
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::Fixed3D;
 			this->MaximizeBox = false;
 			this->Name = S"Form1";
-			this->Text = S" Image Processing Part Of Nepali OCR";
+			this->Text = S"Nepali OCR";
 			this->picture_panel->ResumeLayout(false);
 			this->ResumeLayout(false);
 
@@ -463,7 +458,7 @@ namespace OCR
 			/*
 
 				This method does the mean removal of the image, before it is binarized. 
-				Yhis is an essentinal part of the Image Preprocessing part. 
+				Yhis is an essentinal part of the ` part. 
 
 			*/
 
