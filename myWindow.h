@@ -635,8 +635,17 @@ private: void LoadFromFile()
 					 }
 				 }
 				 this->display(this->lineno,this->wordno,this->charno);
-				 
 				 this->Update;
+				 x1=this->LineInfo[lineno].Words[wordno].Units[charno].getStartColumn(); //Equivalent to :: left_x
+				 x2=this->LineInfo[lineno].Words[wordno].Units[charno].getEndColumn();	//Equivalent to :: right_x
+				 y1=this->LineInfo[lineno].getStartRow();		//Equivalent to :: top_y
+				 y2=this->LineInfo[lineno].getEndRow();	
+				 System::Windows::Forms::MessageBox::Show(charno.ToString(),"Charno");
+				 //Cuzz charno starts from 0, we need to increment charno by 1, before recognizing
+				 singleRecognize(x1,x2,y1,y2,charno+1) ;
+				
+				 
+				 
 			 
 		 }
 	public: 
@@ -679,7 +688,7 @@ private: void LoadFromFile()
 			this->pictureBoxSmall->Image=cropImage;
 			this->smallHeightLabel->Text = this->cropImage->Height.ToString();
 			this->smallWidthLabel->Text = this->cropImage->Width.ToString();
-			singleRecognize(x1,x2,y1,y2,charno) ;
+			//this->singleRecognize(x1,x2,y1,y2,0);
 		}
 	
 	private: void singleRecognize(int left_x,int right_x,int top_y,int bottom_y,int charno){

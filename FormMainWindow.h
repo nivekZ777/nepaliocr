@@ -1081,6 +1081,23 @@ private: System::Void fastRecognizeButton_Click(System::Object *  sender, System
 //Try magnify function
 		 
 private: void tryMagnify(){
+					
+				this->Contrast(10);
+				this->ContrastDone=true;
+				this->Update();
+				
+				//mean removal
+				this->MeanRemoval(9);
+				this->meanDone= true;
+				this->Update();
+
+				//Binarization
+				this->makeBinary();
+				
+				//separation
+				this->separate();
+				
+
 					OCR::myWindow* mw = new OCR::myWindow(this->im,
 					this->BinaryImage,
 						this->g,
@@ -1105,22 +1122,7 @@ private: void tryMagnify(){
 						this->alModelRec
 						);
 				
-				this->Contrast(10);
-				this->ContrastDone=true;
-				this->Update();
-				
-				//mean removal
-				this->MeanRemoval(9);
-				this->meanDone= true;
-				this->Update();
-
-				//Binarization
-				this->makeBinary();
-				
-				//separation
-				this->separate();
-				
-
+				 
 				mw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
 				mw->ShowDialog();
 			 	  }
