@@ -1,4 +1,5 @@
 #include "Line.h"
+#include "TrainingProcess.h"
 
 #pragma once
 
@@ -38,10 +39,10 @@ namespace OCR
 			}
 
 			// getting the character database path
-			System::Windows::Forms::MessageBox::Show(this->applicationPath,"Path of characterDB path");
+			//System::Windows::Forms::MessageBox::Show(this->applicationPath,"Path of characterDB path");
 
 			this->characterDBPath=this->characterDBPath->Concat(this->applicationPath ,"\\htk\\DataBaseFile\\characters.txt");	
-			System::Windows::Forms::MessageBox::Show(this->characterDBPath,"Path of characterDB path");
+			//System::Windows::Forms::MessageBox::Show(this->characterDBPath,"Path of characterDB path");
 			
 			InitializeComponent();
 			//this->applicationPath = Application::StartupPath->ToString();
@@ -63,6 +64,7 @@ namespace OCR
 	
 	private: 
 		bool** BinArray;
+		int **ImageArray;
 		Line* LineInfo;
 		int lineCount;
 		Bitmap* cropImage;
@@ -82,8 +84,9 @@ namespace OCR
 
 	public: 
 		
-		void defineVar(bool** BArray,Line* Lines,int numberOfLines)
+		void defineVar(int** ImgArray,bool** BArray,Line* Lines,int numberOfLines)
 			{
+				this->ImageArray=ImgArray;
 				this->BinArray=BArray;
 				this->LineInfo=Lines;
 				this->lineCount=numberOfLines;
@@ -241,6 +244,7 @@ namespace OCR
 			this->trainButton->Name = S"trainButton";
 			this->trainButton->TabIndex = 10;
 			this->trainButton->Text = S"TRAIN";
+			this->trainButton->Click += new System::EventHandler(this, trainButton_Click);
 			// 
 			// combineChar
 			// 
@@ -355,6 +359,13 @@ private: System::Void prevButton_Click(System::Object *  sender, System::EventAr
 private: System::Void addChar_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 this->combineChar->Text=this->combineChar->Text->Concat(this->combineChar->Text,this->characterBox->SelectedItem->ToString());
+		 }
+
+private: System::Void trainButton_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 TrainingProcess* tp=new TrainingProcess(this->applicationPath,this->ImageArray,this->x1,this->x2,this->y1,this->y2);
+			 tp->PrepareTrainingData();
+			 tp->TrainingByHTK(tp->numOfFrame);
 		 }
 
 };
