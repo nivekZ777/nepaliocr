@@ -29,7 +29,25 @@ namespace OCR
 	public: 
 		TrainingForm(void)
 		{
+			this->applicationPath=Application::StartupPath->ToString();
+			
+			int len = this->applicationPath->Length -1;			
+			if(this->applicationPath->Substring(len)->Equals("\\"))
+			{
+				this->applicationPath = this->applicationPath->Substring(0,len);				
+			}
+
+			// getting the character database path
+			System::Windows::Forms::MessageBox::Show(this->applicationPath,"Path of characterDB path");
+
+			this->characterDBPath=this->characterDBPath->Concat(this->applicationPath ,"\\htk\\DataBaseFile\\characters.txt");	
+			System::Windows::Forms::MessageBox::Show(this->characterDBPath,"Path of characterDB path");
+			
 			InitializeComponent();
+			//this->applicationPath = Application::StartupPath->ToString();
+			// for the directory, path appear an extra '/'
+			// here we are removing that '/'
+			
 		}
         
 	protected: 
@@ -51,6 +69,15 @@ namespace OCR
 		static int lineno=0;
 		static int wordno=0;
 		static int charno=0;
+		private: int x1,x2,y1,y2;
+		private: String* applicationPath;
+				 String* characterDBPath;
+		private: System::Collections::SortedList* slForCharacters;
+
+
+		private: System::Windows::Forms::TextBox *  combineChar;
+		private: System::Windows::Forms::Button *  addChar;
+		
 
 
 	public: 
@@ -61,15 +88,16 @@ namespace OCR
 				this->LineInfo=Lines;
 				this->lineCount=numberOfLines;
 				this->display(this->lineno,this->wordno,this->charno);
+				this->LoadComboBoxFromFile();
 			}
 
 
 		void display(int lineno,int wordno,int charno)
 		{
-			int x1=this->LineInfo[lineno].Words[wordno].Units[charno].getStartColumn();
-			int x2=this->LineInfo[lineno].Words[wordno].Units[charno].getEndColumn();
-			int y1=this->LineInfo[lineno].getStartRow();
-			int y2=this->LineInfo[lineno].getEndRow();
+			x1=this->LineInfo[lineno].Words[wordno].Units[charno].getStartColumn();
+			x2=this->LineInfo[lineno].Words[wordno].Units[charno].getEndColumn();
+			y1=this->LineInfo[lineno].getStartRow();
+			y2=this->LineInfo[lineno].getEndRow();
 
 			int xsize=x2-x1+1;
 			int ysize=y2-y1+1;
@@ -94,16 +122,48 @@ namespace OCR
 			    }
 			}
 			this->pictureBox1->Image=cropImage;
-}
+		}
+
+		private: void LoadComboBoxFromFile()
+		 {
+			System::IO::StreamReader* sr = System::IO::StreamReader::Null;
+			System::String* tempStr;
+			System::String* charStr;
+			System::String* unicodeStr;
+			int index;
+
+			try
+			{
+				slForCharacters = new System::Collections::SortedList();
+				// read the characters and store
+				sr = new System::IO::StreamReader(this->characterDBPath);
+				tempStr = sr->ReadLine();
+				while (tempStr->Length!=0)
+				{
+					index = tempStr->IndexOf(" ");
+					charStr = tempStr->Substring(0,index);
+					unicodeStr = tempStr->Substring(index+1);
+					slForCharacters->Add(charStr,unicodeStr);
+					this->characterBox->Items->Add(charStr);
+					tempStr = sr->ReadLine();
+				}
+				sr->Close();
+			}
+			catch(System::Exception* ex)
+			{
+				System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Can't load the Combo box!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+				exit(0);
+			}
+		 }
 
 	private: System::Windows::Forms::Panel *  panel1;
 	private: System::Windows::Forms::PictureBox *  pictureBox1;
-	private: System::Windows::Forms::ComboBox *  LineNo;
-	private: System::Windows::Forms::ComboBox *  WordNo;
-	private: System::Windows::Forms::ComboBox *  CharNo;
-	private: System::Windows::Forms::Label *  label1;
-	private: System::Windows::Forms::Label *  label2;
-	private: System::Windows::Forms::Label *  label3;
+
+
+
+
+
+
 	private: System::Windows::Forms::Button *  nextButton;
 	private: System::Windows::Forms::Button *  prevButton;
 	private: System::Windows::Forms::ComboBox *  characterBox;
@@ -123,16 +183,12 @@ namespace OCR
 		{
 			this->panel1 = new System::Windows::Forms::Panel();
 			this->pictureBox1 = new System::Windows::Forms::PictureBox();
-			this->LineNo = new System::Windows::Forms::ComboBox();
-			this->WordNo = new System::Windows::Forms::ComboBox();
-			this->CharNo = new System::Windows::Forms::ComboBox();
-			this->label1 = new System::Windows::Forms::Label();
-			this->label2 = new System::Windows::Forms::Label();
-			this->label3 = new System::Windows::Forms::Label();
 			this->nextButton = new System::Windows::Forms::Button();
 			this->prevButton = new System::Windows::Forms::Button();
 			this->characterBox = new System::Windows::Forms::ComboBox();
 			this->trainButton = new System::Windows::Forms::Button();
+			this->combineChar = new System::Windows::Forms::TextBox();
+			this->addChar = new System::Windows::Forms::Button();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -154,57 +210,9 @@ namespace OCR
 			this->pictureBox1->TabIndex = 0;
 			this->pictureBox1->TabStop = false;
 			// 
-			// LineNo
-			// 
-			this->LineNo->Location = System::Drawing::Point(208, 24);
-			this->LineNo->Name = S"LineNo";
-			this->LineNo->Size = System::Drawing::Size(72, 21);
-			this->LineNo->TabIndex = 1;
-			this->LineNo->Text = S"Line No.";
-			// 
-			// WordNo
-			// 
-			this->WordNo->Location = System::Drawing::Point(208, 64);
-			this->WordNo->Name = S"WordNo";
-			this->WordNo->Size = System::Drawing::Size(72, 21);
-			this->WordNo->TabIndex = 2;
-			this->WordNo->Text = S"Word No.";
-			// 
-			// CharNo
-			// 
-			this->CharNo->Location = System::Drawing::Point(208, 104);
-			this->CharNo->Name = S"CharNo";
-			this->CharNo->Size = System::Drawing::Size(72, 21);
-			this->CharNo->TabIndex = 3;
-			this->CharNo->Text = S"Char No.";
-			// 
-			// label1
-			// 
-			this->label1->Location = System::Drawing::Point(144, 27);
-			this->label1->Name = S"label1";
-			this->label1->Size = System::Drawing::Size(56, 23);
-			this->label1->TabIndex = 4;
-			this->label1->Text = S"LINE:";
-			// 
-			// label2
-			// 
-			this->label2->Location = System::Drawing::Point(144, 67);
-			this->label2->Name = S"label2";
-			this->label2->Size = System::Drawing::Size(56, 23);
-			this->label2->TabIndex = 5;
-			this->label2->Text = S"WORD:";
-			// 
-			// label3
-			// 
-			this->label3->Location = System::Drawing::Point(144, 107);
-			this->label3->Name = S"label3";
-			this->label3->Size = System::Drawing::Size(56, 23);
-			this->label3->TabIndex = 6;
-			this->label3->Text = S"CHAR:";
-			// 
 			// nextButton
 			// 
-			this->nextButton->Location = System::Drawing::Point(160, 160);
+			this->nextButton->Location = System::Drawing::Point(296, 40);
 			this->nextButton->Name = S"nextButton";
 			this->nextButton->Size = System::Drawing::Size(56, 24);
 			this->nextButton->TabIndex = 7;
@@ -213,7 +221,7 @@ namespace OCR
 			// 
 			// prevButton
 			// 
-			this->prevButton->Location = System::Drawing::Point(80, 160);
+			this->prevButton->Location = System::Drawing::Point(200, 40);
 			this->prevButton->Name = S"prevButton";
 			this->prevButton->Size = System::Drawing::Size(56, 24);
 			this->prevButton->TabIndex = 8;
@@ -222,33 +230,43 @@ namespace OCR
 			// 
 			// characterBox
 			// 
-			this->characterBox->Location = System::Drawing::Point(16, 224);
+			this->characterBox->Location = System::Drawing::Point(16, 168);
 			this->characterBox->Name = S"characterBox";
 			this->characterBox->Size = System::Drawing::Size(121, 21);
 			this->characterBox->TabIndex = 9;
-			this->characterBox->Text = S"Characters";
 			// 
 			// trainButton
 			// 
-			this->trainButton->Location = System::Drawing::Point(176, 224);
+			this->trainButton->Location = System::Drawing::Point(232, 232);
 			this->trainButton->Name = S"trainButton";
 			this->trainButton->TabIndex = 10;
 			this->trainButton->Text = S"TRAIN";
 			// 
+			// combineChar
+			// 
+			this->combineChar->Location = System::Drawing::Point(168, 168);
+			this->combineChar->Name = S"combineChar";
+			this->combineChar->TabIndex = 11;
+			this->combineChar->Text = S"";
+			// 
+			// addChar
+			// 
+			this->addChar->Location = System::Drawing::Point(304, 166);
+			this->addChar->Name = S"addChar";
+			this->addChar->TabIndex = 12;
+			this->addChar->Text = S"ADD";
+			this->addChar->Click += new System::EventHandler(this, addChar_Click);
+			// 
 			// TrainingForm
 			// 
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
-			this->ClientSize = System::Drawing::Size(292, 266);
+			this->ClientSize = System::Drawing::Size(400, 266);
+			this->Controls->Add(this->addChar);
+			this->Controls->Add(this->combineChar);
 			this->Controls->Add(this->trainButton);
 			this->Controls->Add(this->characterBox);
 			this->Controls->Add(this->prevButton);
 			this->Controls->Add(this->nextButton);
-			this->Controls->Add(this->label3);
-			this->Controls->Add(this->label2);
-			this->Controls->Add(this->label1);
-			this->Controls->Add(this->CharNo);
-			this->Controls->Add(this->WordNo);
-			this->Controls->Add(this->LineNo);
 			this->Controls->Add(this->panel1);
 			this->Name = S"TrainingForm";
 			this->Text = S"TrainingForm";
@@ -332,6 +350,11 @@ private: System::Void prevButton_Click(System::Object *  sender, System::EventAr
 				 this->display(this->lineno,this->wordno,this->charno);
 				 this->Update;
 
+		 }
+
+private: System::Void addChar_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 this->combineChar->Text=this->combineChar->Text->Concat(this->combineChar->Text,this->characterBox->SelectedItem->ToString());
 		 }
 
 };
