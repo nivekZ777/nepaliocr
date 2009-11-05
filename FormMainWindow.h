@@ -671,37 +671,24 @@ private: System::Windows::Forms::Button *  fastRecognizeButton;
 
 		private: void doDeSkew()
 				  {
-						static bool skewedFlag;
-						/*
-						*SkewedFlag checks whether the image is deskewed or not.
-						*/
+						 
 
 
-					if(skewedFlag==true){
-											 
-						 System::Windows::Forms::MessageBox::Show(" The image is already rotated","Repeated Action");
-						 					  }
-				
+					 
+
 					Deskew* ds=new Deskew(im);
+					double skewAngle=ds->GetSkewAngle();
+
 					
-					/*
-					*If the image is not deskewed even once .. then do deskew
-					*/
-					if(skewedFlag==false){
-					  double skewAngle=ds->GetSkewAngle();
 
-					  System::Windows::Forms::MessageBox::Show(skewAngle.ToString(),"Skew Angle");
+   				    System::Windows::Forms::MessageBox::Show(skewAngle.ToString(),"Skew Angle");
+					im=this->RotateImage(-skewAngle); 
+										
+					
+					this->pictureBox1->Image = im;
+					//System::Windows::Forms::MessageBox::Show(" Image rotated successfully","Action Complete");
 
-					  im=this->RotateImage(-skewAngle); 
-
-					  this->pictureBox1->Image = im;
-					  skewedFlag = true;
-					  /*
-					  *Set skewedFlag to true after one successful deskew action
-					  */
-					  System::Windows::Forms::MessageBox::Show(" Image rotated successfully","Action Complete");
-
-					}
+				 
 					
 					
 				  }
@@ -828,7 +815,12 @@ private: System::Windows::Forms::Button *  fastRecognizeButton;
 			}
 			catch(System::Exception* ex)
 			{
-				System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Can't load the Combo box!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+				System::String* errorString1="";
+				errorString1 = ex->Message->ToString();
+				errorString1 = errorString1->Concat("Database file access error \n\nThe system generated the following error:\n",errorString1);
+				System::Windows::Forms::MessageBox::Show( errorString1,"Error");
+				//System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Can't load the Combo box!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+				//System::Windows::Forms::MessageBox::Show( ex->Message->ToString(),"Can't access database files");
 				exit(0);
 			}
 		 }
