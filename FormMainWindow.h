@@ -715,6 +715,10 @@ namespace Exercise1
 			 // recognize the words from the features file using the Viterbi decoder of the HTK Toolkit HVite
 			 // then read the Master Labeled File(MLF) and fetch the output models
 			 this->alModelRec = rp->RecognizeByHTK();
+			
+			 
+
+			 
 			 this->ProvideOutput();
 
 			 /* after recognizing is done remove the script file and also the associated image features files */
@@ -785,29 +789,26 @@ namespace Exercise1
 							{
 								ucodeStr = "";
 									
-								System::Collections::IEnumerator* tempNum0;
-								tempNum0=this->alModelRec->GetEnumerator();
-								System::String* tmpStr;
-								
-								int tempCount=0;
-									while(tempNum0->MoveNext())
+							System::Collections::IEnumerator* ENum;
+							ENum=this->alModelRec->GetEnumerator();
+							System::String* tempStr="";
+							int tempCount=0;
+               				while(ENum->MoveNext())
+								{
+									if(ind==tempCount)
 									{
-										//if(tempCount==ind)
-										//{
-										tmpStr=(String*)tempNum0->Current;
-										System::Windows::Forms::MessageBox::Show(tempStr,"Keys",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-
-										//break;
-										//}
-										//tempCount++;
-
+									tempStr=ENum->Current->ToString();
+									break;
 									}
+									tempCount++;
+									//System::Windows::Forms::MessageBox::Show(tempStr,"Keys",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+								}
 								//System::Windows::Forms::MessageBox::Show(index.ToString(),"Index Value!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 								//index = slModelTranscription->IndexOfKey(alModelRec[ind++]);
-								System::Windows::Forms::MessageBox::Show(tempStr,"First Key",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-								exit(0);
+								//System::Windows::Forms::MessageBox::Show(tempStr,"First Key",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+								//exit(0);
 
-								index = this->slModelTranscription->IndexOfKey(tempStr)+1;
+								index = this->slModelTranscription->IndexOfKey(tempStr);
 								ind++;
 								tempAl = (System::Collections::ArrayList*)slModelTranscription->GetByIndex(index);
 								System::Collections::IEnumerator* tempNum=tempAl->GetEnumerator();
