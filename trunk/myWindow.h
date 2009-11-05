@@ -694,38 +694,49 @@ private: void LoadFromFile()
 			System::String* dirOfRecFile = rp->recognitionTempFileDir;
 			this->slModelTranscription = rp->LoadModelTranscriptions(this->modelTrainDBPath);
 			rp->SetImageBoundary(left_x,right_x,top_y,bottom_y);
-				 
-			//Assumption : totalunit for single recognize is 1
-			/*
 			int totalUnit =charno;
-			wordToRec = wordToRec->Concat(dirOfRecFile,totalUnit.ToString(),".txt");	
-			rp->PrepareWordData(wordToRec);
 			
-			try
-			{
-				System::IO::StreamWriter* sw = System::IO::File::AppendText(rp->scriptFilePath);	
+			//rp->PrepareWordData(wordToRec);
+			//Assumption : totalunit for single recognize is 1
+
+				wordToRec = wordToRec->Concat(dirOfRecFile,totalUnit.ToString(),".txt");	
+			
+				if(this->SeparateDone){			
+				rp->PrepareWordData(wordToRec);
+				}
+				else{
+					System::Windows::Forms::MessageBox::Show("The words are not separated. \n Cannot Process for recognition","Error");
+					exit(0);
+				}
+
+				try
+				{
+					System::IO::StreamWriter* sw = System::IO::File::AppendText(rp->scriptFilePath);	
+					for(int i=1;i<=totalUnit;i++)	
+					{
+						System::String* tmp=tmp->Concat((String*)"\"",dirOfRecFile,i.ToString(),(String*)".txt",(String*)"\"");
+						sw->WriteLine(tmp);
+						sw->Flush();
+					}
+					sw->Close();
+				}
+				catch(System::Exception* ex)
+				{
+					System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to prepare the script file!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+					exit(0);
+				}
+			
+				this->alModelRec = rp->RecognizeByHTK();
+				this->ProvideOutput();
+				System::IO::File::Delete(rp->scriptFilePath);
 				for(int i=1;i<=totalUnit;i++)	
 				{
-					System::String* tmp=tmp->Concat((String*)"\"",dirOfRecFile,i.ToString(),(String*)".txt",(String*)"\"");
-					sw->WriteLine(tmp);
-					sw->Flush();
+					System::String* tmp=tmp->Concat(dirOfRecFile,i.ToString(),".txt");
+					System::IO::File::Delete(tmp);
 				}
-				sw->Close();
-			}
-			catch(System::Exception* ex)
-			{
-				System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to prepare the script file!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-				exit(0);
-			}
-			this->alModelRec = rp->RecognizeByHTK();
-			this->ProvideOutput();
-			System::IO::File::Delete(rp->scriptFilePath);
-			for(int i=1;i<=totalUnit;i++)	
-			{
-				System::String* tmp=tmp->Concat(dirOfRecFile,i.ToString(),".txt");
-				System::IO::File::Delete(tmp);
-			}
-			*/
+
+			
+			 
 
 }	 //End singleRecognize
 	
