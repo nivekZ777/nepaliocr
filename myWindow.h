@@ -90,6 +90,7 @@ namespace OCR
 		private: int **ImgArray;
 		private: int intLevel;
 		Bitmap* imageReceivedToForm;
+		String* meroText;
 
 	private: int numberOfLines;
 	private: Line* Lines; 
@@ -118,6 +119,13 @@ namespace OCR
 	private: System::Windows::Forms::Label *  label7;
 	private: System::Windows::Forms::Button *  button1;
 	private: System::Windows::Forms::Button *  button2;
+	private: System::Windows::Forms::Label *  label9;
+	private: System::Windows::Forms::Label *  label10;
+	private: System::Windows::Forms::Label *  label11;
+	private: System::Windows::Forms::Label *  label12;
+	private: System::Windows::Forms::Button *  avgButton;
+	private: System::Windows::Forms::Label *  label13;
+	private: System::Windows::Forms::RichTextBox *  myRTB;
 
 
 
@@ -138,6 +146,10 @@ namespace OCR
 		{
 			this->panel_myWindow = new System::Windows::Forms::Panel();
 			this->groupBox2 = new System::Windows::Forms::GroupBox();
+			this->label12 = new System::Windows::Forms::Label();
+			this->label11 = new System::Windows::Forms::Label();
+			this->label10 = new System::Windows::Forms::Label();
+			this->label9 = new System::Windows::Forms::Label();
 			this->button2 = new System::Windows::Forms::Button();
 			this->button1 = new System::Windows::Forms::Button();
 			this->label8 = new System::Windows::Forms::Label();
@@ -146,11 +158,14 @@ namespace OCR
 			this->label2 = new System::Windows::Forms::Label();
 			this->pictureBox1 = new System::Windows::Forms::PictureBox();
 			this->groupBox1 = new System::Windows::Forms::GroupBox();
+			this->label13 = new System::Windows::Forms::Label();
+			this->avgButton = new System::Windows::Forms::Button();
 			this->label7 = new System::Windows::Forms::Label();
 			this->label5 = new System::Windows::Forms::Label();
 			this->label3 = new System::Windows::Forms::Label();
 			this->pictureBox_myWindow = new System::Windows::Forms::PictureBox();
 			this->label1 = new System::Windows::Forms::Label();
+			this->myRTB = new System::Windows::Forms::RichTextBox();
 			this->panel_myWindow->SuspendLayout();
 			this->groupBox2->SuspendLayout();
 			this->groupBox1->SuspendLayout();
@@ -159,15 +174,20 @@ namespace OCR
 			// panel_myWindow
 			// 
 			this->panel_myWindow->AutoScroll = true;
+			this->panel_myWindow->Controls->Add(this->myRTB);
 			this->panel_myWindow->Controls->Add(this->groupBox2);
 			this->panel_myWindow->Controls->Add(this->groupBox1);
 			this->panel_myWindow->Location = System::Drawing::Point(8, 16);
 			this->panel_myWindow->Name = S"panel_myWindow";
-			this->panel_myWindow->Size = System::Drawing::Size(504, 320);
+			this->panel_myWindow->Size = System::Drawing::Size(928, 456);
 			this->panel_myWindow->TabIndex = 1;
 			// 
 			// groupBox2
 			// 
+			this->groupBox2->Controls->Add(this->label12);
+			this->groupBox2->Controls->Add(this->label11);
+			this->groupBox2->Controls->Add(this->label10);
+			this->groupBox2->Controls->Add(this->label9);
 			this->groupBox2->Controls->Add(this->button2);
 			this->groupBox2->Controls->Add(this->button1);
 			this->groupBox2->Controls->Add(this->label8);
@@ -175,16 +195,43 @@ namespace OCR
 			this->groupBox2->Controls->Add(this->label4);
 			this->groupBox2->Controls->Add(this->label2);
 			this->groupBox2->Controls->Add(this->pictureBox1);
-			this->groupBox2->Location = System::Drawing::Point(256, 16);
+			this->groupBox2->Location = System::Drawing::Point(312, 16);
 			this->groupBox2->Name = S"groupBox2";
-			this->groupBox2->Size = System::Drawing::Size(240, 288);
+			this->groupBox2->Size = System::Drawing::Size(312, 384);
 			this->groupBox2->TabIndex = 5;
 			this->groupBox2->TabStop = false;
 			this->groupBox2->Text = S"Sliced single Image";
 			// 
+			// label12
+			// 
+			this->label12->Location = System::Drawing::Point(176, 144);
+			this->label12->Name = S"label12";
+			this->label12->TabIndex = 11;
+			// 
+			// label11
+			// 
+			this->label11->Location = System::Drawing::Point(56, 144);
+			this->label11->Name = S"label11";
+			this->label11->TabIndex = 10;
+			this->label11->Text = S"Avg Height";
+			// 
+			// label10
+			// 
+			this->label10->Location = System::Drawing::Point(176, 104);
+			this->label10->Name = S"label10";
+			this->label10->TabIndex = 9;
+			// 
+			// label9
+			// 
+			this->label9->Location = System::Drawing::Point(56, 104);
+			this->label9->Name = S"label9";
+			this->label9->Size = System::Drawing::Size(96, 16);
+			this->label9->TabIndex = 8;
+			this->label9->Text = S"Avg width";
+			// 
 			// button2
 			// 
-			this->button2->Location = System::Drawing::Point(136, 184);
+			this->button2->Location = System::Drawing::Point(208, 216);
 			this->button2->Name = S"button2";
 			this->button2->Size = System::Drawing::Size(96, 96);
 			this->button2->TabIndex = 7;
@@ -193,7 +240,7 @@ namespace OCR
 			// 
 			// button1
 			// 
-			this->button1->Location = System::Drawing::Point(24, 216);
+			this->button1->Location = System::Drawing::Point(96, 264);
 			this->button1->Name = S"button1";
 			this->button1->Size = System::Drawing::Size(72, 40);
 			this->button1->TabIndex = 6;
@@ -202,14 +249,14 @@ namespace OCR
 			// 
 			// label8
 			// 
-			this->label8->Location = System::Drawing::Point(128, 50);
+			this->label8->Location = System::Drawing::Point(176, 64);
 			this->label8->Name = S"label8";
-			this->label8->Size = System::Drawing::Size(72, 30);
+			this->label8->Size = System::Drawing::Size(104, 24);
 			this->label8->TabIndex = 5;
 			// 
 			// label6
 			// 
-			this->label6->Location = System::Drawing::Point(24, 56);
+			this->label6->Location = System::Drawing::Point(56, 72);
 			this->label6->Name = S"label6";
 			this->label6->Size = System::Drawing::Size(72, 24);
 			this->label6->TabIndex = 4;
@@ -217,7 +264,7 @@ namespace OCR
 			// 
 			// label4
 			// 
-			this->label4->Location = System::Drawing::Point(24, 24);
+			this->label4->Location = System::Drawing::Point(56, 40);
 			this->label4->Name = S"label4";
 			this->label4->Size = System::Drawing::Size(80, 16);
 			this->label4->TabIndex = 3;
@@ -225,20 +272,22 @@ namespace OCR
 			// 
 			// label2
 			// 
-			this->label2->Location = System::Drawing::Point(120, 24);
+			this->label2->Location = System::Drawing::Point(176, 40);
 			this->label2->Name = S"label2";
-			this->label2->Size = System::Drawing::Size(80, 16);
+			this->label2->Size = System::Drawing::Size(104, 16);
 			this->label2->TabIndex = 2;
 			// 
 			// pictureBox1
 			// 
-			this->pictureBox1->Location = System::Drawing::Point(24, 112);
+			this->pictureBox1->Location = System::Drawing::Point(56, 200);
 			this->pictureBox1->Name = S"pictureBox1";
 			this->pictureBox1->TabIndex = 1;
 			this->pictureBox1->TabStop = false;
 			// 
 			// groupBox1
 			// 
+			this->groupBox1->Controls->Add(this->label13);
+			this->groupBox1->Controls->Add(this->avgButton);
 			this->groupBox1->Controls->Add(this->label7);
 			this->groupBox1->Controls->Add(this->label5);
 			this->groupBox1->Controls->Add(this->label3);
@@ -246,10 +295,26 @@ namespace OCR
 			this->groupBox1->Controls->Add(this->label1);
 			this->groupBox1->Location = System::Drawing::Point(16, 16);
 			this->groupBox1->Name = S"groupBox1";
-			this->groupBox1->Size = System::Drawing::Size(232, 288);
+			this->groupBox1->Size = System::Drawing::Size(280, 384);
 			this->groupBox1->TabIndex = 4;
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = S"Input Image ";
+			// 
+			// label13
+			// 
+			this->label13->Location = System::Drawing::Point(64, 216);
+			this->label13->Name = S"label13";
+			this->label13->Size = System::Drawing::Size(112, 32);
+			this->label13->TabIndex = 7;
+			// 
+			// avgButton
+			// 
+			this->avgButton->Location = System::Drawing::Point(80, 296);
+			this->avgButton->Name = S"avgButton";
+			this->avgButton->Size = System::Drawing::Size(72, 24);
+			this->avgButton->TabIndex = 6;
+			this->avgButton->Text = S"Average";
+			this->avgButton->Click += new System::EventHandler(this, avgButton_Click);
 			// 
 			// label7
 			// 
@@ -289,10 +354,18 @@ namespace OCR
 			this->label1->Size = System::Drawing::Size(72, 16);
 			this->label1->TabIndex = 2;
 			// 
+			// myRTB
+			// 
+			this->myRTB->Location = System::Drawing::Point(656, 32);
+			this->myRTB->Name = S"myRTB";
+			this->myRTB->Size = System::Drawing::Size(256, 400);
+			this->myRTB->TabIndex = 6;
+			this->myRTB->Text = S"";
+			// 
 			// myWindow
 			// 
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
-			this->ClientSize = System::Drawing::Size(520, 342);
+			this->ClientSize = System::Drawing::Size(944, 478);
 			this->Controls->Add(this->panel_myWindow);
 			this->Name = S"myWindow";
 			this->Text = S"Image Viewer";
@@ -319,6 +392,12 @@ namespace OCR
 	private:
 	void display(int lineno,int wordno,int charno)
 		{
+			static float widthCount=0;
+			static float heightCount=0;
+			static float avgWidthCount=0;
+			static float avgHeightCount=0;
+			static float counterForAveragingHeightWeight=0;
+
 			x1=this->LineInfo[lineno].Words[wordno].Units[charno].getStartColumn();
 			x2=this->LineInfo[lineno].Words[wordno].Units[charno].getEndColumn();
 			y1=this->LineInfo[lineno].getStartRow();
@@ -373,8 +452,32 @@ namespace OCR
 				}
 			}
 			this->pictureBox1->Image=cropImage;
+			 
+			
 			this->label2->Text = cropImage->Height.ToString();
 			this->label8->Text = cropImage->Width.ToString();
+			widthCount +=cropImage->Height;
+			heightCount +=cropImage->Width;
+			counterForAveragingHeightWeight++;
+		
+			//Now the same values will be the average
+			avgWidthCount=widthCount/counterForAveragingHeightWeight;
+			avgHeightCount=heightCount/counterForAveragingHeightWeight;
+			
+			this->label10->Text = avgWidthCount.ToString();
+			this->meroText= this->meroText->Concat(this->meroText,"\n Average width : ",avgWidthCount.ToString());
+			
+
+			this->label12->Text = avgHeightCount.ToString();
+			this->meroText= this->meroText->Concat(this->meroText,"\n Average Height : ",avgHeightCount.ToString());
+			
+		
+			this->label13->Text = counterForAveragingHeightWeight.ToString();
+
+			//this->myRTB->AppendText("\n ");
+			this->myRTB->AppendText(this->meroText);
+
+
 		}
 
 
@@ -386,6 +489,8 @@ namespace OCR
 
 private: System::Void button1_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
+			this->meroText= this->meroText->Concat(this->meroText,"\n");
+			
 			 if(charno<this->LineInfo[lineno].Words[wordno].getTotalUnit()-1)
 				 {
 					this->charno++;
@@ -655,8 +760,64 @@ private: void LoadFromFile()
 
 			 }
 
+	private: void checkParameters(){
+
+				this->myRTB->AppendText("\n ---------------------------");
 
 
+				for(int myI=0; myI< (this->LineInfo[lineno].getTotalWord()-1); myI++){
+					 this->meroText= this->meroText->Concat("\n\n Loop : ",myI.ToString());
+					 this->meroText= this->meroText->Concat(this->meroText,"\n LineInfo : ",this->LineInfo[lineno].getTotalWord().ToString());
+					 this->myRTB->AppendText(meroText);
+					 //this->meroText = 
+					 //this->myRTB->AppendText();
+				 
+
+			 if(charno<this->LineInfo[lineno].Words[wordno].getTotalUnit()-1)
+				 {
+					this->charno++;
+					this->meroText= this->meroText->Concat("\n \(inside if\) Loop : ",myI.ToString());
+					 this->meroText= this->meroText->Concat(this->meroText,"\n Inside Charno : ",this->charno.ToString());
+					 this->myRTB->AppendText(meroText);
+				 }
+				 else
+				 {
+					this->myRTB->AppendText("\n\nInside else");
+					 //this->charno=0;
+					 if(wordno< this->LineInfo[lineno].getTotalWord()-1)
+					 {
+						 this->myRTB->AppendText("\n withIn Else and again a new if");
+						 this->wordno++;
+						 this->charno=0;
+					 }
+
+
+					 else
+					 {
+						 this->wordno=0;
+						 this->charno=0;
+						 if(lineno<this->lineCount-1)
+						 {
+							 this->lineno++;
+						 }
+						 else
+						 {
+							 this->lineno=0;
+							 this->wordno=0;
+							 this->charno=0;
+						 }
+					 }
+				 }
+				 this->display(this->lineno,this->wordno,this->charno);
+				 
+				 }
+				 this->Update();
+		 }
+
+private: System::Void avgButton_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			checkParameters();
+		 }
 
 };
 }
