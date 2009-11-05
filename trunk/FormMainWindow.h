@@ -1,4 +1,4 @@
-	#include "TrainingForm.h"
+#include "TrainingForm.h"
 #include "RecognitionForm.h"
 #include "RecognitionProcess.h"
 #include "ThresholedValue.h"
@@ -46,12 +46,18 @@ namespace OCR
 		Form1(void)
 		{
 			//user declarations
-			this->BinaryDone=false;
+ 			this->BinaryDone=false;
 			this->ImageLoaded=false;
 			this->SeparateDone=false;
 			this->ContrastDone=false;
 			this->meanDone=false;
 			this->deskewDone=false;
+
+			private System::ComponentModel::IContainer components = null;
+			this->components = new System::ComponentModel::Container();
+			this->icon = ((System::Drawing::Icon)(resources.GetObject("$this.Icon")));
+			private System::Drawing::Icon *a = new System::Drawing::Icon();
+			
 
 			InitializeComponent();
 
@@ -144,6 +150,7 @@ namespace OCR
 	private: System::Windows::Forms::Label *  myInfo;
 	private: System::Windows::Forms::Label *  myInfo1;
 	private: System::Windows::Forms::Button *  findMagnification;
+
 
 
 
@@ -1193,6 +1200,11 @@ private: System::Void findMagnification_Click(System::Object *  sender, System::
 				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
 			 }
 
+		 }
+
+private: System::Void B2Button_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 System::Windows::Forms::MessageBox::Show("This is b2 message","This is b2 title");
 		 }
 
 };

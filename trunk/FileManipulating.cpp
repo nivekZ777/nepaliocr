@@ -588,7 +588,7 @@ void FileManipulating::PrepareData(System::String* dataFileName, int **imageArr,
 			imHeight = (((bottomY -  topY) + 1) + (40 - (((bottomY - topY) + 1)  % 40)) );
 		}
 
-		// Declare and set the proper size of the window
+		// Declare and set the proper size of the windowz
 		signed int ** Window;	
 		Window = new signed int *[imHeight];
 		for (int j = 0; j< imHeight ; j++)
@@ -604,7 +604,7 @@ void FileManipulating::PrepareData(System::String* dataFileName, int **imageArr,
 				Window[i][k]=1;
 			}
 		}
-
+		
 		
 		//mapping the image into the wordarray
 		for (int i=topY ; i<=bottomY; i++ )
