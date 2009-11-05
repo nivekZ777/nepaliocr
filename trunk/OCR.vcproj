@@ -282,6 +282,9 @@
 			<File
 				RelativePath=".\app.rc">
 			</File>
+			<File
+				RelativePath=".\myIcon.ico">
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt">
