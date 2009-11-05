@@ -200,6 +200,7 @@ namespace OCR
 			this->bigHeightLabel = new System::Windows::Forms::Label();
 			this->label1 = new System::Windows::Forms::Label();
 			this->groupBox2 = new System::Windows::Forms::GroupBox();
+			this->myWindowRecognizeButton = new System::Windows::Forms::Button();
 			this->myWindowSeparateButton = new System::Windows::Forms::Button();
 			this->avgHeightLabel = new System::Windows::Forms::Label();
 			this->label6 = new System::Windows::Forms::Label();
@@ -214,7 +215,6 @@ namespace OCR
 			this->pictureBoxSmall = new System::Windows::Forms::PictureBox();
 			this->groupBox3 = new System::Windows::Forms::GroupBox();
 			this->myRTB = new System::Windows::Forms::RichTextBox();
-			this->myWindowRecognizeButton = new System::Windows::Forms::Button();
 			this->panel1->SuspendLayout();
 			this->groupBox1->SuspendLayout();
 			this->groupBox2->SuspendLayout();
@@ -303,6 +303,15 @@ namespace OCR
 			this->groupBox2->TabIndex = 1;
 			this->groupBox2->TabStop = false;
 			this->groupBox2->Text = S"Sliced Single Image";
+			// 
+			// myWindowRecognizeButton
+			// 
+			this->myWindowRecognizeButton->Location = System::Drawing::Point(152, 304);
+			this->myWindowRecognizeButton->Name = S"myWindowRecognizeButton";
+			this->myWindowRecognizeButton->Size = System::Drawing::Size(80, 24);
+			this->myWindowRecognizeButton->TabIndex = 12;
+			this->myWindowRecognizeButton->Text = S"Recognize";
+			this->myWindowRecognizeButton->Click += new System::EventHandler(this, myWindowRecognizeButton_Click);
 			// 
 			// myWindowSeparateButton
 			// 
@@ -416,17 +425,9 @@ namespace OCR
 			this->myRTB->TabIndex = 0;
 			this->myRTB->Text = S"";
 			// 
-			// myWindowRecognizeButton
-			// 
-			this->myWindowRecognizeButton->Location = System::Drawing::Point(152, 304);
-			this->myWindowRecognizeButton->Name = S"myWindowRecognizeButton";
-			this->myWindowRecognizeButton->Size = System::Drawing::Size(80, 24);
-			this->myWindowRecognizeButton->TabIndex = 12;
-			this->myWindowRecognizeButton->Text = S"Recognize";
-			this->myWindowRecognizeButton->Click += new System::EventHandler(this, myWindowRecognizeButton_Click);
-			// 
 			// myWindow
 			// 
+			this->AllowDrop = true;
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
 			this->ClientSize = System::Drawing::Size(912, 494);
 			this->Controls->Add(this->groupBox3);
