@@ -652,7 +652,7 @@ private: System::Void deSkew_Click(System::Object *  sender, System::EventArgs *
 private: System::Void train_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 OCR::TrainingForm* tw=new OCR::TrainingForm();
-			 tw->defineVar(this->tmpBArray,this->Lines,this->numberOfLines);
+			 tw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
 			 //tw->defineVar(this->BArray,this->Lines,this->numberOfLines);
 			 tw->ShowDialog();
 
