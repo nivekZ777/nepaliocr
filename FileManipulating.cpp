@@ -594,6 +594,7 @@ void FileManipulating::PrepareData(System::String* dataFileName, int **imageArr,
 		for (int j = 0; j< imHeight ; j++)
 		{
 			Window [j] = new signed int [imWidth];
+			
 		}
 
 		// initialize the array with 1
