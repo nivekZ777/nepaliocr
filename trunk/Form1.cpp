@@ -2,7 +2,7 @@
 #include "FormMainWindow.h"
 #include <windows.h>
 
-using namespace NepaliOCR;
+using namespace OCR;
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,

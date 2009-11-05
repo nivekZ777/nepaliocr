@@ -11,7 +11,7 @@
 #pragma once
 
 
-namespace NepaliOCR
+namespace OCR
 {
 	using namespace System;
 	using namespace System::Data;
