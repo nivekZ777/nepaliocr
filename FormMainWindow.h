@@ -6,7 +6,7 @@
 #include "Separate.h"
 #include "Convolution.h"
 #include "Deskew.h"
-#include "myWindow.h"
+
 
 
 #pragma once
@@ -16,7 +16,7 @@ namespace OCR
 {
 	using namespace System;
 	using namespace System::Data;
-	using namespace System::ComponentModel; 
+	using namespace System::ComponentModel;
 	using namespace System::Collections;
 	using namespace System::Windows::Forms;
 	using namespace System::Drawing;
@@ -71,10 +71,7 @@ namespace OCR
 			this->LoadFromFile();
 			
 		}
-
-
-	
-
+  
 	protected:
 		void Dispose(Boolean disposing)
 		{
@@ -92,7 +89,6 @@ namespace OCR
 	private: Bitmap* BinaryImage;
 
 	private: Graphics* g;
-	private: Bitmap* ImageForMyWindow;
 
 	private: int intLevel;
 	private: int **ImgArray;
@@ -106,13 +102,9 @@ namespace OCR
 			 bool meanDone;
 			 bool deskewDone;
 
-	private: bool **binaryArrayForMagnification; //equivalent to::-> tmpBArry
-	//bool binaryArrayForMagnification is equivalent to bool tmpBArry of separate() function
-
-
 
 	private: int numberOfLines;
-	private: static Line* Lines; 
+	private: Line* Lines; 
 
 	private: String* applicationPath;
 			 String* modelTrainDBPath;
@@ -143,14 +135,10 @@ namespace OCR
 	private: System::Windows::Forms::Button *  deSkew;
 	private: System::Windows::Forms::Button *  train;
 	private: System::Windows::Forms::Button *  recognize;
-	private: System::Windows::Forms::Button *  fastRecognizeButton;
-	private: System::Windows::Forms::Label *  myInfo;
-	private: System::Windows::Forms::Label *  myInfo1;
-	private: System::Windows::Forms::Button *  findMagnification;
-private: System::Windows::Forms::GroupBox *  groupBox1;
-private: System::Windows::Forms::GroupBox *  groupBox2;
-private: System::Windows::Forms::GroupBox *  groupBox3;
-
+private: System::Windows::Forms::Button *  fastRecognizeButton;
+private: System::Windows::Forms::Label *  myInfo;
+private: System::Windows::Forms::Label *  myInfo1;
+private: System::Windows::Forms::Button *  findMagnification;
 
 
 
@@ -185,19 +173,13 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			this->myInfo = new System::Windows::Forms::Label();
 			this->myInfo1 = new System::Windows::Forms::Label();
 			this->findMagnification = new System::Windows::Forms::Button();
-			this->groupBox1 = new System::Windows::Forms::GroupBox();
-			this->groupBox2 = new System::Windows::Forms::GroupBox();
-			this->groupBox3 = new System::Windows::Forms::GroupBox();
 			this->picture_panel->SuspendLayout();
-			this->groupBox1->SuspendLayout();
-			this->groupBox2->SuspendLayout();
-			this->groupBox3->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// convertToBinary_button
 			// 
 			this->convertToBinary_button->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->convertToBinary_button->Location = System::Drawing::Point(192, 24);
+			this->convertToBinary_button->Location = System::Drawing::Point(232, 96);
 			this->convertToBinary_button->Name = S"convertToBinary_button";
 			this->convertToBinary_button->Size = System::Drawing::Size(72, 24);
 			this->convertToBinary_button->TabIndex = 5;
@@ -230,7 +212,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			this->openImage->Cursor = System::Windows::Forms::Cursors::Hand;
 			this->openImage->Location = System::Drawing::Point(32, 8);
 			this->openImage->Name = S"openImage";
-			this->openImage->Size = System::Drawing::Size(112, 40);
+			this->openImage->Size = System::Drawing::Size(112, 48);
 			this->openImage->TabIndex = 1;
 			this->openImage->Text = S"OPEN IMAGE";
 			this->openImage->Click += new System::EventHandler(this, openImage_Click);
@@ -242,7 +224,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			// separate_button
 			// 
 			this->separate_button->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->separate_button->Location = System::Drawing::Point(280, 24);
+			this->separate_button->Location = System::Drawing::Point(320, 96);
 			this->separate_button->Name = S"separate_button";
 			this->separate_button->TabIndex = 6;
 			this->separate_button->Text = S"SEPARATE";
@@ -256,7 +238,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			// 
 			this->saveImage->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->saveImage->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->saveImage->Location = System::Drawing::Point(264, 0);
+			this->saveImage->Location = System::Drawing::Point(264, 8);
 			this->saveImage->Name = S"saveImage";
 			this->saveImage->Size = System::Drawing::Size(112, 48);
 			this->saveImage->TabIndex = 2;
@@ -267,7 +249,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			// 
 			this->imContrast->BackColor = System::Drawing::Color::Transparent;
 			this->imContrast->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->imContrast->Location = System::Drawing::Point(16, 24);
+			this->imContrast->Location = System::Drawing::Point(64, 96);
 			this->imContrast->Name = S"imContrast";
 			this->imContrast->TabIndex = 3;
 			this->imContrast->Text = S"CONTRAST";
@@ -276,7 +258,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			// meanRemoval
 			// 
 			this->meanRemoval->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->meanRemoval->Location = System::Drawing::Point(104, 24);
+			this->meanRemoval->Location = System::Drawing::Point(144, 96);
 			this->meanRemoval->Name = S"meanRemoval";
 			this->meanRemoval->TabIndex = 4;
 			this->meanRemoval->Text = S"MEAN";
@@ -285,7 +267,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			// deSkew
 			// 
 			this->deSkew->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->deSkew->Location = System::Drawing::Point(512, 80);
+			this->deSkew->Location = System::Drawing::Point(8, 72);
 			this->deSkew->Name = S"deSkew";
 			this->deSkew->TabIndex = 7;
 			this->deSkew->Text = S"DE-SKEW";
@@ -294,7 +276,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			// train
 			// 
 			this->train->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->train->Location = System::Drawing::Point(8, 18);
+			this->train->Location = System::Drawing::Point(600, 88);
 			this->train->Name = S"train";
 			this->train->TabIndex = 8;
 			this->train->Text = S"TRAIN";
@@ -303,7 +285,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			// recognize
 			// 
 			this->recognize->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->recognize->Location = System::Drawing::Point(88, 18);
+			this->recognize->Location = System::Drawing::Point(688, 88);
 			this->recognize->Name = S"recognize";
 			this->recognize->Size = System::Drawing::Size(88, 23);
 			this->recognize->TabIndex = 9;
@@ -314,68 +296,33 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			// 
 			this->fastRecognizeButton->Location = System::Drawing::Point(160, 8);
 			this->fastRecognizeButton->Name = S"fastRecognizeButton";
-			this->fastRecognizeButton->Size = System::Drawing::Size(80, 40);
+			this->fastRecognizeButton->Size = System::Drawing::Size(88, 48);
 			this->fastRecognizeButton->TabIndex = 10;
 			this->fastRecognizeButton->Text = S"Fast Recognize";
 			this->fastRecognizeButton->Click += new System::EventHandler(this, fastRecognizeButton_Click);
 			// 
 			// myInfo
 			// 
-			this->myInfo->Location = System::Drawing::Point(96, 16);
+			this->myInfo->Location = System::Drawing::Point(520, 16);
 			this->myInfo->Name = S"myInfo";
 			this->myInfo->Size = System::Drawing::Size(264, 24);
 			this->myInfo->TabIndex = 11;
 			// 
 			// myInfo1
 			// 
-			this->myInfo1->Location = System::Drawing::Point(8, 16);
+			this->myInfo1->Location = System::Drawing::Point(440, 16);
 			this->myInfo1->Name = S"myInfo1";
 			this->myInfo1->Size = System::Drawing::Size(72, 24);
 			this->myInfo1->TabIndex = 12;
 			// 
 			// findMagnification
 			// 
-			this->findMagnification->Location = System::Drawing::Point(408, 80);
+			this->findMagnification->Location = System::Drawing::Point(392, 64);
 			this->findMagnification->Name = S"findMagnification";
 			this->findMagnification->Size = System::Drawing::Size(88, 24);
 			this->findMagnification->TabIndex = 13;
 			this->findMagnification->Text = S"Magnification";
 			this->findMagnification->Click += new System::EventHandler(this, findMagnification_Click);
-			// 
-			// groupBox1
-			// 
-			this->groupBox1->Controls->Add(this->myInfo1);
-			this->groupBox1->Controls->Add(this->myInfo);
-			this->groupBox1->Location = System::Drawing::Point(424, 0);
-			this->groupBox1->Name = S"groupBox1";
-			this->groupBox1->Size = System::Drawing::Size(368, 48);
-			this->groupBox1->TabIndex = 14;
-			this->groupBox1->TabStop = false;
-			this->groupBox1->Text = S"Info";
-			// 
-			// groupBox2
-			// 
-			this->groupBox2->Controls->Add(this->train);
-			this->groupBox2->Controls->Add(this->recognize);
-			this->groupBox2->Location = System::Drawing::Point(600, 56);
-			this->groupBox2->Name = S"groupBox2";
-			this->groupBox2->Size = System::Drawing::Size(192, 56);
-			this->groupBox2->TabIndex = 15;
-			this->groupBox2->TabStop = false;
-			this->groupBox2->Text = S"Training/ Recognizing";
-			// 
-			// groupBox3
-			// 
-			this->groupBox3->Controls->Add(this->imContrast);
-			this->groupBox3->Controls->Add(this->meanRemoval);
-			this->groupBox3->Controls->Add(this->convertToBinary_button);
-			this->groupBox3->Controls->Add(this->separate_button);
-			this->groupBox3->Location = System::Drawing::Point(16, 56);
-			this->groupBox3->Name = S"groupBox3";
-			this->groupBox3->Size = System::Drawing::Size(384, 72);
-			this->groupBox3->TabIndex = 16;
-			this->groupBox3->TabStop = false;
-			this->groupBox3->Text = S"Preprocessing";
 			// 
 			// Form1
 			// 
@@ -384,23 +331,25 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			this->AutoScroll = true;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->ClientSize = System::Drawing::Size(794, 518);
-			this->Controls->Add(this->groupBox2);
 			this->Controls->Add(this->findMagnification);
+			this->Controls->Add(this->myInfo1);
+			this->Controls->Add(this->myInfo);
 			this->Controls->Add(this->fastRecognizeButton);
+			this->Controls->Add(this->recognize);
+			this->Controls->Add(this->train);
+			this->Controls->Add(this->meanRemoval);
+			this->Controls->Add(this->imContrast);
 			this->Controls->Add(this->saveImage);
+			this->Controls->Add(this->separate_button);
 			this->Controls->Add(this->openImage);
 			this->Controls->Add(this->picture_panel);
+			this->Controls->Add(this->convertToBinary_button);
 			this->Controls->Add(this->deSkew);
-			this->Controls->Add(this->groupBox1);
-			this->Controls->Add(this->groupBox3);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::Fixed3D;
 			this->MaximizeBox = false;
 			this->Name = S"Form1";
 			this->Text = S" Image Processing Part Of Nepali OCR";
 			this->picture_panel->ResumeLayout(false);
-			this->groupBox1->ResumeLayout(false);
-			this->groupBox2->ResumeLayout(false);
-			this->groupBox3->ResumeLayout(false);
 			this->ResumeLayout(false);
 
 		}	
@@ -478,7 +427,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 
 			this->pictureBox1->Image = im;
 			g=this->pictureBox1->CreateGraphics();
-			//System::Windows::Forms::MessageBox::Show("Mean Removal Done!!!!"/*fLevel.ToString()*/,"Threshold Value");
+			System::Windows::Forms::MessageBox::Show("Mean Removal Done!!!!"/*fLevel.ToString()*/,"Threshold Value");
 			}
 		catch(Exception* ex)
 			{
@@ -580,7 +529,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			
 			this->pictureBox1->Image = im;
 			g=this->pictureBox1->CreateGraphics();
-			//System::Windows::Forms::MessageBox::Show("Contrast Done!!!!"/*fLevel.ToString()*/,"Threshold Value");
+			System::Windows::Forms::MessageBox::Show("Contrast Done!!!!"/*fLevel.ToString()*/,"Threshold Value");
 			}
 		catch(Exception* ex)
 			{
@@ -591,10 +540,8 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 
 //			return true;
 		}
-		public: void makeBinary()
+		private: void makeBinary()
 			 {
-			 
-
 				 if(this->ImageLoaded)
 				 {
 					//if (this->BinaryDone)
@@ -618,8 +565,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 						rgbConvert* rgbC = new rgbConvert(im);
 						BArray = rgbC->GetBinaryArray(200);
 						ImgArray = rgbC->GetImageArray( );
-					   
-
+					   	
 					 // Showing the binary image
 						this->BinaryImage = rgbC->GetBinaryImage();
 						this->pictureBox1->Image = this->BinaryImage;
@@ -697,12 +643,8 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 		
 		private: void separateChar()
 				 {
-					 float myPenSum=0;
-					 int myPenCount = 0;
-					 
 					 Pen* p=new Pen(Color::Blue,1);
-
-					 
+	
 								for(int i=0;i<this->numberOfLines;i++)
 									{
 										for(int j=0;j<this->Lines[i].getTotalWord();j++)
@@ -713,12 +655,6 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 														int x2=this->Lines[i].Words[j].Units[k].getEndColumn();
 														int y1=this->Lines[i].getStartRow();
 														int y2=this->Lines[i].getEndRow();
-														
-														 myPenSum+=(y2-y1)/(x2-x1);
-														 myPenCount++;
-
-														
-														// System::Windows::Forms::MessageBox::Show((myPenSum/myPenCount).ToString(),"Transformation Factor");
 
 														g->DrawLine(p,x1,y1,x1,y2);
 														g->DrawLine(p,x2,y1,x2,y2);
@@ -729,15 +665,10 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 				 }
 		private: void separate()
 				 {
-					 this->tmpBArray=new bool*[im->Height]; 
-					 //Declaring array of size image height
-
-					 
+					 this->tmpBArray=new bool*[im->Height];
 					 //System::Windows::Forms::MessageBox::Show(im->Height.ToString(),"Height");
 					 myInfo1->Text = "Image Height";
 					 myInfo->Text = im->Height.ToString();
-					 
-					 
 					 //this->tmpBArray=this->BArray;
 					 for(int i=0;i<im->Height;i++)
 					 {
@@ -767,10 +698,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 								this->separateChar();			//separate Characters
 							}
 
-							//sp->drawHorizontalHist();
-							//Pen* p=new Pen(Color::Red,1);
-							//g->DrawLine(p,50,50,150,150);
-							//g->DrawRectangle(p,50,50,150,150);//x,y,width,height
+							 
 						}
 					 
 					this->Update();
@@ -823,11 +751,11 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 		{
 								 
 						RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImgArray);
+
 						// load the transcription of the models
 						this->slModelTranscription = rp->LoadModelTranscriptions(this->modelTrainDBPath);
 						 
 						int lineCount = this->numberOfLines;
-						
 						int wordCount = 0;
 						int totalUnit = 0;
 						int unitCount = 0;
@@ -898,11 +826,6 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 							//System::IO::File::Delete(dirOfRecFile+i+".txt");
 							System::IO::File::Delete(tmp);
 						}
-						//System::Windows::Forms::MessageBox::Show(wordCount.ToString(),"WordCount");
-						//System::Windows::Forms::MessageBox::Show(totalUnit.ToString(),"totalUnit");
-						//System::Windows::Forms::MessageBox::Show(unitCount.ToString(),"UnitCount");
-						
-						
 
 		}
 
@@ -937,8 +860,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 				errorString1 = ex->Message->ToString();
 				errorString1 = errorString1->Concat("Database file access error \n\nThe system generated the following error:\n",errorString1);
 				System::Windows::Forms::MessageBox::Show( errorString1,"Error");
-				//System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Can't load the Combo box!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-				//System::Windows::Forms::MessageBox::Show( ex->Message->ToString(),"Can't access database files");
+				
 				exit(0);
 			}
 		 }
@@ -978,12 +900,9 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 									break;
 									}
 									tempCount++;
-									//System::Windows::Forms::MessageBox::Show(tempStr,"Keys",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+									
 								}
-								//System::Windows::Forms::MessageBox::Show(index.ToString(),"Index Value!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-								//index = slModelTranscription->IndexOfKey(alModelRec[ind++]);
-								//System::Windows::Forms::MessageBox::Show(tempStr,"First Key",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-								//exit(0);
+								 
 
 								index = this->slModelTranscription->IndexOfKey(tempStr);
 								ind++;
@@ -994,11 +913,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 									tempStr = (String*)tempNum->Current;
 									ucodeStr = ucodeStr->Concat(ucodeStr,slForCharacters->GetKey(slForCharacters->IndexOfValue(tempStr)));
 								}
-								/*for(int l=0;l<tempAl->Count;l++)
-								{
-									tempStr = tempAl[l]->ToString();
-									ucodeStr = ucodeStr->Concat(ucodeStr,slForCharacters->GetKey(slForCharacters->IndexOfValue(tempStr)));
-								}		*/					
+												
 								text = text->Concat(text,ucodeStr);
 							}// end if
 						}
@@ -1012,86 +927,12 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 				System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to provide the output!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 				exit(0);
 			}
-			// resize the window, show the output into a rich text box
-			//this->richTextBoxOutput->Visible = true;
-			//PostProcessor^ pr = gcnew PostProcessor(text);
-			//this->richTextBoxOutput->Text = pr->TextPostProcessor();
-
-			/*System::Collections::IEnumerator* tempNum;
-			System::String* tmpStr;
-			System::String* text;
-			tempNum=this->alModelRec->GetEnumerator();
-			while(tempNum->MoveNext())
-			{
-				tmpStr=(String*) tempNum->Current;
-				tmpStr=tmpStr->Concat(tmpStr,(String*)"\n");
-			}
-
-			text=tmpStr;
-					*/			
-
+		 
 			OCR::RecognitionForm* rw=new OCR::RecognitionForm();
 			rw->showText(text);
 			rw->ShowDialog();
 
 		 }
-private: void tryMagnify(){
-
-			 //Initially Separate the chars from image before magnifying
-			this->binaryArrayForMagnification=new bool*[im->Height];   //declaring array
-			//bool binaryArrayForMagnification is equivalent to bool tmpBArry of separate() function
-						
-			myInfo1->Text = "Image Height";
-			myInfo->Text = im->Height.ToString();
-			 for(int i=0;i<im->Height;i++)
-					 {
-						 this->binaryArrayForMagnification[i]=new bool[im->Width];
-						 for(int j=0;j<im->Width;j++)
-						 {
-							 this->binaryArrayForMagnification[i][j]=this->BArray[i][j];
-						 }
-
-					 }
-			//image is kept in array now
-					 if(this->SeparateDone==false)
-							{
-							Separate* spMagnify=new Separate(im,BArray,g);
-							spMagnify->LineSeparate();						//Separate Lines from the image
-
-							this->numberOfLines=spMagnify->getNumberOfLines(); //Get Number of Lines
-							this->Lines=spMagnify->getLines();			//Get Lines
-							//this->SeparateDone=true;
-							this->separateChar();				//separate Characters					
-							}
-
-							else
-							{
-								this->separateChar();			//separate Characters
-							}
-							this->Update();
-							//Binary image is saved in : this->BinaryImage;
-							//whole image stored in :: this->ImgArray;
-							
-							//Separation process complete before magnification
-							//now lets move ahead
-
-							//this->BinaryImage 
-							//TO BE DONE TOMORROW
-							OCR::myWindow* mw = new OCR::myWindow(this->BinaryImage);
-							//This will display the image "binaryimage" in the new window at left pane
-							//mw->pictureBox_myWindow->Image = this->binaryArrayForMagnification;
-
-							mw->defineVar(this->ImgArray,this->binaryArrayForMagnification,this->Lines,this->numberOfLines);
-							 //mw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
-							// " mw->definevar()" This will display a segment of the image in right pane
-
-							mw->ShowDialog();
-							//OCR::myWindow* mw1 = new OCR::myWindow(this->im);
-							//mw1->ShowDialog();
-							
-
-
-			}
 
 private: System::Void close_button_Click_1(System::Object *  sender, System::EventArgs *  e)
 			 {
@@ -1178,16 +1019,13 @@ private: System::Void train_Click(System::Object *  sender, System::EventArgs * 
 
 			 OCR::TrainingForm* tw=new OCR::TrainingForm();
 			 tw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
-			 //this->slForCharacters=tw->getSortedList();
-			 //tw->defineVar(this->BArray,this->Lines,this->numberOfLines);
 			 tw->ShowDialog();
-			 
 
 				}
 			 else{
 				 System::Windows::Forms::MessageBox::Show("Image not loaded, Please load image first ","Image Not loaded");
 			 }
-			 //TrainWindow* tr=new TrainWindow();
+			 
 			
 		 }
 
@@ -1241,29 +1079,17 @@ private: System::Void fastRecognizeButton_Click(System::Object *  sender, System
 
 			 }
 
-		 }
-		
-				 
+		 }//End function recognize button
+
+//Try magnify function
+		 private: void tryMagnify(){
+				  }
 
 private: System::Void findMagnification_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-				  
-			//function to magnify the image
-			 //if(this->BinaryDone){
-					//The image magnification is easier if it is separated first
-					//System::Windows::Forms::MessageBox::Show("Looks like the image is separted\n working","Good");
-					this->makeBinary();
-					this->separate();
-					tryMagnify();
-			 //}
-			 //else{
-			//	 System::Windows::Forms::MessageBox::Show("Image is not Binarized","Binarize first");
-			 //}
 
 
 		 }
-
-
 
 };
 

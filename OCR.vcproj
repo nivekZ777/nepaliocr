@@ -162,12 +162,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\testDisplayToSeparate.cpp">
-			</File>
-			<File
-				RelativePath=".\testMagnifyWindow.cpp">
-			</File>
-			<File
 				RelativePath=".\ThresholedValue.cpp">
 			</File>
 			<File
@@ -236,9 +230,6 @@
 							ResourceFileName="$(IntDir)/OCR.myWindow.resources"/>
 					</FileConfiguration>
 				</File>
-			</File>
-			<File
-				RelativePath=".\myWindowSeparate.h">
 			</File>
 			<File
 				RelativePath=".\RecognitionForm.h"
