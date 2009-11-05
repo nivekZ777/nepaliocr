@@ -748,7 +748,7 @@ void FileManipulating::PrepareData(System::String* dataFileName, int **imageArr,
 	}
 	catch(System::NullReferenceException* ex)
 	{
-		System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Training Process failed",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Error",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		exit(0);
 	}
 }
