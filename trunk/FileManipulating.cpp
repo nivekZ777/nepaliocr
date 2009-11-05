@@ -86,9 +86,9 @@ void FileManipulating::CreatePrototypeFile(System::String* fromFile, System::Str
     bool firstLine = true;
 	System::String *mytmp;
 
-//	System::Windows::Forms::MessageBox::Show(fromFile->ToString(),"From: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-//	System::Windows::Forms::MessageBox::Show(toFile->ToString(),"To: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-//	System::Windows::Forms::MessageBox::Show(modelName->ToString(),"ModelName: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+	System::Windows::Forms::MessageBox::Show(fromFile->ToString(),"From: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+	System::Windows::Forms::MessageBox::Show(toFile->ToString(),"To: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+	System::Windows::Forms::MessageBox::Show(modelName->ToString(),"ModelName: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 
     try
@@ -148,7 +148,7 @@ void FileManipulating::CreatePrototypeFile(System::String* fromFile, System::Str
 			
         }
 */
-		//System::Windows::Forms::MessageBox::Show("ya looks gud","Prototype file creation success!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		System::Windows::Forms::MessageBox::Show("ya looks gud","Prototype file creation success!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 
 		sr->Close();
@@ -196,7 +196,7 @@ void FileManipulating::CreateHMMFile(System::String *exeFileDir, System::String 
 		sw->Write(tempStr);
 		sw->Close();
 		
-		//System::Windows::Forms::MessageBox::Show("Create HMM File on Process","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		System::Windows::Forms::MessageBox::Show("Create HMM File on Process","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 		// create a process and execute 
 		System::Diagnostics::Process *p = new System::Diagnostics::Process();
@@ -220,8 +220,8 @@ void FileManipulating::AddModelDefToMasterModelFile(System::String *mmfFilePath,
 		System::IO::StreamWriter* sw = System::IO::StreamWriter::Null;
 		System::String* tempStr;
 		int lineNum = 0;
-		//System::Windows::Forms::MessageBox::Show(mmfFilePath,"MMF FilePath: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-		//System::Windows::Forms::MessageBox::Show(fromHmmFile,"HMM File: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		System::Windows::Forms::MessageBox::Show(mmfFilePath,"MMF FilePath: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		System::Windows::Forms::MessageBox::Show(fromHmmFile,"HMM File: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 		// if the file does not exist then directly copy the entire content of the prototype file
 		if(!System::IO::File::Exists(mmfFilePath))
@@ -237,7 +237,7 @@ void FileManipulating::AddModelDefToMasterModelFile(System::String *mmfFilePath,
 			//while (!System::String::IsNullOrEmpty((tempStr = sr->ReadLine())))
 			tempStr= sr->ReadLine();
 
-			//System::Windows::Forms::MessageBox::Show("working gud till here!","HMM File: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+			System::Windows::Forms::MessageBox::Show("working gud till here!","HMM File: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
        // while (!System::String::IsNullOrEmpty((tempStr = sr->ReadLine())))
         
 			
@@ -331,7 +331,7 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 			// create streamreader
 			System::IO::StreamReader* sr = new System::IO::StreamReader(gramFile);
 			System::String* line;
-			//	System::String *tmp;
+			System::String *tmp;
 			int  k;
 
 
@@ -372,7 +372,7 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 			sw->Write(text);
 			sw->Close();
 		}
-		//System::Windows::Forms::MessageBox::Show("Building Network working gud till here!","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		System::Windows::Forms::MessageBox::Show("Building Network working gud till here!","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		// add model name to the dictionary file
 		
 		sw = System::IO::File::AppendText(dictFile);
@@ -438,7 +438,7 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 		p->Start();
 		p->WaitForExit();
 
-		//System::Windows::Forms::MessageBox::Show("Building Network success!","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		System::Windows::Forms::MessageBox::Show("Building Network success!","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 
 	}
 	catch(System::Exception* ex)
@@ -594,7 +594,6 @@ void FileManipulating::PrepareData(System::String* dataFileName, int **imageArr,
 		for (int j = 0; j< imHeight ; j++)
 		{
 			Window [j] = new signed int [imWidth];
-			
 		}
 
 		// initialize the array with 1
@@ -647,7 +646,7 @@ void FileManipulating::PrepareData(System::String* dataFileName, int **imageArr,
 				ApplyDCT();
 
 				NoOfWindow++;
-				//	int val;
+				int val;
 				int k1=0;
 				for(int p = 0; p < FRAME_HT ;p++ )
 				{
@@ -756,7 +755,7 @@ void FileManipulating::PrepareData(System::String* dataFileName, int **imageArr,
 
 void FileManipulating::ApplyDCT()
 {
-  float cucv;
+  float cucv, temp;
 
 	for (int u=0;u<FRAME_HT;u++)
     {

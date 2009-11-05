@@ -34,36 +34,7 @@ RecognitionProcess::RecognitionProcess(System::String* path,int **imgArray)
 
 void RecognitionProcess::ImageBoundarySet(int left_x, int right_x,int top_y, int bottom_y)
 {
-	/*
-	try
-	{
-		bool pixelFound = false;
-		for(int yVal=top_y; yVal<=bottom_y; yVal++)
-		{
-			for(int xVal=left_x; xVal<=right_x; xVal++)
-			{
-				if(this->imageArr[yVal][xVal]==0 && pixelFound)
-				{
-					if(xVal<this->leftX){this->leftX = xVal;}
-					if(xVal>this->rightX){this->rightX = xVal;}
-					if(yVal>this->bottomY){this->bottomY = yVal;}
-				}
-				else if(this->imageArr[yVal][xVal]==0)
-				{
-					pixelFound = true;
-					this->leftX = xVal;
-					this->rightX = xVal;
-					this->topY = yVal;
-					this->bottomY = yVal;	
-				}
-			}
-		}
-	}
-	catch(System::NullReferenceException* ex)
-	{
-		System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Image Boundary Finding Error",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-		exit(0);
-	}*/
+	 
 	this->leftX=left_x;
 	this->rightX=right_x;
 	this->topY=top_y;
@@ -79,36 +50,11 @@ System::Collections::SortedList* RecognitionProcess::LoadModelTranscriptions(Sys
 	 System::String* tempStr;
 	 int count=0;
 	 bool modelName = true;
-
 	 try
 	 {
 		sr = new System::IO::StreamReader(dbFilePath);
+
 		 
-		/*
-
-
-		while (!System::String::IsNullOrEmpty((tempStr = sr->ReadLine())))
-		{
-			if(tempStr->Equals("*"))
-			{
-				count = 0;
-				slModel->Add(key,alModelTrans);
-			}
-			else
-			{
-				if(count==0)
-				{
-					key = tempStr;
-					alModelTrans = new System::Collections::ArrayList();
-					count++;
-				}
-				else
-				{
-					alModelTrans->Add(tempStr);
-				}
-			}
-		}
-		*/
 		while(sr->Peek()>=0)
 		{
 			tempStr=sr->ReadLine();
@@ -138,7 +84,6 @@ System::Collections::SortedList* RecognitionProcess::LoadModelTranscriptions(Sys
 	 }
 	 catch(System::Exception* ex)
 	{
-
 		System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to Load the Model DataBase!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		exit(0);
 	}
