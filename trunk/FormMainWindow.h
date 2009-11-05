@@ -478,7 +478,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 
 			this->pictureBox1->Image = im;
 			g=this->pictureBox1->CreateGraphics();
-			System::Windows::Forms::MessageBox::Show("Mean Removal Done!!!!"/*fLevel.ToString()*/,"Threshold Value");
+			//System::Windows::Forms::MessageBox::Show("Mean Removal Done!!!!"/*fLevel.ToString()*/,"Threshold Value");
 			}
 		catch(Exception* ex)
 			{
@@ -580,7 +580,7 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 			
 			this->pictureBox1->Image = im;
 			g=this->pictureBox1->CreateGraphics();
-			System::Windows::Forms::MessageBox::Show("Contrast Done!!!!"/*fLevel.ToString()*/,"Threshold Value");
+			//System::Windows::Forms::MessageBox::Show("Contrast Done!!!!"/*fLevel.ToString()*/,"Threshold Value");
 			}
 		catch(Exception* ex)
 			{
@@ -898,9 +898,9 @@ private: System::Windows::Forms::GroupBox *  groupBox3;
 							//System::IO::File::Delete(dirOfRecFile+i+".txt");
 							System::IO::File::Delete(tmp);
 						}
-						System::Windows::Forms::MessageBox::Show(wordCount.ToString(),"WordCount");
-						System::Windows::Forms::MessageBox::Show(totalUnit.ToString(),"totalUnit");
-						System::Windows::Forms::MessageBox::Show(unitCount.ToString(),"UnitCount");
+						//System::Windows::Forms::MessageBox::Show(wordCount.ToString(),"WordCount");
+						//System::Windows::Forms::MessageBox::Show(totalUnit.ToString(),"totalUnit");
+						//System::Windows::Forms::MessageBox::Show(unitCount.ToString(),"UnitCount");
 						
 						
 
