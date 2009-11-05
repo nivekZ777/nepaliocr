@@ -129,7 +129,10 @@ namespace OCR
 				|			|
 			[x1,y2]-(xsize)-[x2,y2] 
 
-
+			x1 = startColumn (unit)
+			x2 = endColumn	 (unit)
+			y1 = startRow  (line)
+			y2 = EndRow		(line)
 
 			*/
 

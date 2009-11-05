@@ -102,6 +102,8 @@ namespace NepaliOCR
 			 bool meanDone;
 			 bool deskewDone;
 
+	private: bool **binaryArrayForMagnification;
+
 
 	private: int numberOfLines;
 	private: Line* Lines; 
@@ -976,6 +978,49 @@ private: System::Windows::Forms::Button *  findMagnification;
 			rw->ShowDialog();
 
 		 }
+private: void tryMagnify(){
+
+			 //Initially Separate the chars from image before magnifying
+			this->binaryArrayForMagnification=new bool*[im->Height];   //declaring array
+			myInfo1->Text = "Image Height";
+			myInfo->Text = im->Height.ToString();
+			 for(int i=0;i<im->Height;i++)
+					 {
+						 this->binaryArrayForMagnification[i]=new bool[im->Width];
+						 for(int j=0;j<im->Width;j++)
+						 {
+							 this->binaryArrayForMagnification[i][j]=this->BArray[i][j];
+						 }
+
+					 }
+			//image is kept in array now
+					 if(this->SeparateDone==false)
+							{
+							Separate* spMagnify=new Separate(im,BArray,g);
+							spMagnify->LineSeparate();						//Separate Lines from the image
+
+							this->numberOfLines=spMagnify->getNumberOfLines(); //Get Number of Lines
+							this->Lines=spMagnify->getLines();			//Get Lines
+							//this->SeparateDone=true;
+							this->separateChar();				//separate Characters					
+							}
+
+							else
+							{
+								this->separateChar();			//separate Characters
+							}
+							this->Update();
+							//Binary image is saved in : this->BinaryImage;
+							//whole image stored in :: this->ImgArray;
+							
+							
+							//TO BE DONE TOMORROW
+							
+
+							//OCR::testMagnifyWindow* tmw = new OCR::testMagnifyWindow();
+
+
+			}
 
 private: System::Void close_button_Click_1(System::Object *  sender, System::EventArgs *  e)
 			 {
@@ -1065,6 +1110,7 @@ private: System::Void train_Click(System::Object *  sender, System::EventArgs * 
 			 //this->slForCharacters=tw->getSortedList();
 			 //tw->defineVar(this->BArray,this->Lines,this->numberOfLines);
 			 tw->ShowDialog();
+			 
 
 				}
 			 else{
@@ -1125,107 +1171,23 @@ private: System::Void fastRecognizeButton_Click(System::Object *  sender, System
 			 }
 
 		 }
-		 private: void separateToCheckMagnification()
-				 {
-					 this->tmpBArray=new bool*[im->Height];
-					 //System::Windows::Forms::MessageBox::Show(im->Height.ToString(),"Height");
-					 myInfo1->Text = "Image Height";
-					 myInfo->Text = im->Height.ToString();
-					 //this->tmpBArray=this->BArray;
-					 for(int i=0;i<im->Height;i++)
-					 {
-						 this->tmpBArray[i]=new bool[im->Width];
-						 for(int j=0;j<im->Width;j++)
-						 {
-							 this->tmpBArray[i][j]=this->BArray[i][j];
-						 }
-
-					 }
-					 if(this->BinaryDone==true) //If binarization is done
-						{
-							
-							float myMagnificationFactor;
-							if(this->SeparateDone==false)
-							{
-							Separate* sp=new Separate(im,BArray,g);
-							sp->LineSeparate();						//Separate Lines from the image
-
-							this->numberOfLines=sp->getNumberOfLines(); //Get Number of Lines
-							this->Lines=sp->getLines();			//Get Lines
-							this->SeparateDone=true;
-							myMagnificationFactor = this->imageTransformerCounter();				//separate Characters					
-							}
-
-							else
-							{
-							myMagnificationFactor =	this->imageTransformerCounter();			//separate Characters
-							
-							}
-							
-						
-							//im->Size= (im->Size)* (myMagnificationFactor/3.3);
-							//im->Height = im->Height * 2// (myMagnificationFactor/3.3);
-							//int pixel1, pixel2;
-							//im->GetPixel(pixel1,pixel2);
-							//System::Drawing::Bitmap * myBmp1;
-							//myBmp1* = new Bitmap(im*2);
-							//myBmp1->SetPixel(im->100,100.100);
-							//	myBmp* = new __gc Bitmap;
-
-							this->pictureBox1->Image = im;
-							g=this->pictureBox1->CreateGraphics();
-							myInfo->Text="";
-							myInfo1->Text="";
-							this->Update();
-
-							//sp->drawHorizontalHist();
-							//Pen* p=new Pen(Color::Red,1);
-							//g->DrawLine(p,50,50,150,150);
-							//g->DrawRectangle(p,50,50,150,150);//x,y,width,height
-						}
-					 
-					this->Update();
-				 }
-		 private: float imageTransformerCounter()
-				 {
-					 static float myPenSum=0;
-					 static int myPenCount = 0;
-					 
-					 Pen* p=new Pen(Color::Blue,1);
-
-					 
-								for(int i=0;i<this->numberOfLines;i++)
-									{
-										for(int j=0;j<this->Lines[i].getTotalWord();j++)
-											{
-												for(int k=0;k<this->Lines[i].Words[j].getTotalUnit();k++)
-													{
-														int x1=this->Lines[i].Words[j].Units[k].getStartColumn();
-														int x2=this->Lines[i].Words[j].Units[k].getEndColumn();
-														int y1=this->Lines[i].getStartRow();
-														int y2=this->Lines[i].getEndRow();
-														
-														 myPenSum+=(y2-y1)/(x2-x1);
-														 myPenCount++;
-
-														
-														// System::Windows::Forms::MessageBox::Show((myPenSum/myPenCount).ToString(),"Transformation Factor");
-
-														g->DrawLine(p,x1,y1,x1,y2);
-														g->DrawLine(p,x2,y1,x2,y2);
-													}
-											}
-									}
-					 myInfo1->Text = "Magnification";
-					 myInfo->Text = (myPenSum/myPenCount).ToString();
-					 //reset counter for separate
-					this->SeparateDone=false;
-					return myPenSum/myPenCount;
-				 }
+		
+				 
 
 private: System::Void findMagnification_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			separateToCheckMagnification();
+				  
+			//function to magnify the image
+			 if(this->BinaryDone){
+					//The image magnification is easier if it is separated first
+					System::Windows::Forms::MessageBox::Show("Looks like the image is separted\n working","Good");
+					tryMagnify();
+			 }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Image is not Binarized","Binarize first");
+			 }
+
+
 		 }
 
 };

@@ -156,6 +156,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\testMagnifyWindow.cpp">
+			</File>
+			<File
 				RelativePath=".\ThresholedValue.cpp">
 			</File>
 			<File
