@@ -44,6 +44,12 @@ namespace OCR
 			this->characterDBPath=this->characterDBPath->Concat(this->applicationPath ,"\\htk\\DataBaseFile\\characters.txt");	
 			//System::Windows::Forms::MessageBox::Show(this->characterDBPath,"Path of characterDB path");
 			
+			this->modelTrainDBPath = this->modelTrainDBPath->Concat(this->applicationPath , "\\htk\\DataBaseFile\\modelTrainDataBase.txt");
+			// getting the path of the word to be tranied for which the recognition output is shown
+			this->wordToRec = this->wordToRec->Concat(this->applicationPath ,"\\htk\\files\\trainfile.txt");
+
+			this->alForCharacters = new System::Collections::ArrayList();
+
 			InitializeComponent();
 			//this->applicationPath = Application::StartupPath->ToString();
 			// for the directory, path appear an extra '/'
@@ -74,7 +80,17 @@ namespace OCR
 		private: int x1,x2,y1,y2;
 		private: String* applicationPath;
 				 String* characterDBPath;
+				 String* modelTrainDBPath;
+				 String* modelName;
+    
+    // for recognition
+	private: String* wordToRec;
+	private: System::Collections::ArrayList* alRec;
+
+
 		private: System::Collections::SortedList* slForCharacters;
+		private: System::Collections::ArrayList* alForCharacters;
+				 System::Collections::IEnumerator* charEnumerator;
 
 
 		private: System::Windows::Forms::TextBox *  combineChar;
@@ -358,7 +374,42 @@ private: System::Void prevButton_Click(System::Object *  sender, System::EventAr
 
 private: System::Void addChar_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 this->combineChar->Text=this->combineChar->Text->Concat(this->combineChar->Text,this->characterBox->SelectedItem->ToString());
+			 int i = this->characterBox->SelectedIndex;
+			 System::String* text ="";
+			 int numOfElement = 0;
+			 if(i>=0)
+			 {
+				 try
+				 {
+					 this->alForCharacters->Add(this->characterBox->SelectedItem->ToString());
+					 //this->alForCharacters->Add(this->comboBoxCharacters->SelectedItem->ToString());
+					 //numOfElement = alForCharacters->Count;
+
+					 this->charEnumerator=this->alForCharacters->GetEnumerator();
+					 //for(int j=0;j<numOfElement;j++)
+
+					 while(this->charEnumerator->MoveNext())
+					 {
+						 //System::String* tmp=*dynamic_cast<__box String*>(this->charEnumerator->Current);
+						 System::String* tmp=(String*)this->charEnumerator->Current;
+						 text = text->Concat(text,tmp->ToString());
+					 }
+				 }
+				 catch(System::Exception* ex)
+				 {
+					 System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Process Transcription Failed!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+					 exit(0);
+				 }
+				 this->combineChar->Text = text;
+			 }
+			 /*if(numOfElement>0)
+			 {
+				 this->buttonCompleted->Enabled = true;
+			 }*/
+
+
+
+			 //this->combineChar->Text=this->combineChar->Text->Concat(this->combineChar->Text,this->characterBox->SelectedItem->ToString());
 		 }
 
 private: System::Void trainButton_Click(System::Object *  sender, System::EventArgs *  e)
@@ -366,6 +417,59 @@ private: System::Void trainButton_Click(System::Object *  sender, System::EventA
 			 TrainingProcess* tp=new TrainingProcess(this->applicationPath,this->ImageArray,this->x1,this->x2,this->y1,this->y2);
 			 tp->PrepareTrainingData();
 			 tp->TrainingByHTK(tp->numOfFrame);
+			 this->modelName = tp->GetTrainedModelName();
+
+			 System::Windows::Forms::MessageBox::Show("Training Completed Successfully!","Success!!",MessageBoxButtons::OK,MessageBoxIcon::Exclamation);
+			 
+			 // delete the unnecessary temporary file
+			 System::IO::File::Delete(wordToRec);
+
+			 System::IO::StreamWriter* sw = System::IO::StreamWriter::Null;
+			 System::String* tempStr;
+			 try
+			 {
+				 
+				 sw = System::IO::File::AppendText(this->modelTrainDBPath);
+				 sw->WriteLine(this->modelName);
+
+
+				 /*for(int i=0;i<this->alForCharacters->Count;i++)
+				 {
+					 tempStr = this->slForCharacters->GetByIndex(slForCharacters->IndexOfKey(alForCharacters[i]))->ToString();
+					 sw->WriteLine(tempStr);
+				 }*/
+
+				 this->charEnumerator=this->alForCharacters->GetEnumerator();
+					 //for(int j=0;j<numOfElement;j++)
+
+				while(this->charEnumerator->MoveNext())
+//				 for(int i=0;i<this->alForCharacters->Count;i++)
+				 {
+					 //System::String* tmp=*dynamic_cast<__box System::String*>(this->charEnumerator->Current);
+					 System::String* tmp=(String*)this->charEnumerator->Current;
+					 tempStr = this->slForCharacters->GetByIndex(slForCharacters->IndexOfKey(tmp))->ToString();
+					 //tempStr = this->slForCharacters->GetByIndex(slForCharacters->IndexOfKey(this->charEnumerator->Current)->ToString());
+					 sw->WriteLine(tempStr);
+				 }
+				 sw->WriteLine("*");
+				 sw->Close();
+				 this->characterBox->Text = "";
+				 this->characterBox->SelectedIndex = -1;
+				 //this->labelRecWord->Text = "";
+				 this->alForCharacters->Clear();
+
+				 // disable some buttons
+				 //this->buttonCompleted->Enabled = false;
+				 //this->groupBox1->Enabled = false;
+				 
+			 }
+			 catch(System::Exception* ex)
+			 {
+				 System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to Load the Model DataBase!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+				 exit(0);
+			 }
+			 
+
 		 }
 
 };
