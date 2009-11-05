@@ -1,3 +1,5 @@
+#ifndef LINE_H
+#define LINE_H
 #pragma once
 #include "Word.h"
 
@@ -45,3 +47,4 @@ public:
 		return this->TotalWord;
 	}
 };
+#endif

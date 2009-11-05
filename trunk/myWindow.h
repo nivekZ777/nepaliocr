@@ -1,4 +1,13 @@
+//#ifndef SEPERATE_H
+//#undef SEPARATE_H
 //#include "Separate.h"
+//#else
+//#define SEPARATE_H
+//#endif
+
+
+
+#include "Separate.h"
 #include "Line.h"
 #include "RecognitionProcess.h"
 #include "RecognitionForm.h"
@@ -916,6 +925,7 @@ private: System::Void avgButton_Click(System::Object *  sender, System::EventArg
 			checkParameters();
 		 }
 
+		 //
 		 /*
 		 	private: void separate()
 				 {
@@ -938,8 +948,8 @@ private: System::Void avgButton_Click(System::Object *  sender, System::EventArg
 
 							if(this->SeparateDone==false)
 							{
-//							Separate* sp=new Separate(imageReceivedToForm,BArray,g);
-//							sp->LineSeparate();						//Separate Lines from the image
+							Separate* sp=new Separate(imageReceivedToForm,BArray,g);
+							sp->LineSeparate();						//Separate Lines from the image
 
 							this->numberOfLines=sp->getNumberOfLines(); //Get Number of Lines
 							this->Lines=sp->getLines();			//Get Lines
@@ -992,6 +1002,8 @@ private: System::Void avgButton_Click(System::Object *  sender, System::EventArg
 									}
 
 				 }
+
+
 				 */
 };
 }
