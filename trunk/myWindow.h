@@ -114,6 +114,7 @@ namespace OCR
 			__super::Dispose(disposing);
 		}
 	private: System::Windows::Forms::Panel *  panel1;
+	private: System::Windows::Forms::Button *  singleRecog;
 	private: System::Windows::Forms::GroupBox *  groupBox1;
 	private: System::Windows::Forms::GroupBox *  groupBox2;
 	private: System::Windows::Forms::GroupBox *  groupBox3;
@@ -215,6 +216,7 @@ namespace OCR
 			this->pictureBoxSmall = new System::Windows::Forms::PictureBox();
 			this->groupBox3 = new System::Windows::Forms::GroupBox();
 			this->myRTB = new System::Windows::Forms::RichTextBox();
+			this->singleRecog = new System::Windows::Forms::Button();
 			this->panel1->SuspendLayout();
 			this->groupBox1->SuspendLayout();
 			this->groupBox2->SuspendLayout();
@@ -284,6 +286,7 @@ namespace OCR
 			// 
 			// groupBox2
 			// 
+			this->groupBox2->Controls->Add(this->singleRecog);
 			this->groupBox2->Controls->Add(this->myWindowRecognizeButton);
 			this->groupBox2->Controls->Add(this->myWindowSeparateButton);
 			this->groupBox2->Controls->Add(this->avgHeightLabel);
@@ -306,11 +309,11 @@ namespace OCR
 			// 
 			// myWindowRecognizeButton
 			// 
-			this->myWindowRecognizeButton->Location = System::Drawing::Point(152, 304);
+			this->myWindowRecognizeButton->Location = System::Drawing::Point(152, 272);
 			this->myWindowRecognizeButton->Name = S"myWindowRecognizeButton";
 			this->myWindowRecognizeButton->Size = System::Drawing::Size(80, 24);
 			this->myWindowRecognizeButton->TabIndex = 12;
-			this->myWindowRecognizeButton->Text = S"Recognize";
+			this->myWindowRecognizeButton->Text = S"RecognizeAll";
 			this->myWindowRecognizeButton->Click += new System::EventHandler(this, myWindowRecognizeButton_Click);
 			// 
 			// myWindowSeparateButton
@@ -424,6 +427,15 @@ namespace OCR
 			this->myRTB->Size = System::Drawing::Size(208, 392);
 			this->myRTB->TabIndex = 0;
 			this->myRTB->Text = S"";
+			// 
+			// singleRecog
+			// 
+			this->singleRecog->Location = System::Drawing::Point(160, 304);
+			this->singleRecog->Name = S"singleRecog";
+			this->singleRecog->Size = System::Drawing::Size(88, 24);
+			this->singleRecog->TabIndex = 13;
+			this->singleRecog->Text = S"Single Recog";
+			this->singleRecog->Click += new System::EventHandler(this, singleRecog_Click);
 			// 
 			// myWindow
 			// 
@@ -658,7 +670,7 @@ private: void LoadFromFile()
 				 x2=this->LineInfo[lineno].Words[wordno].Units[charno].getEndColumn();	//Equivalent to :: right_x
 				 y1=this->LineInfo[lineno].getStartRow();		//Equivalent to :: top_y
 				 y2=this->LineInfo[lineno].getEndRow();	
-				 singleRecognize(x1,x2,y1,y2,1) ;
+				// singleRecognize(x1,x2,y1,y2,1) ;
 
 				 //Cuzz charno starts from 0, we need to increment charno by 1, before recognizing
 				// singleRecognize(x1,x2,y1,y2,charno) ;
@@ -689,7 +701,7 @@ private: void LoadFromFile()
 			 
 			this->cropImage=new Bitmap(xsize,ysize,Imaging::PixelFormat::Format24bppRgb);
 			
-			for(int i=y1;i<=y2;i++)//traverse through y
+			for(int i=y1;i<=y2;i++)//traverse throughy
 			{
 				for(int j=x1;j<=x2;j++)//traverse through x
 				{
@@ -900,6 +912,11 @@ private: System::Void myWindowRecognizeButton_Click(System::Object *  sender, Sy
 		 {
 			 this->Recognize();
 		 }//End myWindowRecognizeButton_Click
+
+private: System::Void singleRecog_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 singleRecognize(x1,x2,y1,y2,1) ;
+		 }
 
 };
 }
