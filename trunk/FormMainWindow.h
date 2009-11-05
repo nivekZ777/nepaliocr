@@ -1138,7 +1138,8 @@ private: System::Void fastRecognizeButton_Click(System::Object *  sender, System
 					 }
 					 if(this->BinaryDone==true) //If binarization is done
 						{
-
+							
+							float myMagnificationFactor;
 							if(this->SeparateDone==false)
 							{
 							Separate* sp=new Separate(im,BArray,g);
@@ -1147,13 +1148,36 @@ private: System::Void fastRecognizeButton_Click(System::Object *  sender, System
 							this->numberOfLines=sp->getNumberOfLines(); //Get Number of Lines
 							this->Lines=sp->getLines();			//Get Lines
 							this->SeparateDone=true;
-							float myMagnificationFoactor = this->imageTransformerCounter();				//separate Characters					
+							myMagnificationFactor = this->imageTransformerCounter();				//separate Characters					
 							}
 
 							else
 							{
-							float myMagnificationFoactor =	this->imageTransformerCounter();			//separate Characters
+							myMagnificationFactor =	this->imageTransformerCounter();			//separate Characters
+							
 							}
+							
+						
+							//im->Size= (im->Size)* (myMagnificationFactor/3.3);
+							//im->Height = im->Height * 2// (myMagnificationFactor/3.3);
+										
+							//int pixel1, pixel2;
+							//im->GetPixel(pixel1,pixel2);
+							
+							
+							//System::Drawing::Bitmap * myBmp1;
+							
+							
+							//myBmp1* = new Bitmap(im*2);
+							//myBmp1->SetPixel(im->100,100.100);
+
+						//	myBmp* = new __gc Bitmap;
+
+							this->pictureBox1->Image = im;
+							g=this->pictureBox1->CreateGraphics();
+							myInfo->Text="";
+							myInfo1->Text="";
+							this->Update();
 
 							//sp->drawHorizontalHist();
 							//Pen* p=new Pen(Color::Red,1);
