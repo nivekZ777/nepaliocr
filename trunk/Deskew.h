@@ -1,4 +1,5 @@
 #include "HoughLine.h"
+
 #pragma once
 
 using namespace System::Collections;
@@ -7,21 +8,31 @@ using namespace System::IO;
 
 public __gc class Deskew
 {
-	
+
+
+
 public:
-	static Bitmap* cBmp;
-	static double cAlphaStart= -0;
+	//The Bitmap
+ 	static Bitmap* cBmp;
+	//The range of angles to search for lines
+	//static double cAlphaStart= -20;
+	static double cAlphaStart= -20;
 	static double cAlphaStep= 0.2;
 	static int cSteps= 40 * 5;
+	//Precalculation of sin and cos.
 	static double *cSinA;
 	static double *cCosA;
+	//Range of d
 	static double cDMin;
 	static double cDStep= 1;
 	static int cDCount;
+
+	//Count of points that fit in a line.
 	static int *cHMatrix;
 
 
 	Deskew(Bitmap* im);
+
 	double GetSkewAngle();
 	void Calc();
 	void Init();
@@ -33,74 +44,102 @@ public:
 
 };
 
+//## Deskew::Deskew(Bitmap* im) ##
 Deskew::Deskew(Bitmap* im)
 {
 	cBmp=im;
 }
+
+//##### double Deskew::GetSkewAngle() ####
+//Calculate the skew angle of the image cBmp.
 double Deskew::GetSkewAngle()
 {
-	HoughLine *h1[];
-	h1=new HoughLine* [20];
+	HoughLine *h1[];		//creating a pointer
+	int i;
+	h1=new HoughLine* [20];	//creating new array of class HoughLine, array of size 20 
+ 	double sum=0;			//initializing sum
+	int count=0;			//initializing count
 
-	double sum=0;
-	int count=0;
-	Calc();
+	Calc();					//calculate
+	//Hough Transformation
+	
 	h1=this->GetTop(20);
-	for(int i=0;i<20;i++)
+	//Top 20 of the detected lines in the image.
+
+	//Average angle of the lines
+	for (i = 0; i <= 19; i++) 
 		{
 			sum+=h1[i]->Alpha;
 			count+=1;
 		}
-	return sum/count;
+		
+		return sum/count;
+	
 }
 
+
+//######### void Deskew::Calc() ###########
 void Deskew::Calc()
 {
+	int x;
+	int y;
 	double bMin=(cBmp->Height) / 4;
 	double bMax=cBmp->Height * 3 / 4;
 
 	int hMin=(int)bMin;
 	int hMax=(int)bMax;
-	//System::Windows::Forms::MessageBox::Show(hMin.ToString()/*fLevel.ToString()*/,"bMin");
-	//System::Windows::Forms::MessageBox::Show(hMax.ToString()/*fLevel.ToString()*/,"bMax");					
+
+	//bMin = 1/4th of ImageHeight
+	//bMax = 3/4th of ImageHeight
+
+
+//	System::Windows::Forms::MessageBox::Show(hMin.ToString()/*fLevel.ToString()*/,"bMin");
+	
+	
+	
+//	System::Windows::Forms::MessageBox::Show(hMax.ToString()/*fLevel.ToString()*/,"bMax");					
 
 	Init();
 
-	for(int y=hMin;y<=hMax;y++)
+	//y runs from 1/4th of image to 3/4th of image
+	for(y=hMin;y<=hMax;y++)
 		{
-			for(int x=1;x<=(cBmp->Width)-2;x++)
+			//x runs from 1 to (width of image-2)
+			for(x=1;x<=(cBmp->Width)-2;x++)
 				{
-					if(IsBlack(x,y))
-						{
-							if(IsBlack(x,y+1))
-								{
-									//this->Calc(x,y);
-								}
-							else
-							{
-								Calc(x,y);
-							}
-						}
+				// Only lower edges are considered.
+				if (IsBlack(x, y))
+				{
+					if (!IsBlack(x, y + 1))
+					{
+						Calc(x, y);
+					}
 				}
+			}
 		}
 }
-
+//################################## Deskew :: Init() ###############
 void Deskew::Init()
 {
+	int i;
 	double angle;
+	// Precalculation of sin and cos.
+		//  ReDimStatement
+		// ReDimStatement
 	cSinA=new double [cSteps-1];
 	cCosA=new double [cSteps-1];
 
 
-	for(int i=0;i<=cSteps-1;i++)
+	for(i=0;i<=cSteps-1;i++)
 		{
-			angle=(GetAlpha(i)) * (System::Math::PI) / 180;
-			cSinA[i]=System::Math::Sin(angle);
-			cCosA[i]=System::Math::Cos(angle);
+			angle=(GetAlpha(i)) * (System::Math::PI) / 180.0;
+			cSinA[i]=System::Math::Sin(angle);		//find sine angle
+			cCosA[i]=System::Math::Cos(angle);		//find cosine angle
 		}
 	
 	cDMin= -(cBmp->Width);
 	double cDCount0=2*(cBmp->Width + cBmp->Height)/ cDStep;
+
 	cDCount=(int)cDCount0;
 	cHMatrix=new int [cDCount * cSteps];
 
@@ -110,6 +149,8 @@ void Deskew::Init()
 	}
 }
 
+
+//##################### Deskew :: GetAlpha #############
 double Deskew::GetAlpha(int Index)
 {
 	return cAlphaStart + (((double) Index) * cAlphaStep) ;
@@ -117,59 +158,91 @@ double Deskew::GetAlpha(int Index)
 
 bool Deskew::IsBlack(int x,int y)
 {
+	Color c;
+	double luminance;
+	int pixel;
+	int red;
+	int green;
+	int blue;
+
 	System::Drawing::Color clr = cBmp->GetPixel(x,y);
-	int pixel = clr.ToArgb();				
+	pixel = clr.ToArgb();				
 
-	int red = (pixel >> 16) & 0xff;
-	int green = (pixel >>  8) & 0xff;
-	int blue = (pixel      ) & 0xff;
+	
 
-	double luminance = (0.299 * red) + (0.587 * green) + (0.114 * blue);
+	red = (pixel >> 16) & 0xff;
+	green = (pixel >>  8) & 0xff;
+	blue = (pixel      ) & 0xff;
+	
+	luminance = (0.299 * red) + (0.587 * green) + (0.114 * blue);
 	return luminance < 140;
 }
 
-void Deskew::Calc(int x,int y)
+
+//################# Deskew :: Calc(int x, int y) ##################
+// Calculate all lines through the point (x,y).
+void Deskew::Calc(int x,int y)		//parameters image pixels(x, and y) coordinates
 {
+	int alpha;
 	double d;
-	int dIndex,Index;
+	int dIndex,Index;			
+	
 
 
 
-
-	for(int alpha=0;alpha<=cSteps-1;alpha++)
+	for(alpha=0;alpha<=cSteps-1;alpha++)
 	{
-		d=(y * cCosA[alpha])- (x * cSinA[alpha]);
+		d=(y * cCosA[alpha])- (x * cSinA[alpha]); //x Cos(alpha) + y Sin(alpha) = P
+												  //P = x Cos(alpha) + y Sin(alpha)
+												  //this turns out to be :
+													// d = y Cos(alpha) + x Sin(alpha)
+													// d = y cCos(alpha) - x cSin(alpha)
 		dIndex=CalcDIndex(d);
 		Index=(dIndex*cSteps)+alpha;
+		
+	
 		cHMatrix[Index]+=1;
+		
+
 	}
 
 }
 
+//########### double Deskew::CalcDIndex(double d) #######
 double Deskew::CalcDIndex(double d)
 {
 	return System::Convert::ToInt32(d - cDMin);
 }
 
+//######## HoughLine* Deskew::GetTop(int count)[] ###
+//Calculate the Count lines in the image with most points.
 HoughLine* Deskew::GetTop(int count)[]
 {
-	HoughLine* h1[]=new HoughLine*[20];
-	for(int i=0;i<count;i++)
-	{
+	HoughLine* h1[]=new HoughLine*[20]; //declaration 
+	int i;
+	int j;
+	HoughLine* tmp;				//temporary houghline datatype
+	int AlphaIndex;				//temp 
+	int dIndex;					//temp 
+			
+	// ERROR: Not supported in C#: ReDimStatement
+	// :::: Some vb codes are left unimplemented here August 18, 2007 ::::::::: 
+
+	for(i=0;i<=(count -1);i++)   //initialize the value of houghline, initially to zero 
+	{							//Continue until it increases upto count
 		h1[i]=new HoughLine();
 	}
-	for(int i=0;i<count;i++)
+
+
+	for(i=0;i<count;i++)
 	{
-		h1[i]->Count=0;
-		h1[i]->Index=0;
-		h1[i]->Alpha=0;
-		h1[i]->d=0;
+		h1[i]->Count=0;			//initialize each components of houghline to zero
+		h1[i]->Index=0;			//initialize
+		h1[i]->Alpha=0;			//initialiae
+		h1[i]->d=0;				//initialiae
 	}
 
-	HoughLine* tmp;
-	int AlphaIndex;
-	int dIndex;
-	int j;
+				//temp
 	
 	int hlLength=(int)cDCount*cSteps;
 	
@@ -186,7 +259,7 @@ HoughLine* Deskew::GetTop(int count)[]
 							tmp=h1[j];
 							h1[j]=h1[j-1];
 							h1[j-1]=tmp;
-							j--;
+							j -= 1;  // means j--;
 						}
 				}
 		}
@@ -197,18 +270,19 @@ HoughLine* Deskew::GetTop(int count)[]
 	for(int i=0;i<=count-1;i++)
 		{
 			dIndex=(h1[i]->Index) / cSteps;
-	//		sw->WriteLine(dIndex);
 			AlphaIndex=h1[i]->Index - dIndex * cSteps;
-	//		sw->WriteLine(h1[i]->Index);
-	//		sw->WriteLine(cSteps);
-	//		sw->WriteLine(dIndex);
-	//		sw->WriteLine(AlphaIndex);
 			h1[i]->Alpha=GetAlpha(AlphaIndex);
 			h1[i]->d=dIndex + cDMin;
 		}
-	//sw->Close();
+	
 	
 
 	return h1;
 
 }
+
+/*
+This Image deskew portion is inspired by the following algorithm
+http://imaging.gmse.net/download/gmseDeskew_vb.html
+
+*/
