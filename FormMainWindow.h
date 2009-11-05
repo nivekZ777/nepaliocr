@@ -1,4 +1,4 @@
-#include "TrainingForm.h"
+	#include "TrainingForm.h"
 #include "RecognitionForm.h"
 #include "RecognitionProcess.h"
 #include "ThresholedValue.h"
