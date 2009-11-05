@@ -3,6 +3,9 @@
 #include "RecognitionForm.h"
 #include "ThresholedValue.h"
 //#include "Separate.h"
+
+
+//#include "Separate.h"
 //#include "myWindowSeparate.h"
 
 #include "rgbConvert.h"
@@ -91,6 +94,7 @@ namespace OCR
 		private: int intLevel;
 		Bitmap* imageReceivedToForm;
 		String* meroText;
+		private: static float counterForAveragingHeightWeight=0;
 
 	private: int numberOfLines;
 	private: Line* Lines; 
@@ -145,6 +149,7 @@ namespace OCR
 		void InitializeComponent(void)
 		{
 			this->panel_myWindow = new System::Windows::Forms::Panel();
+			this->myRTB = new System::Windows::Forms::RichTextBox();
 			this->groupBox2 = new System::Windows::Forms::GroupBox();
 			this->label12 = new System::Windows::Forms::Label();
 			this->label11 = new System::Windows::Forms::Label();
@@ -165,7 +170,6 @@ namespace OCR
 			this->label3 = new System::Windows::Forms::Label();
 			this->pictureBox_myWindow = new System::Windows::Forms::PictureBox();
 			this->label1 = new System::Windows::Forms::Label();
-			this->myRTB = new System::Windows::Forms::RichTextBox();
 			this->panel_myWindow->SuspendLayout();
 			this->groupBox2->SuspendLayout();
 			this->groupBox1->SuspendLayout();
@@ -181,6 +185,14 @@ namespace OCR
 			this->panel_myWindow->Name = S"panel_myWindow";
 			this->panel_myWindow->Size = System::Drawing::Size(928, 456);
 			this->panel_myWindow->TabIndex = 1;
+			// 
+			// myRTB
+			// 
+			this->myRTB->Location = System::Drawing::Point(656, 32);
+			this->myRTB->Name = S"myRTB";
+			this->myRTB->Size = System::Drawing::Size(256, 400);
+			this->myRTB->TabIndex = 6;
+			this->myRTB->Text = S"";
 			// 
 			// groupBox2
 			// 
@@ -302,14 +314,14 @@ namespace OCR
 			// 
 			// label13
 			// 
-			this->label13->Location = System::Drawing::Point(64, 216);
+			this->label13->Location = System::Drawing::Point(32, 280);
 			this->label13->Name = S"label13";
 			this->label13->Size = System::Drawing::Size(112, 32);
 			this->label13->TabIndex = 7;
 			// 
 			// avgButton
 			// 
-			this->avgButton->Location = System::Drawing::Point(80, 296);
+			this->avgButton->Location = System::Drawing::Point(104, 336);
 			this->avgButton->Name = S"avgButton";
 			this->avgButton->Size = System::Drawing::Size(72, 24);
 			this->avgButton->TabIndex = 6;
@@ -354,14 +366,6 @@ namespace OCR
 			this->label1->Size = System::Drawing::Size(72, 16);
 			this->label1->TabIndex = 2;
 			// 
-			// myRTB
-			// 
-			this->myRTB->Location = System::Drawing::Point(656, 32);
-			this->myRTB->Name = S"myRTB";
-			this->myRTB->Size = System::Drawing::Size(256, 400);
-			this->myRTB->TabIndex = 6;
-			this->myRTB->Text = S"";
-			// 
 			// myWindow
 			// 
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
@@ -396,7 +400,7 @@ namespace OCR
 			static float heightCount=0;
 			static float avgWidthCount=0;
 			static float avgHeightCount=0;
-			static float counterForAveragingHeightWeight=0;
+			
 
 			x1=this->LineInfo[lineno].Words[wordno].Units[charno].getStartColumn();
 			x2=this->LineInfo[lineno].Words[wordno].Units[charno].getEndColumn();
@@ -493,7 +497,10 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 			
 			 if(charno<this->LineInfo[lineno].Words[wordno].getTotalUnit()-1)
 				 {
-					this->charno++;
+					 this->myRTB->AppendText("\n--------within first if ---total units ----------");
+					 this->myRTB->AppendText(this->LineInfo[lineno].Words[wordno].getTotalUnit().ToString());
+
+					 this->charno++;
 				 }
 				 else
 				 {
@@ -502,6 +509,8 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 					 {
 						 this->wordno++;
 						 this->charno=0;
+						 this->myRTB->AppendText("\n else if -----------total units ----------");
+						 this->myRTB->AppendText(this->LineInfo[lineno].Words[wordno].getTotalUnit().ToString());
 					 }
 
 
@@ -512,12 +521,16 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 						 if(lineno<this->lineCount-1)
 						 {
 							 this->lineno++;
+							 this->myRTB->AppendText("------else else if -----total units ----------");
+							 this->myRTB->AppendText(this->LineInfo[lineno].Words[wordno].getTotalUnit().ToString());
 						 }
 						 else
 						 {
 							 this->lineno=0;
 							 this->wordno=0;
 							 this->charno=0;
+							 this->myRTB->AppendText("------else else else -----total units ----------");
+							 this->myRTB->AppendText(this->LineInfo[lineno].Words[wordno].getTotalUnit().ToString());
 						 }
 					 }
 				 }
@@ -618,7 +631,7 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 
 						// remove all the temporary word image feature files
 						for(int i=1;i<=totalUnit;i++)	
-						{
+						{~
 							System::String* tmp=tmp->Concat(dirOfRecFile,i.ToString(),".txt");
 							//System::IO::File::Delete(dirOfRecFile+i+".txt");
 							System::IO::File::Delete(tmp);
@@ -762,31 +775,22 @@ private: void LoadFromFile()
 
 	private: void checkParameters(){
 
-				this->myRTB->AppendText("\n ---------------------------");
+			 this->myRTB->AppendText("\n Lineno is ");
+			 this->myRTB->AppendText(lineno.ToString());
+			 this->myRTB->AppendText("\n lineCount is ");
+			 this->myRTB->AppendText(this->lineCount.ToString());
 
 
-				for(int myI=0; myI< (this->LineInfo[lineno].getTotalWord()-1); myI++){
-					 this->meroText= this->meroText->Concat("\n\n Loop : ",myI.ToString());
-					 this->meroText= this->meroText->Concat(this->meroText,"\n LineInfo : ",this->LineInfo[lineno].getTotalWord().ToString());
-					 this->myRTB->AppendText(meroText);
-					 //this->meroText = 
-					 //this->myRTB->AppendText();
-				 
-
+			 /*
 			 if(charno<this->LineInfo[lineno].Words[wordno].getTotalUnit()-1)
 				 {
 					this->charno++;
-					this->meroText= this->meroText->Concat("\n \(inside if\) Loop : ",myI.ToString());
-					 this->meroText= this->meroText->Concat(this->meroText,"\n Inside Charno : ",this->charno.ToString());
-					 this->myRTB->AppendText(meroText);
 				 }
 				 else
 				 {
-					this->myRTB->AppendText("\n\nInside else");
 					 //this->charno=0;
 					 if(wordno< this->LineInfo[lineno].getTotalWord()-1)
 					 {
-						 this->myRTB->AppendText("\n withIn Else and again a new if");
 						 this->wordno++;
 						 this->charno=0;
 					 }
@@ -808,12 +812,97 @@ private: void LoadFromFile()
 						 }
 					 }
 				 }
-				 this->display(this->lineno,this->wordno,this->charno);
+			
+			*/
+
+			int abc=0;
+
+			for(int myI=0;(myI<= this->lineno) ;myI++){ //no of Lines
+				this->myRTB->AppendText(" \n Number of lines :  ");
+				this->myRTB->AppendText(this->lineno.ToString());
+				this->myRTB->AppendText(myI.ToString());
+				this->myRTB->AppendText(" \n ");
+
+				 for(int myJ=0;myJ<=this->LineInfo[myI].getTotalWord();myJ++){
+					 this->myRTB->AppendText("\nnumber of Words:");
+					 this->myRTB->AppendText(this->LineInfo[myI].getTotalWord().ToString());
+					 this->myRTB->AppendText("\nJ:");		
+					 this->myRTB->AppendText(myJ.ToString());
+					 this->myRTB->AppendText("\nK:    ");
+					 for(int myK=0;(myK<this->LineInfo[myI].Words[myK].getTotalUnit());myK++){
+						
+						 abc++;
+						 
+						 
+						 this->myRTB->AppendText(myK.ToString());
+						 this->myRTB->AppendText("  ");
+
+						 //this->myAverage(myI,myJ,myK);
+
+					 }
 				 
 				 }
-				 this->Update();
+
+				 this->myRTB->AppendText("\n--------------------- Abc is ");
+				 this->myRTB->AppendText(abc.ToString());
+			 }
+				 this->myAverage(this->lineno,this->wordno,this->charno);
+			 
+			 
+				 this->Update;
 		 }
 
+	private:
+	void myAverage(int lineno,int wordno,int charno)
+		{
+			static float widthCount=0;
+			static float heightCount=0;
+			static float avgWidthCount=0;
+			static float avgHeightCount=0;
+			static float counterForAveragingHeightWeight=0;
+
+			x1=this->LineInfo[lineno].Words[wordno].Units[charno].getStartColumn();
+			x2=this->LineInfo[lineno].Words[wordno].Units[charno].getEndColumn();
+			y1=this->LineInfo[lineno].getStartRow();
+			y2=this->LineInfo[lineno].getEndRow();
+			int xsize=x2-x1+1;
+			int ysize=y2-y1+1;
+			
+			this->cropImage=new Bitmap(xsize,ysize,Imaging::PixelFormat::Format24bppRgb);
+			
+			for(int i=y1;i<=y2;i++)//traverse through y
+			{
+				for(int j=x1;j<=x2;j++)//traverse through x
+				{
+				if(this->BinArray[i][j])
+					{
+						 
+						this->cropImage->SetPixel(j-x1,i-y1,Color::White);
+					}
+					else
+					{
+						this->cropImage->SetPixel(j-x1,i-y1,Color::Black);
+					}
+				}
+			}
+			//this->pictureBox1->Image=cropImage;
+			this->label2->Text = cropImage->Height.ToString();
+			this->label8->Text = cropImage->Width.ToString();
+			widthCount +=cropImage->Height;
+			heightCount +=cropImage->Width;
+			counterForAveragingHeightWeight++;
+			avgWidthCount=widthCount/counterForAveragingHeightWeight;
+			avgHeightCount=heightCount/counterForAveragingHeightWeight;
+			
+			this->label10->Text = avgWidthCount.ToString();
+			this->meroText= this->meroText->Concat(this->meroText,"\n Average width : ",avgWidthCount.ToString());
+			this->label12->Text = avgHeightCount.ToString();
+			this->meroText= this->meroText->Concat(this->meroText,"\n Average Height : ",avgHeightCount.ToString());
+			this->label13->Text = counterForAveragingHeightWeight.ToString();
+			this->myRTB->AppendText(this->meroText);
+
+
+		}
 private: System::Void avgButton_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			checkParameters();

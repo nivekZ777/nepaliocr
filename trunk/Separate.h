@@ -1,3 +1,7 @@
+#ifndef SEPARATE_H
+#define SEPARATE_H
+
+
 #include "Line.h"
 #pragma once
 //#include <vector>
@@ -22,6 +26,10 @@ private:
 
 	Graphics* g;
 
+
+#ifndef SEPARATE 
+#define SEPARATE
+
 public:
 	Separate(Bitmap* im,bool **B,Graphics* gr);
 	Line *Lines;
@@ -35,6 +43,8 @@ public:
 	Line* getLines();
 
 };
+#endif
+
 
 Separate::Separate(Bitmap* im,bool **B,Graphics* gr)
 {
@@ -1353,7 +1363,7 @@ Line* Separate::getLines()
 
 	
 	
-	
+#endif 
 
 	
 
