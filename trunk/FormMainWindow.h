@@ -586,6 +586,9 @@ namespace Exercise1
 						}
 					this->Update();
 				 }
+
+
+
 		private: void doDeSkew()
 				  {
 					  Deskew* ds=new Deskew(im);
@@ -597,10 +600,10 @@ namespace Exercise1
 		private: Bitmap* RotateImage(double angle)
 					{
 						Graphics* gr;
-						Bitmap* tmp=new Bitmap(im->Width,im->Height,PixelFormat::Format24bppRgb);
+						Bitmap* tmp=new Bitmap(2*im->Width,2*im->Height,PixelFormat::Format24bppRgb);
 						tmp->SetResolution(im->HorizontalResolution,im->VerticalResolution);
 						gr=Graphics::FromImage(tmp);
-						gr->FillRectangle(Brushes::White,0,0,im->Width+400,im->Height+400);
+						gr->FillRectangle(Brushes::White,0,0,2*im->Width,2*im->Height);
 						gr->RotateTransform(angle);
 						gr->DrawImage(im,15,0);
 						gr->Dispose();
@@ -650,6 +653,7 @@ private: System::Void train_Click(System::Object *  sender, System::EventArgs * 
 		 {
 			 OCR::TrainingForm* tw=new OCR::TrainingForm();
 			 tw->defineVar(this->tmpBArray,this->Lines,this->numberOfLines);
+			 //tw->defineVar(this->BArray,this->Lines,this->numberOfLines);
 			 tw->ShowDialog();
 
 
