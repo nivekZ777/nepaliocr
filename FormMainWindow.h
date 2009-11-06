@@ -110,6 +110,7 @@ namespace OCR
 			this->scriptFilePath = this->scriptFilePath->Concat(this->applicationPath ,"\\htk\\recognizer\\script.txt");
 
 			this->LoadFromFile();
+			this->delRTB();
 			//this->MdiChildren = OCR::myWindow ;
 			//this->MdiChildren = OCR::TrainingForm;
 			//
@@ -439,6 +440,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			// 
 			// mnuSaveOutput
 			// 
+			this->mnuSaveOutput->Enabled = false;
 			this->mnuSaveOutput->Index = 3;
 			this->mnuSaveOutput->Shortcut = System::Windows::Forms::Shortcut::CtrlD;
 			this->mnuSaveOutput->Text = S"Save Output";
@@ -631,7 +633,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			__mcTemp__6[0] = this->mnuVersionInfo;
 			__mcTemp__6[1] = this->menuItem4;
 			this->mnuAbout->MenuItems->AddRange(__mcTemp__6);
-			this->mnuAbout->Text = S"&About";
+			this->mnuAbout->Text = S"A&bout";
 			// 
 			// mnuVersionInfo
 			// 
@@ -692,8 +694,6 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			this->picture_panel->ResumeLayout(false);
 			this->panel1->ResumeLayout(false);
 			this->ResumeLayout(false);
-
-			this->delRTB();
 
 		}	
 
@@ -833,7 +833,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 				//System::Windows::Forms::MessageBox::Show("Pixelformat is not 24 bytes per pixel RGB","Format24bppRgb");
 				return;
 			}
-			this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
+			//this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
 			try{
 			double pixel = 0, contrast = (100.0+nContrast)/100.0;
 
@@ -1936,6 +1936,7 @@ private: System::Void mnuTrain_Click(System::Object *  sender, System::EventArgs
 		private: void createRTB(){
 			  //this function is used to create the richtextbox used producing output after recognition
 				this->rtbMainOutput->Visible = true;
+				this->mnuSaveOutput->Enabled = true;
 			  if(this->rtbOutputShowing == false){
 				  
 				this->picture_panel->Size = System::Drawing::Size((this->picture_panel->Width),(this->picture_panel->Height-96));
@@ -1952,6 +1953,7 @@ private: System::Void mnuTrain_Click(System::Object *  sender, System::EventArgs
 			
 			this->picture_panel->Size = System::Drawing::Size((this->picture_panel->Width),(this->picture_panel->Height+96));
 			this->rtbMainOutput->Visible = false;
+			//this->mnuSaveOutput->Enabled = true;
 			//this->rtbOutput->Container->Dispose();
 			this->rtbOutputShowing = false;
 			 
@@ -2012,7 +2014,7 @@ private: System::Void mnuDeskew_Click(System::Object *  sender, System::EventArg
 
 private: System::Void mnuContrast_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 if(this->ImageLoaded==true){
+			if(this->ImageLoaded==true){
 			this->Contrast(10);
 			this->ContrastDone=true;
 			this->Update();
@@ -2055,7 +2057,12 @@ private: void enableCropper(System::Windows::Forms::ContextMenu *ocrCMenu){
 			mnuCropSelected->Text = "Crop Selected";
 			mnuCropSelected->Click+= new System::EventHandler(this,mnuCropSelected_Click);
 			ocrCMenu->MenuItems->Add(mnuCropSelected);
-			this->g->DrawRectangle(Pens::Blue, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+			System::Drawing::Pen *myCropPen = new System::Drawing::Pen(System::Drawing::Color::Blue,1);
+			//p->Color = System::Drawing::Color::Blue;
+			myCropPen->DashStyle = System::Drawing::Drawing2D::DashStyle::Dash;
+			
+			//this->g->DrawRectangle(Pens::Blue, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+			this->g->DrawRectangle(myCropPen, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
 			this->imageSelection = true;
 			
 			
@@ -2519,6 +2526,7 @@ private: System::Void pictureBox1_MouseDown(System::Object *  sender, System::Wi
 			 this->pointX1 = e->X;
 			 this->pointY1 = e->Y;
 			 this->crobPictureBox->Visible = false;
+			 this->dragEnabled = true;
 			 
 		 }
 
@@ -2528,7 +2536,27 @@ private: System::Void pictureBox1_MouseUp(System::Object *  sender, System::Wind
 			 this->pointY2 = e->Y;
 			 
 			this->drawContextMenu(e);
+			this->dragEnabled = false;
 			 
+		 }
+private: System::Void pictureBox1_MouseMove(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
+		 {
+			 //this->crobPictureBox->Visible = true;
+			 //this->crobPictureBox->BringToFront();
+			 //g->Flush();
+			 //draw rectangles on mouse move event
+			 System::Drawing::Pen *myPen_MouseMove = new System::Drawing::Pen(System::Drawing::Color::Red,1);
+			//p->Color = System::Drawing::Color::Blue;
+			 myPen_MouseMove->DashStyle = System::Drawing::Drawing2D::DashStyle::DashDot;
+		
+			 if(this->dragEnabled){
+			 this->pointX2 = e->X;
+			 this->pointY2 = e->Y;
+			 this->pictureBox1->Refresh();
+			 this->g->DrawRectangle(myPen_MouseMove, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+			 }
+
+
 		 }
 
 private: void drawMyMenu(System::Windows::Forms::MenuItem *abc, String *myMenuText){
@@ -2543,7 +2571,7 @@ private: void drawMyMenu(System::Windows::Forms::MenuItem *abc, String *myMenuTe
 		 }
 private: System::Void mnuVersionInfo_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 System::Windows::Forms::MessageBox::Show("Build: September 19 2008","Nepali OCR ");
+			 System::Windows::Forms::MessageBox::Show("Build: September 24 2008","Nepali OCR ");
 		 }
 
 		 
@@ -2599,18 +2627,16 @@ private: void enableNewCropper(System::Windows::Forms::ContextMenu *ocrCMenu){
 				return;
 			}
 			this->pictureBox1->Refresh();
-			this->g->DrawRectangle(Pens::Black, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+			System::Drawing::Pen *myCropPen = new System::Drawing::Pen(System::Drawing::Color::Blue,1);
+			//p->Color = System::Drawing::Color::Blue;
+			myCropPen->DashStyle = System::Drawing::Drawing2D::DashStyle::Dot;
+			
+			//this->g->DrawRectangle(Pens::Black, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+			this->g->DrawRectangle(myCropPen, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
 			this->imageSelection = true;
+			//delete myCropPen;
 					
 }
-private: System::Void pictureBox1_MouseMove(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
-		 {
-			 //this->crobPictureBox->Visible = true;
-			 //this->crobPictureBox->BringToFront();
-			 //g->Flush();
-			 //this->g->DrawRectangle(Pens::Black, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
-
-		 }
 
 
 
