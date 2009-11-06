@@ -63,4 +63,42 @@ int main(array<System::String ^> ^args)
 		 
 }
  
- 
+
+/*while(argEnum->MoveNext()){
+		int i;
+			//if(i==0){
+			//	arg0 = argEnum->Current->ToString();
+			//}
+			if(i==0){
+				inputFileName = argEnum->Current->ToString();
+			}
+			//if(i<=1){
+			//	if(i==1){
+			//		outputFileName = argEnum->Current->ToString();
+			//	}
+			//	else{
+					//Process Even if no output file specified
+					outputFileName = "rawOutput.txt";
+			//	}
+			//}
+			i++;
+	}
+	if(!inputFileName || !outputFileName){
+		Console::WriteLine("=====================================");
+		if(!inputFileName){
+			inputFileName = "rawInput.txt";
+			Console::WriteLine("No input file specified");
+			 
+
+		}
+		if(!outputFileName){
+			outputFileName = "rawOutput.txt";
+			Console::WriteLine("No output file specified");
+			
+		}
+		
+		Console::WriteLine("=====================================");
+		Console::WriteLine("usage: ocrTextProcessor.exe inputfile.txt outputfile.txt");
+	}
+
+	*/
