@@ -40,11 +40,14 @@ namespace OCR
 	private: System::Windows::Forms::PictureBox *  pictureBox1;
 	private: System::Windows::Forms::Label *  label1;
 	private: System::Windows::Forms::Label *  label2;
-	private: System::Windows::Forms::Label *  label3;
-	private: System::Windows::Forms::Label *  label4;
-	private: System::Windows::Forms::Label *  label5;
-	private: System::Windows::Forms::Label *  label6;
+
+
+
+
 	private: System::Windows::Forms::Button *  btnCloseAboutForm;
+	private: System::Windows::Forms::Label *  label4;
+	private: System::Windows::Forms::LinkLabel *  linkLabel1;
+
 
 	private:
 		/// <summary>
@@ -62,11 +65,9 @@ namespace OCR
 			this->pictureBox1 = new System::Windows::Forms::PictureBox();
 			this->label1 = new System::Windows::Forms::Label();
 			this->label2 = new System::Windows::Forms::Label();
-			this->label3 = new System::Windows::Forms::Label();
-			this->label4 = new System::Windows::Forms::Label();
-			this->label5 = new System::Windows::Forms::Label();
-			this->label6 = new System::Windows::Forms::Label();
 			this->btnCloseAboutForm = new System::Windows::Forms::Button();
+			this->label4 = new System::Windows::Forms::Label();
+			this->linkLabel1 = new System::Windows::Forms::LinkLabel();
 			this->SuspendLayout();
 			// 
 			// pictureBox1
@@ -83,94 +84,60 @@ namespace OCR
 			this->label1->Font = new System::Drawing::Font(S"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, (System::Byte)0);
 			this->label1->Location = System::Drawing::Point(232, 24);
 			this->label1->Name = S"label1";
+			this->label1->Size = System::Drawing::Size(200, 16);
 			this->label1->TabIndex = 1;
-			this->label1->Text = S"Nepali OCR ";
+			this->label1->Text = S"Nepali OCR (Beta Version)";
 			// 
 			// label2
 			// 
-			this->label2->Location = System::Drawing::Point(224, 64);
+			this->label2->Location = System::Drawing::Point(232, 80);
 			this->label2->Name = S"label2";
 			this->label2->Size = System::Drawing::Size(200, 40);
 			this->label2->TabIndex = 2;
 			this->label2->Text = S"Developed by :                                                  Madan Puraskar Pu" 
 				S"stakalaya ";
 			// 
-			// label3
-			// 
-			this->label3->Location = System::Drawing::Point(24, 192);
-			this->label3->Name = S"label3";
-			this->label3->Size = System::Drawing::Size(560, 136);
-			this->label3->TabIndex = 3;
-			this->label3->Text = S"The Madan Puraskar Pustakalaya (MPP) is the principal archive of books and period" 
-				S"icals in the nepali language, the mother tongue (or lingua franca) of a little o" 
-				S"ver 30 million people of South Asia. The Library is a not-for profit, non-govern" 
-				S"mental institution that is run by a trust whose members are eminent men and wome" 
-				S"n of letters of Nepal. In addition to the archival collection which is at the ce" 
-				S"nter of its focus, the Library is well known for its continuing work in the area" 
-				S"s of publishing, education and training. It also manages two of Nepal\'s most pre" 
-				S"stigious literary prizes, the Madan Puraskar and the Jagadamba Shree. The first " 
-				S"four decades of the Library\'s existence have been devoted to accessions and cata" 
-				S"loguing (using the Dewey System). With beginnings as a private collection in the" 
-				S" mid-1940s, the Library has expanded continuously over the decades, keeping pace" 
-				S" with the development of the Nepali language in the modernizing nation state of " 
-				S"Nepal, and in the hills of North India.";
-			// 
-			// label4
-			// 
-			this->label4->Location = System::Drawing::Point(24, 344);
-			this->label4->Name = S"label4";
-			this->label4->Size = System::Drawing::Size(568, 64);
-			this->label4->TabIndex = 3;
-			this->label4->Text = S"The first acquisitions for what was later to become the Madan Puraskar Pustakalay" 
-				S"a (MPP) were made in the mid-1940s by a Kathmandu schoolboy, with pennies that c" 
-				S"ame from his lunch allowance. As the personal collection grew, it attracted gift" 
-				S"s in kind from several important literary personalities, statesmen and scholars " 
-				S"of Nepal and India.";
-			// 
-			// label5
-			// 
-			this->label5->Location = System::Drawing::Point(24, 424);
-			this->label5->Name = S"label5";
-			this->label5->Size = System::Drawing::Size(568, 64);
-			this->label5->TabIndex = 3;
-			this->label5->Text = S"In 1956, the collection received an endowment from Rani Jagadamba Kumari Devi Ran" 
-				S"a. Madan Puraskar Pustakalaya was officially registered in 1985, under Organizat" 
-				S"ions Registration Act of 1977. The foundations of the Library were even more sec" 
-				S"ure when in 1986, it was gifted land and a building worth over NRs 10 million (a" 
-				S"bout US$ 200,000) by that schoolboy, Kamal Mani Dixit, presently Chairman of the" 
-				S" Library.";
-			// 
-			// label6
-			// 
-			this->label6->Font = new System::Drawing::Font(S"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, (System::Byte)0);
-			this->label6->Location = System::Drawing::Point(136, 152);
-			this->label6->Name = S"label6";
-			this->label6->Size = System::Drawing::Size(232, 24);
-			this->label6->TabIndex = 3;
-			this->label6->Text = S" About: Madan Puraskar Pustakalaya";
-			// 
 			// btnCloseAboutForm
 			// 
-			this->btnCloseAboutForm->Location = System::Drawing::Point(240, 496);
+			this->btnCloseAboutForm->Location = System::Drawing::Point(184, 168);
 			this->btnCloseAboutForm->Name = S"btnCloseAboutForm";
 			this->btnCloseAboutForm->Size = System::Drawing::Size(88, 24);
 			this->btnCloseAboutForm->TabIndex = 4;
 			this->btnCloseAboutForm->Text = S"Close";
 			this->btnCloseAboutForm->Click += new System::EventHandler(this, btnCloseAboutForm_Click);
 			// 
+			// label4
+			// 
+			this->label4->Font = new System::Drawing::Font(S"Microsoft Sans Serif", 8.25F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, (System::Byte)0);
+			this->label4->Location = System::Drawing::Point(232, 48);
+			this->label4->Name = S"label4";
+			this->label4->Size = System::Drawing::Size(200, 16);
+			this->label4->TabIndex = 1;
+			this->label4->Text = S"Released : December 15,2008";
+			// 
+			// linkLabel1
+			// 
+			this->linkLabel1->Location = System::Drawing::Point(232, 120);
+			this->linkLabel1->Name = S"linkLabel1";
+			this->linkLabel1->Size = System::Drawing::Size(160, 32);
+			this->linkLabel1->TabIndex = 6;
+			this->linkLabel1->TabStop = true;
+			this->linkLabel1->Text = S"www.madanpuraskar.org";
+			this->linkLabel1->Click += new System::EventHandler(this, linkLabel1_Click);
+			// 
 			// about
 			// 
+			this->AutoScale = false;
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
 			this->BackColor = System::Drawing::SystemColors::ControlLightLight;
-			this->ClientSize = System::Drawing::Size(624, 526);
+			this->ClientSize = System::Drawing::Size(456, 214);
+			this->ControlBox = false;
+			this->Controls->Add(this->linkLabel1);
 			this->Controls->Add(this->btnCloseAboutForm);
-			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->pictureBox1);
 			this->Controls->Add(this->label4);
-			this->Controls->Add(this->label5);
-			this->Controls->Add(this->label6);
 			this->Icon = (__try_cast<System::Drawing::Icon *  >(resources->GetObject(S"$this.Icon")));
 			this->Name = S"about";
 			this->Text = S"About: Nepali OCR";
@@ -181,6 +148,12 @@ namespace OCR
 			 {
 				 this->Hide();
 			 }
+
+private: System::Void linkLabel1_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 System::Diagnostics::Process::Start("IExplore"," http://www.madanpuraskar.org");
+
+		 }
 
 };
 }

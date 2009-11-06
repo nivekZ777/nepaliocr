@@ -51,6 +51,7 @@
 #include "externalPostProcessor.h"
 #include "about.h"
 #include "helpLoadImage.h"
+#include "helpOCR.h"
  
 
 
@@ -265,7 +266,7 @@ private: System::Windows::Forms::MenuItem *  mnuHelpOCR;
 private: System::Windows::Forms::MenuItem *  mnuHelpTrain;
 private: System::Windows::Forms::MenuItem *  menuItem5;
 private: System::Windows::Forms::MenuItem *  menuItem6;
-private: System::Windows::Forms::MenuItem *  menuItem7;
+
 private: System::Windows::Forms::MenuItem *  mnuAdvancedHelp;
 private: System::Windows::Forms::MenuItem *  mnuHelpBinarize;
 private: System::Windows::Forms::MenuItem *  mnuHelpSeparate;
@@ -284,6 +285,7 @@ private: System::Windows::Forms::MenuItem *  menuItem9;
 private: System::Windows::Forms::MenuItem *  mnuHelpImageDeskew;
 private: System::Windows::Forms::MenuItem *  menuItem10;
 private: System::Windows::Forms::MenuItem *  mnuHelpImageRemoveNoise;
+private: System::Windows::Forms::MenuItem *  mnuRemoveNoiseII;
 
 
 
@@ -348,27 +350,23 @@ private: System::Windows::Forms::MenuItem *  mnuHelpImageRemoveNoise;
 			this->mnuAbout = new System::Windows::Forms::MenuItem();
 			this->mnuVersionInfo = new System::Windows::Forms::MenuItem();
 			this->menuItem4 = new System::Windows::Forms::MenuItem();
-			this->panel1 = new System::Windows::Forms::Panel();
-			this->rtbMainOutput = new System::Windows::Forms::RichTextBox();
-			this->rtbOutput = new System::Windows::Forms::RichTextBox();
-			this->saveOutputDialog = new System::Windows::Forms::SaveFileDialog();
 			this->mnuHowDoI = new System::Windows::Forms::MenuItem();
 			this->mnuHelpBrowseImage = new System::Windows::Forms::MenuItem();
 			this->mnuHelpOCR = new System::Windows::Forms::MenuItem();
 			this->mnuHelpTrain = new System::Windows::Forms::MenuItem();
 			this->menuItem5 = new System::Windows::Forms::MenuItem();
 			this->menuItem6 = new System::Windows::Forms::MenuItem();
-			this->menuItem7 = new System::Windows::Forms::MenuItem();
+			this->mnuRemoveNoiseII = new System::Windows::Forms::MenuItem();
 			this->mnuAdvancedHelp = new System::Windows::Forms::MenuItem();
 			this->mnuHelpBinarize = new System::Windows::Forms::MenuItem();
 			this->mnuHelpSeparate = new System::Windows::Forms::MenuItem();
+			this->mnuHelpNoiseRemoval = new System::Windows::Forms::MenuItem();
+			this->mnuHelpContrast = new System::Windows::Forms::MenuItem();
 			this->mnuHelpCropperMain = new System::Windows::Forms::MenuItem();
 			this->menuItem8 = new System::Windows::Forms::MenuItem();
 			this->mnuHelpSaving = new System::Windows::Forms::MenuItem();
 			this->mnuHelpSaveImage = new System::Windows::Forms::MenuItem();
 			this->mnuHelpSaveOutput = new System::Windows::Forms::MenuItem();
-			this->mnuHelpNoiseRemoval = new System::Windows::Forms::MenuItem();
-			this->mnuHelpContrast = new System::Windows::Forms::MenuItem();
 			this->mnuHelpImage = new System::Windows::Forms::MenuItem();
 			this->mnuHelpImageRotateLeft = new System::Windows::Forms::MenuItem();
 			this->mnuHelpImageRotateRight = new System::Windows::Forms::MenuItem();
@@ -377,6 +375,10 @@ private: System::Windows::Forms::MenuItem *  mnuHelpImageRemoveNoise;
 			this->mnuHelpImageDeskew = new System::Windows::Forms::MenuItem();
 			this->menuItem10 = new System::Windows::Forms::MenuItem();
 			this->mnuHelpImageRemoveNoise = new System::Windows::Forms::MenuItem();
+			this->panel1 = new System::Windows::Forms::Panel();
+			this->rtbMainOutput = new System::Windows::Forms::RichTextBox();
+			this->rtbOutput = new System::Windows::Forms::RichTextBox();
+			this->saveOutputDialog = new System::Windows::Forms::SaveFileDialog();
 			this->picture_panel->SuspendLayout();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
@@ -714,6 +716,178 @@ private: System::Windows::Forms::MenuItem *  mnuHelpImageRemoveNoise;
 			this->menuItem4->Index = 1;
 			this->menuItem4->Text = S"-";
 			// 
+			// mnuHowDoI
+			// 
+			this->mnuHowDoI->Index = 2;
+			System::Windows::Forms::MenuItem* __mcTemp__7[] = new System::Windows::Forms::MenuItem*[6];
+			__mcTemp__7[0] = this->mnuHelpBrowseImage;
+			__mcTemp__7[1] = this->mnuHelpOCR;
+			__mcTemp__7[2] = this->mnuHelpTrain;
+			__mcTemp__7[3] = this->menuItem5;
+			__mcTemp__7[4] = this->menuItem6;
+			__mcTemp__7[5] = this->mnuRemoveNoiseII;
+			this->mnuHowDoI->MenuItems->AddRange(__mcTemp__7);
+			this->mnuHowDoI->Text = S"How Do I \?";
+			// 
+			// mnuHelpBrowseImage
+			// 
+			this->mnuHelpBrowseImage->Index = 0;
+			this->mnuHelpBrowseImage->Text = S"Load Image";
+			this->mnuHelpBrowseImage->Click += new System::EventHandler(this, mnuHelpBrowseImage_Click);
+			// 
+			// mnuHelpOCR
+			// 
+			this->mnuHelpOCR->Index = 1;
+			this->mnuHelpOCR->Text = S"OCR";
+			this->mnuHelpOCR->Click += new System::EventHandler(this, mnuHelpOCR_Click);
+			// 
+			// mnuHelpTrain
+			// 
+			this->mnuHelpTrain->Index = 2;
+			this->mnuHelpTrain->Text = S"Train";
+			this->mnuHelpTrain->Click += new System::EventHandler(this, mnuHelpTrain_Click);
+			// 
+			// menuItem5
+			// 
+			this->menuItem5->Index = 3;
+			this->menuItem5->Text = S"-";
+			// 
+			// menuItem6
+			// 
+			this->menuItem6->Index = 4;
+			this->menuItem6->Text = S"Deskew Image";
+			this->menuItem6->Click += new System::EventHandler(this, menuItem6_Click);
+			// 
+			// mnuRemoveNoiseII
+			// 
+			this->mnuRemoveNoiseII->Index = 5;
+			this->mnuRemoveNoiseII->Text = S"Remove Noise";
+			this->mnuRemoveNoiseII->Click += new System::EventHandler(this, mnuRemoveNoiseII_Click);
+			// 
+			// mnuAdvancedHelp
+			// 
+			this->mnuAdvancedHelp->Index = 3;
+			System::Windows::Forms::MenuItem* __mcTemp__8[] = new System::Windows::Forms::MenuItem*[4];
+			__mcTemp__8[0] = this->mnuHelpBinarize;
+			__mcTemp__8[1] = this->mnuHelpSeparate;
+			__mcTemp__8[2] = this->mnuHelpNoiseRemoval;
+			__mcTemp__8[3] = this->mnuHelpContrast;
+			this->mnuAdvancedHelp->MenuItems->AddRange(__mcTemp__8);
+			this->mnuAdvancedHelp->Text = S"Advanced";
+			// 
+			// mnuHelpBinarize
+			// 
+			this->mnuHelpBinarize->Index = 0;
+			this->mnuHelpBinarize->Text = S"Binarize";
+			this->mnuHelpBinarize->Click += new System::EventHandler(this, mnuHelpBinarize_Click);
+			// 
+			// mnuHelpSeparate
+			// 
+			this->mnuHelpSeparate->Index = 1;
+			this->mnuHelpSeparate->Text = S"Separate";
+			this->mnuHelpSeparate->Click += new System::EventHandler(this, mnuHelpSeparate_Click);
+			// 
+			// mnuHelpNoiseRemoval
+			// 
+			this->mnuHelpNoiseRemoval->Index = 2;
+			this->mnuHelpNoiseRemoval->Text = S"Noise Removal";
+			this->mnuHelpNoiseRemoval->Click += new System::EventHandler(this, mnuHelpNoiseRemoval_Click);
+			// 
+			// mnuHelpContrast
+			// 
+			this->mnuHelpContrast->Index = 3;
+			this->mnuHelpContrast->Text = S"Contrast";
+			this->mnuHelpContrast->Click += new System::EventHandler(this, mnuHelpContrast_Click);
+			// 
+			// mnuHelpCropperMain
+			// 
+			this->mnuHelpCropperMain->Index = 4;
+			System::Windows::Forms::MenuItem* __mcTemp__9[] = new System::Windows::Forms::MenuItem*[1];
+			__mcTemp__9[0] = this->menuItem8;
+			this->mnuHelpCropperMain->MenuItems->AddRange(__mcTemp__9);
+			this->mnuHelpCropperMain->Text = S"Cropper";
+			// 
+			// menuItem8
+			// 
+			this->menuItem8->Index = 0;
+			this->menuItem8->Text = S"Select Cropped Image";
+			this->menuItem8->Click += new System::EventHandler(this, menuItem8_Click);
+			// 
+			// mnuHelpSaving
+			// 
+			this->mnuHelpSaving->Index = 5;
+			System::Windows::Forms::MenuItem* __mcTemp__10[] = new System::Windows::Forms::MenuItem*[2];
+			__mcTemp__10[0] = this->mnuHelpSaveImage;
+			__mcTemp__10[1] = this->mnuHelpSaveOutput;
+			this->mnuHelpSaving->MenuItems->AddRange(__mcTemp__10);
+			this->mnuHelpSaving->Text = S"Saving";
+			// 
+			// mnuHelpSaveImage
+			// 
+			this->mnuHelpSaveImage->Index = 0;
+			this->mnuHelpSaveImage->Text = S"Image";
+			this->mnuHelpSaveImage->Click += new System::EventHandler(this, mnuHelpSaveImage_Click);
+			// 
+			// mnuHelpSaveOutput
+			// 
+			this->mnuHelpSaveOutput->Index = 1;
+			this->mnuHelpSaveOutput->Text = S"Output";
+			this->mnuHelpSaveOutput->Click += new System::EventHandler(this, mnuHelpSaveOutput_Click);
+			// 
+			// mnuHelpImage
+			// 
+			this->mnuHelpImage->Index = 6;
+			System::Windows::Forms::MenuItem* __mcTemp__11[] = new System::Windows::Forms::MenuItem*[7];
+			__mcTemp__11[0] = this->mnuHelpImageRotateLeft;
+			__mcTemp__11[1] = this->mnuHelpImageRotateRight;
+			__mcTemp__11[2] = this->mnuHelpImageRotateUpright;
+			__mcTemp__11[3] = this->menuItem9;
+			__mcTemp__11[4] = this->mnuHelpImageDeskew;
+			__mcTemp__11[5] = this->menuItem10;
+			__mcTemp__11[6] = this->mnuHelpImageRemoveNoise;
+			this->mnuHelpImage->MenuItems->AddRange(__mcTemp__11);
+			this->mnuHelpImage->Text = S"Image";
+			// 
+			// mnuHelpImageRotateLeft
+			// 
+			this->mnuHelpImageRotateLeft->Index = 0;
+			this->mnuHelpImageRotateLeft->Text = S"Roate Left";
+			this->mnuHelpImageRotateLeft->Click += new System::EventHandler(this, mnuHelpImageRotateLeft_Click);
+			// 
+			// mnuHelpImageRotateRight
+			// 
+			this->mnuHelpImageRotateRight->Index = 1;
+			this->mnuHelpImageRotateRight->Text = S"Rotate Right";
+			this->mnuHelpImageRotateRight->Click += new System::EventHandler(this, mnuHelpImageRotateRight_Click);
+			// 
+			// mnuHelpImageRotateUpright
+			// 
+			this->mnuHelpImageRotateUpright->Index = 2;
+			this->mnuHelpImageRotateUpright->Text = S"Rotate upright";
+			this->mnuHelpImageRotateUpright->Click += new System::EventHandler(this, mnuHelpImageRotateUpright_Click);
+			// 
+			// menuItem9
+			// 
+			this->menuItem9->Index = 3;
+			this->menuItem9->Text = S"-";
+			// 
+			// mnuHelpImageDeskew
+			// 
+			this->mnuHelpImageDeskew->Index = 4;
+			this->mnuHelpImageDeskew->Text = S"Deskew";
+			this->mnuHelpImageDeskew->Click += new System::EventHandler(this, mnuHelpImageDeskew_Click);
+			// 
+			// menuItem10
+			// 
+			this->menuItem10->Index = 5;
+			this->menuItem10->Text = S"-";
+			// 
+			// mnuHelpImageRemoveNoise
+			// 
+			this->mnuHelpImageRemoveNoise->Index = 6;
+			this->mnuHelpImageRemoveNoise->Text = S"Remove Noise";
+			this->mnuHelpImageRemoveNoise->Click += new System::EventHandler(this, mnuHelpImageRemoveNoise_Click);
+			// 
 			// panel1
 			// 
 			this->panel1->AutoScroll = true;
@@ -739,162 +913,6 @@ private: System::Windows::Forms::MenuItem *  mnuHelpImageRemoveNoise;
 			this->rtbOutput->Name = S"rtbOutput";
 			this->rtbOutput->TabIndex = 0;
 			this->rtbOutput->Text = S"";
-			// 
-			// mnuHowDoI
-			// 
-			this->mnuHowDoI->Index = 2;
-			System::Windows::Forms::MenuItem* __mcTemp__7[] = new System::Windows::Forms::MenuItem*[6];
-			__mcTemp__7[0] = this->mnuHelpBrowseImage;
-			__mcTemp__7[1] = this->mnuHelpOCR;
-			__mcTemp__7[2] = this->mnuHelpTrain;
-			__mcTemp__7[3] = this->menuItem5;
-			__mcTemp__7[4] = this->menuItem6;
-			__mcTemp__7[5] = this->menuItem7;
-			this->mnuHowDoI->MenuItems->AddRange(__mcTemp__7);
-			this->mnuHowDoI->Text = S"How Do I \?";
-			// 
-			// mnuHelpBrowseImage
-			// 
-			this->mnuHelpBrowseImage->Index = 0;
-			this->mnuHelpBrowseImage->Text = S"Load Image";
-			this->mnuHelpBrowseImage->Click += new System::EventHandler(this, mnuHelpBrowseImage_Click);
-			// 
-			// mnuHelpOCR
-			// 
-			this->mnuHelpOCR->Index = 1;
-			this->mnuHelpOCR->Text = S"OCR";
-			// 
-			// mnuHelpTrain
-			// 
-			this->mnuHelpTrain->Index = 2;
-			this->mnuHelpTrain->Text = S"Train";
-			// 
-			// menuItem5
-			// 
-			this->menuItem5->Index = 3;
-			this->menuItem5->Text = S"-";
-			// 
-			// menuItem6
-			// 
-			this->menuItem6->Index = 4;
-			this->menuItem6->Text = S"Deskew Image";
-			// 
-			// menuItem7
-			// 
-			this->menuItem7->Index = 5;
-			this->menuItem7->Text = S"Remove Noise";
-			// 
-			// mnuAdvancedHelp
-			// 
-			this->mnuAdvancedHelp->Index = 3;
-			System::Windows::Forms::MenuItem* __mcTemp__8[] = new System::Windows::Forms::MenuItem*[4];
-			__mcTemp__8[0] = this->mnuHelpBinarize;
-			__mcTemp__8[1] = this->mnuHelpSeparate;
-			__mcTemp__8[2] = this->mnuHelpNoiseRemoval;
-			__mcTemp__8[3] = this->mnuHelpContrast;
-			this->mnuAdvancedHelp->MenuItems->AddRange(__mcTemp__8);
-			this->mnuAdvancedHelp->Text = S"Advanced";
-			// 
-			// mnuHelpBinarize
-			// 
-			this->mnuHelpBinarize->Index = 0;
-			this->mnuHelpBinarize->Text = S"Binarize";
-			// 
-			// mnuHelpSeparate
-			// 
-			this->mnuHelpSeparate->Index = 1;
-			this->mnuHelpSeparate->Text = S"Separate";
-			// 
-			// mnuHelpCropperMain
-			// 
-			this->mnuHelpCropperMain->Index = 4;
-			System::Windows::Forms::MenuItem* __mcTemp__9[] = new System::Windows::Forms::MenuItem*[1];
-			__mcTemp__9[0] = this->menuItem8;
-			this->mnuHelpCropperMain->MenuItems->AddRange(__mcTemp__9);
-			this->mnuHelpCropperMain->Text = S"Cropper";
-			// 
-			// menuItem8
-			// 
-			this->menuItem8->Index = 0;
-			this->menuItem8->Text = S"Select Cropped Image";
-			// 
-			// mnuHelpSaving
-			// 
-			this->mnuHelpSaving->Index = 5;
-			System::Windows::Forms::MenuItem* __mcTemp__10[] = new System::Windows::Forms::MenuItem*[2];
-			__mcTemp__10[0] = this->mnuHelpSaveImage;
-			__mcTemp__10[1] = this->mnuHelpSaveOutput;
-			this->mnuHelpSaving->MenuItems->AddRange(__mcTemp__10);
-			this->mnuHelpSaving->Text = S"Saving";
-			// 
-			// mnuHelpSaveImage
-			// 
-			this->mnuHelpSaveImage->Index = 0;
-			this->mnuHelpSaveImage->Text = S"Image";
-			// 
-			// mnuHelpSaveOutput
-			// 
-			this->mnuHelpSaveOutput->Index = 1;
-			this->mnuHelpSaveOutput->Text = S"Output";
-			// 
-			// mnuHelpNoiseRemoval
-			// 
-			this->mnuHelpNoiseRemoval->Index = 2;
-			this->mnuHelpNoiseRemoval->Text = S"Noise Removal";
-			// 
-			// mnuHelpContrast
-			// 
-			this->mnuHelpContrast->Index = 3;
-			this->mnuHelpContrast->Text = S"Contrast";
-			// 
-			// mnuHelpImage
-			// 
-			this->mnuHelpImage->Index = 6;
-			System::Windows::Forms::MenuItem* __mcTemp__11[] = new System::Windows::Forms::MenuItem*[7];
-			__mcTemp__11[0] = this->mnuHelpImageRotateLeft;
-			__mcTemp__11[1] = this->mnuHelpImageRotateRight;
-			__mcTemp__11[2] = this->mnuHelpImageRotateUpright;
-			__mcTemp__11[3] = this->menuItem9;
-			__mcTemp__11[4] = this->mnuHelpImageDeskew;
-			__mcTemp__11[5] = this->menuItem10;
-			__mcTemp__11[6] = this->mnuHelpImageRemoveNoise;
-			this->mnuHelpImage->MenuItems->AddRange(__mcTemp__11);
-			this->mnuHelpImage->Text = S"Image";
-			// 
-			// mnuHelpImageRotateLeft
-			// 
-			this->mnuHelpImageRotateLeft->Index = 0;
-			this->mnuHelpImageRotateLeft->Text = S"Roate Left";
-			// 
-			// mnuHelpImageRotateRight
-			// 
-			this->mnuHelpImageRotateRight->Index = 1;
-			this->mnuHelpImageRotateRight->Text = S"Rotate Right";
-			// 
-			// mnuHelpImageRotateUpright
-			// 
-			this->mnuHelpImageRotateUpright->Index = 2;
-			this->mnuHelpImageRotateUpright->Text = S"Rotate upright";
-			// 
-			// menuItem9
-			// 
-			this->menuItem9->Index = 3;
-			this->menuItem9->Text = S"-";
-			// 
-			// mnuHelpImageDeskew
-			// 
-			this->mnuHelpImageDeskew->Index = 4;
-			this->mnuHelpImageDeskew->Text = S"Deskew";
-			// 
-			// menuItem10
-			// 
-			this->menuItem10->Index = 5;
-			this->menuItem10->Text = S"-";
-			// 
-			// mnuHelpImageRemoveNoise
-			// 
-			this->mnuHelpImageRemoveNoise->Index = 6;
-			this->mnuHelpImageRemoveNoise->Text = S"Remove Noise";
 			// 
 			// FormMainWindow
 			// 
@@ -1364,10 +1382,10 @@ private: System::Windows::Forms::MenuItem *  mnuHelpImageRemoveNoise;
 							}
 							this->WidthStore();
                             this->SizeThreshold=this->ThresholdSize();
-							Resegment* rsg=new Resegment(im,BinaryDone,ImageLoaded,SeparateDone,BArray,this->numberOfLines,this->Lines,g,this->totalUnits,this->SizeThreshold,this->intLevel,this->HeadBottom);
+/*							Resegment* rsg=new Resegment(im,BinaryDone,ImageLoaded,SeparateDone,BArray,this->numberOfLines,this->Lines,g,this->totalUnits,this->SizeThreshold,this->intLevel,this->HeadBottom);
 //							rsg->PrepareTouchingCharIndex();
 							rsg->Do_Segmentation();
-
+*/
 						}// if(this->BinaryDone==true) //If binarization is done
 					
 					this->setResetMenu(this->ImageLoaded,this->BinaryDone,this->SeparateDone);
@@ -1495,8 +1513,9 @@ private: System::Windows::Forms::MenuItem *  mnuHelpImageRemoveNoise;
 									rp->SetImageBoundary(left_x,right_x,top_y,bottom_y);
 									totalUnit++;
 									wordToRec = wordToRec->Concat(dirOfRecFile,totalUnit.ToString(),".txt");	
-									this->statusBar1->Text = "Preparing word datas.. ";
+									this->statusBar1->Text = "Preparing word datas.. and running HTK Recognizer..  ";
 									rp->PrepareWordData(wordToRec);
+									this->statusBar1->Text = "Recognization process in progress .. This may take some time .. please wait";
 								} 
 							}//wordcount
 						}
@@ -1819,10 +1838,6 @@ private: System::Void saveImage_Click(System::Object *  sender, System::EventArg
 		 }
 
  
-
-		 
-
- 
  
  
 //Try magnify function
@@ -1916,8 +1931,10 @@ private: System::Void picture_panel_DragDrop(System::Object *  sender, System::W
 				 //  if( (ext != ".jpg")|| (ext != ".jpeg")|| (ext != ".gif")|| (ext != ".png")|| (ext != ".tif")|| (ext != ".tiff")|| (ext != ".bmp") ) allow = false;
 
 			// }
-			 if(e->Data->GetDataPresent(DataFormats::FileDrop))
+			if(e->Data->GetDataPresent(DataFormats::FileDrop)){
 							e->Effect = DragDropEffects::All;
+							System::Windows::Forms::MessageBox::Show("ok");
+			}
 			 else
 					e->Effect = DragDropEffects::None;
 
@@ -2901,15 +2918,7 @@ private: System::Void pictureBox1_MouseMove(System::Object *  sender, System::Wi
 				 }
 			 this->pictureBox1->Refresh();
 			 }
-			////Debugging Codes :P
-			 //String *temp123 = "";
-			 //temp123= temp123->Concat(temp123," x1:",this->pointX1.ToString());
-			 //temp123= temp123->Concat(temp123," x2:",this->pointX2.ToString());
-			 //temp123= temp123->Concat(temp123," y1:",this->pointY1.ToString());			 
-			 //temp123= temp123->Concat(temp123," y2:",this->pointY2.ToString());
-			 //temp123= temp123->Concat(temp123," x2-x1:",(this->pointX2-this->pointX1).ToString());
-			 //temp123= temp123->Concat(temp123," y2-y1:",(this->pointY2-this->pointY1).ToString());
-			 //this->statusBar1->Text = temp123;
+			
 		 }
 
 private: void drawMyMenu(System::Windows::Forms::MenuItem *abc, String *myMenuText){
@@ -3089,6 +3098,122 @@ private: System::Void mnuHelpBrowseImage_Click(System::Object *  sender, System:
 		 {
 			 helpLoadImage *hlpLoadImage = new helpLoadImage();
 			 hlpLoadImage->Show();
+		 }
+
+private: System::Void mnuHelpOCR_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 helpOCR *hlpOCR = new helpOCR();
+			 hlpOCR->ShowHelpOCR();
+			 hlpOCR->Show();
+		 }
+
+private: System::Void mnuHelpTrain_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpTrain();
+			hlpOCR->Show();
+		 }
+
+private: System::Void menuItem6_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpDeskew();
+			hlpOCR->Show();
+		 }
+
+private: System::Void mnuHelpBinarize_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpBinarize();
+			hlpOCR->Show();
+		 }
+
+private: System::Void mnuHelpSeparate_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpSeparate();
+			hlpOCR->Show();
+		 }
+
+private: System::Void mnuHelpNoiseRemoval_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpNoiseRemoval();
+			hlpOCR->Show();
+		 }
+
+private: System::Void mnuHelpContrast_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpContrast();
+			hlpOCR->Show();
+			 //ShowHelpContrast
+		 }
+
+private: System::Void menuItem8_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpCropper();
+			hlpOCR->Show();
+		 }
+
+private: System::Void mnuHelpSaveImage_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpSaveImage();
+			hlpOCR->Show();
+		 }
+
+private: System::Void mnuHelpSaveOutput_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpSaveOutput();
+			hlpOCR->Show();
+		 }
+
+private: System::Void mnuHelpImageRotateLeft_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpRotateLeft();
+			hlpOCR->Show();
+		 }
+
+private: System::Void mnuHelpImageRotateRight_Click(System::Object *  sender, System::EventArgs *  e)
+		 {			 
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpRotateRight();
+			hlpOCR->Show();
+		 }
+
+private: System::Void mnuHelpImageRotateUpright_Click(System::Object *  sender, System::EventArgs *  e)
+		 {			 
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpRotateUpright();
+			hlpOCR->Show();
+
+		 }
+
+private: System::Void mnuHelpImageDeskew_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpDeskew();
+			hlpOCR->Show();
+		 }
+
+private: System::Void mnuHelpImageRemoveNoise_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpNoiseRemoval();
+			hlpOCR->Show();
+		 }
+
+private: System::Void mnuRemoveNoiseII_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			helpOCR *hlpOCR = new helpOCR();
+			hlpOCR->ShowHelpNoiseRemoval();
+			hlpOCR->Show();
 		 }
 
 };
