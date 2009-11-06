@@ -114,7 +114,7 @@ float ThresholedValue::GetThresholed()
 				count++;
 			}
 		}//end of for
-		float idx = (float)sumI/count;
+		float idx = sumI/count;
 		level = (idx - 1)/(num_bins-1);
 	}// end of if
 	else
