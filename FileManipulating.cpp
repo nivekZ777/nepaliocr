@@ -144,7 +144,7 @@ void FileManipulating::CreatePrototypeFile(System::String* fromFile, System::Str
 			
         }
 */
-		System::Windows::Forms::MessageBox::Show("ya looks gud","Prototype file creation success!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		//System::Windows::Forms::MessageBox::Show("ya looks gud","Prototype file creation success!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 
 		sr->Close();
@@ -192,7 +192,7 @@ void FileManipulating::CreateHMMFile(System::String *exeFileDir, System::String 
 		sw->Write(tempStr);
 		sw->Close();
 		
-		System::Windows::Forms::MessageBox::Show("Create HMM File on Process","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+	//	System::Windows::Forms::MessageBox::Show("Create HMM File on Process","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 		// create a process and execute 
 		System::Diagnostics::Process *p = new System::Diagnostics::Process();
@@ -216,8 +216,8 @@ void FileManipulating::AddModelDefToMasterModelFile(System::String *mmfFilePath,
 		System::IO::StreamWriter* sw = System::IO::StreamWriter::Null;
 		System::String* tempStr;
 		int lineNum = 0;
-		System::Windows::Forms::MessageBox::Show(mmfFilePath,"MMF FilePath: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-		System::Windows::Forms::MessageBox::Show(fromHmmFile,"HMM File: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		//System::Windows::Forms::MessageBox::Show(mmfFilePath,"MMF FilePath: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		//System::Windows::Forms::MessageBox::Show(fromHmmFile,"HMM File: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 		// if the file does not exist then directly copy the entire content of the prototype file
 		if(!System::IO::File::Exists(mmfFilePath))
@@ -233,7 +233,7 @@ void FileManipulating::AddModelDefToMasterModelFile(System::String *mmfFilePath,
 			//while (!System::String::IsNullOrEmpty((tempStr = sr->ReadLine())))
 			tempStr= sr->ReadLine();
 
-			System::Windows::Forms::MessageBox::Show("working gud till here!","HMM File: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+			//System::Windows::Forms::MessageBox::Show("working gud till here!","HMM File: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
        // while (!System::String::IsNullOrEmpty((tempStr = sr->ReadLine())))
         
 			
@@ -368,7 +368,7 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 			sw->Write(text);
 			sw->Close();
 		}
-		System::Windows::Forms::MessageBox::Show("Building Network working gud till here!","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		//System::Windows::Forms::MessageBox::Show("Building Network working gud till here!","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		// add model name to the dictionary file
 		
 		sw = System::IO::File::AppendText(dictFile);
