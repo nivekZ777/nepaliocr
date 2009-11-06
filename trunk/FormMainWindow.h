@@ -36,7 +36,6 @@
 #include "Convolution.h"
 #include "Deskew.h"
 #include "myWindow.h"
-#include "Resegment.h"
 
 
 #pragma once
@@ -175,7 +174,7 @@ namespace OCR
 	private: System::Windows::Forms::Label *  myInfo1;
 	private: System::Windows::Forms::Button *  findMagnification;
 	private: System::Windows::Forms::Button *  cb;
-	private: System::Windows::Forms::Button *  btnRotate_right;
+private: System::Windows::Forms::Button *  btnRotate_right;
 
 
 
@@ -416,7 +415,6 @@ namespace OCR
 			this->MaximizeBox = false;
 			this->Name = S"FormMainWindow";
 			this->Text = S"Nepali OCR";
-			this->Load += new System::EventHandler(this, FormMainWindow_Load);
 			this->picture_panel->ResumeLayout(false);
 			this->ResumeLayout(false);
 
@@ -817,8 +815,7 @@ namespace OCR
 							{
 								this->separateChar();			//separate Characters
 							}
-							Resegment* rsg=new Resegment(im,BinaryDone,ImageLoaded,SeparateDone,BArray,this->numberOfLines,this->Lines,g);
-							rsg->Do_Segmentation();
+
 							 
 						}
 					 
@@ -1341,10 +1338,6 @@ private: System::Void btnRotate_right_Click(System::Object *  sender, System::Ev
  
 			 im->RotateFlip(RotateFlipType::Rotate90FlipNone);
 			 this->pictureBox1->Image = im;
-		 }
-
-private: System::Void FormMainWindow_Load(System::Object *  sender, System::EventArgs *  e)
-		 {
 		 }
 
 };
