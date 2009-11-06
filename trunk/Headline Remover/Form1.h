@@ -46,12 +46,10 @@ namespace Headliner_ver_103
 
 	private: Bitmap* im;
 	private: Bitmap* BinaryImage;
-			 Bitmap* cropImage; //new Crop Image
-			 Bitmap* FinalImage; //New Final Image
+			 Bitmap* cropImage;
 	private: Graphics* g;
-    private: int intLevel,ImHeight,ImWidth;
+    private: int intLevel;
 	private: int **ImgArray;
-			 int *WStore; //new
 
 	private: bool **BArray;
 			 bool **tmpBArray;
@@ -61,10 +59,9 @@ namespace Headliner_ver_103
 			 bool SeparateDone;
 
     private: int numberOfLines;
-			 int totalunits;
 	private: Line* Lines; 
 			 	 Line* LineInfo;
-	int linecount;
+int linecount;
 			static int lineno=0;
 			static int charno=0;
 			static int wordno=0;
@@ -93,8 +90,6 @@ namespace Headliner_ver_103
 	private: System::Windows::Forms::PictureBox *  Part1;
 	private: System::Windows::Forms::PictureBox *  Part2;
 	private: System::Windows::Forms::Label *  label3;
-	private: System::Windows::Forms::Panel *  panel5;
-	private: System::Windows::Forms::PictureBox *  FinalResult;
 
 
 
@@ -134,13 +129,10 @@ namespace Headliner_ver_103
 			this->Part2 = new System::Windows::Forms::PictureBox();
 			this->label1 = new System::Windows::Forms::Label();
 			this->label3 = new System::Windows::Forms::Label();
-			this->panel5 = new System::Windows::Forms::Panel();
-			this->FinalResult = new System::Windows::Forms::PictureBox();
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->panel3->SuspendLayout();
 			this->panel4->SuspendLayout();
-			this->panel5->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// btnOpen
@@ -188,6 +180,7 @@ namespace Headliner_ver_103
 			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
 			this->pictureBox1->TabIndex = 0;
 			this->pictureBox1->TabStop = false;
+			this->pictureBox1->Click += new System::EventHandler(this, pictureBox1_Click);
 			// 
 			// lbl1
 			// 
@@ -220,14 +213,14 @@ namespace Headliner_ver_103
 			this->panel2->Controls->Add(this->SmallImage);
 			this->panel2->Location = System::Drawing::Point(384, 88);
 			this->panel2->Name = S"panel2";
-			this->panel2->Size = System::Drawing::Size(88, 48);
+			this->panel2->Size = System::Drawing::Size(144, 80);
 			this->panel2->TabIndex = 7;
 			// 
 			// SmallImage
 			// 
 			this->SmallImage->Location = System::Drawing::Point(8, 8);
 			this->SmallImage->Name = S"SmallImage";
-			this->SmallImage->Size = System::Drawing::Size(72, 32);
+			this->SmallImage->Size = System::Drawing::Size(128, 64);
 			this->SmallImage->TabIndex = 0;
 			this->SmallImage->TabStop = false;
 			this->SmallImage->Click += new System::EventHandler(this, pictureBox2_Click);
@@ -235,7 +228,7 @@ namespace Headliner_ver_103
 			// WidthLabel
 			// 
 			this->WidthLabel->Enabled = false;
-			this->WidthLabel->Location = System::Drawing::Point(608, 8);
+			this->WidthLabel->Location = System::Drawing::Point(632, 72);
 			this->WidthLabel->Name = S"WidthLabel";
 			this->WidthLabel->Size = System::Drawing::Size(32, 32);
 			this->WidthLabel->TabIndex = 9;
@@ -243,7 +236,8 @@ namespace Headliner_ver_103
 			// label2
 			// 
 			this->label2->Enabled = false;
-			this->label2->Location = System::Drawing::Point(536, 8);
+			this->label2->ForeColor = System::Drawing::SystemColors::HotTrack;
+			this->label2->Location = System::Drawing::Point(552, 72);
 			this->label2->Name = S"label2";
 			this->label2->Size = System::Drawing::Size(64, 32);
 			this->label2->TabIndex = 8;
@@ -253,7 +247,7 @@ namespace Headliner_ver_103
 			// 
 			this->panel3->AutoScroll = true;
 			this->panel3->Controls->Add(this->Part1);
-			this->panel3->Location = System::Drawing::Point(384, 176);
+			this->panel3->Location = System::Drawing::Point(432, 176);
 			this->panel3->Name = S"panel3";
 			this->panel3->Size = System::Drawing::Size(88, 56);
 			this->panel3->TabIndex = 8;
@@ -271,7 +265,7 @@ namespace Headliner_ver_103
 			// 
 			this->panel4->AutoScroll = true;
 			this->panel4->Controls->Add(this->Part2);
-			this->panel4->Location = System::Drawing::Point(480, 176);
+			this->panel4->Location = System::Drawing::Point(528, 176);
 			this->panel4->Name = S"panel4";
 			this->panel4->Size = System::Drawing::Size(88, 56);
 			this->panel4->TabIndex = 10;
@@ -286,7 +280,7 @@ namespace Headliner_ver_103
 			// 
 			// label1
 			// 
-			this->label1->Location = System::Drawing::Point(384, 240);
+			this->label1->Location = System::Drawing::Point(432, 240);
 			this->label1->Name = S"label1";
 			this->label1->Size = System::Drawing::Size(88, 23);
 			this->label1->TabIndex = 11;
@@ -294,35 +288,16 @@ namespace Headliner_ver_103
 			// 
 			// label3
 			// 
-			this->label3->Location = System::Drawing::Point(480, 240);
+			this->label3->Location = System::Drawing::Point(528, 240);
 			this->label3->Name = S"label3";
 			this->label3->Size = System::Drawing::Size(88, 23);
 			this->label3->TabIndex = 12;
 			this->label3->Text = S"P2";
 			// 
-			// panel5
-			// 
-			this->panel5->AutoScroll = true;
-			this->panel5->Controls->Add(this->FinalResult);
-			this->panel5->Location = System::Drawing::Point(576, 48);
-			this->panel5->Name = S"panel5";
-			this->panel5->Size = System::Drawing::Size(272, 184);
-			this->panel5->TabIndex = 13;
-			// 
-			// FinalResult
-			// 
-			this->FinalResult->Location = System::Drawing::Point(15, 15);
-			this->FinalResult->Name = S"FinalResult";
-			this->FinalResult->Size = System::Drawing::Size(248, 160);
-			this->FinalResult->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
-			this->FinalResult->TabIndex = 0;
-			this->FinalResult->TabStop = false;
-			// 
 			// Form1
 			// 
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
-			this->ClientSize = System::Drawing::Size(856, 462);
-			this->Controls->Add(this->panel5);
+			this->ClientSize = System::Drawing::Size(680, 278);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->panel4);
@@ -346,7 +321,6 @@ namespace Headliner_ver_103
 			this->panel2->ResumeLayout(false);
 			this->panel3->ResumeLayout(false);
 			this->panel4->ResumeLayout(false);
-			this->panel5->ResumeLayout(false);
 			this->ResumeLayout(false);
 
 		}	
@@ -374,9 +348,7 @@ private: void OpenImage(void)
 					im = new Bitmap(this->myDialog->OpenFile());
 					this->pictureBox1->Image = im;
 					g=this->pictureBox1->CreateGraphics();
-					this->ImHeight=im->Height;
-					this->ImWidth=im->Width;
-					this->FinalImage=new Bitmap(this->ImWidth,this->ImHeight,Imaging::PixelFormat::Format24bppRgb);
+					 	
 					//System::Windows::Forms::MessageBox::Show("Image successfully loaded","Success");
 				 }
 				this->Update();
@@ -400,7 +372,6 @@ private: void OpenImage(void)
 					// getting an binary array of 					 
 						rgbConvert* rgbC = new rgbConvert(im);
 						BArray = rgbC->GetBinaryArray(intLevel);
-
 						ImgArray = rgbC->GetImageArray( );
 					   	
 					 // Showing the binary image
@@ -496,7 +467,6 @@ private: void DoSeparate()
 
 */
 					 Pen* p=new Pen(Color::Blue,1);
-					 this->totalunits=0;
 	
 								for(int i=0;i<this->numberOfLines;i++)
 									{
@@ -508,10 +478,7 @@ private: void DoSeparate()
 														int x2=this->Lines[i].Words[j].Units[k].getEndColumn();
 														int y1=this->Lines[i].getStartRow();
 														int y2=this->Lines[i].getEndRow();
-														if(x2-x1+1>2)
-														{
-															this->totalunits++;
-														}
+
 														//g->DrawLine(p,x1,y1,x1,y2);
 														//g->DrawLine(p,x2,y1,x2,y2);
 													}
@@ -586,6 +553,16 @@ private: int MultiFactorialAnalysis(Bitmap *connected)
 			Fdm=new float[width];
 			Fdmc=new float[width];
 
+			/*for(i=0;i<=connected->Width-1;i++)
+			{
+				top[i]=0;
+				bottom[i]=0;
+				Fic[i]=0;
+				Fmt[i]=0;
+				Summation[i]=0;
+				Fdm[i]=0;
+				Fdmc[i]=0;
+			}*/
 			for(i=0;i<=connected->Width-1;i++)
 			{
 				top[i]=0;
@@ -595,9 +572,6 @@ private: int MultiFactorialAnalysis(Bitmap *connected)
 				Summation[i]=0;
 				Fdm[i]=0;
 				Fdmc[i]=0;
-			}
-			for(i=0;i<=connected->Width-1;i++)
-			{
 				flag=false;
 				for(j=0;j<=connected->Height-1;j++)
 				{
@@ -657,7 +631,7 @@ private: int MultiFactorialAnalysis(Bitmap *connected)
 						inccount++;
 					}
 				}
-				//System::Windows::Forms::MessageBox::Show(inccount.ToString(),"blob size");
+				System::Windows::Forms::MessageBox::Show(inccount.ToString(),"blob size");
 			//	System::Windows::Forms::MessageBox::Show(height.ToString(),"Bigger T");
 				Fmt[i]=1-inccount/(float)height;
 			}
@@ -726,12 +700,12 @@ private: int minimum(int *num,int width)
 			int mini=num[0];
 			for (int i=1;i<=width-1;i++)
 			{
-				//System::Windows::Forms::MessageBox::Show(mini.ToString(),"Mini Value");
-				//System::Windows::Forms::MessageBox::Show(num[i].ToString(),"Num Value");
+				System::Windows::Forms::MessageBox::Show(mini.ToString(),"Mini Value");
+				System::Windows::Forms::MessageBox::Show(num[i].ToString(),"Num Value");
 				if(mini>=num[i] && num[i]>=0)
 				{
 					mini=num[i];
-					//System::Windows::Forms::MessageBox::Show(mini.ToString(),"Mini Value");
+					System::Windows::Forms::MessageBox::Show(mini.ToString(),"Mini Value");
 				}
 			}
 			return mini;
@@ -743,8 +717,8 @@ private: int maximum(float *num,int width)
 			int maxcol;
 			for (int i=1;i<width;i++)
 			{
-				//System::Windows::Forms::MessageBox::Show(maxi.ToString(),"Maxi");
-				//System::Windows::Forms::MessageBox::Show(num[i].ToString(),"Column Value");
+				System::Windows::Forms::MessageBox::Show(maxi.ToString(),"Maxi");
+				System::Windows::Forms::MessageBox::Show(num[i].ToString(),"Column Value");
 				if(maxi<=num[i])
 				{
 					maxcol=i;
@@ -766,49 +740,6 @@ private: int maximum(int *num,int width)
 			}
 			return maxi;
 		 }
-private: void widthStore()
-		 {
-			this->WStore=new int[this->totalunits];
-			LineInfo=Lines;
-			int count=0;
-			for(int i=0;i<this->numberOfLines;i++)
-			{
-				for(int j=0;j<this->Lines[i].getTotalWord();j++)
-				{
-					for(int k=0;k<this->Lines[i].Words[j].getTotalUnit();k++)
-					{
-						int x1=this->Lines[i].Words[j].Units[k].getStartColumn();
-						int x2=this->Lines[i].Words[j].Units[k].getEndColumn();
-						int y1=this->Lines[i].getStartRow();
-						int y2=this->Lines[i].getEndRow();
-						int wth=x2-x1+1;
-						if(wth>2)
-						{
-							this->WStore[count]=wth;
-							count++;
-						}
-					}
-				}
-			}
-	//		System::Windows::Forms::MessageBox::Show(count.ToString(),"Count");
-
-		}
-private: void sortWidth()
-		 {
-			int temp;
-			for(int i=0;i<this->totalunits;i++)
-			{
-				for(int j=i+1;j<this->totalunits;j++)
-				{
-					if(this->WStore[i]>this->WStore[j])
-					{
-						temp=this->WStore[i];
-						this->WStore[i]=this->WStore[j];
-						this->WStore[j]=temp;
-					}
-				}
-			}
-		 }
 private: void display(int lineno,int wordno,int charno)
 		{
 			int x1,x2,y1,y2;
@@ -818,24 +749,17 @@ private: void display(int lineno,int wordno,int charno)
 			y1=this->LineInfo[lineno].getStartRow();		//Equivalent to :: top_y
 			y2=this->LineInfo[lineno].getEndRow();			 //Equivalent to :: bottom_y
 			
-			this->sortWidth();
-			int sz;
-			sz=(this->totalunits+1)/2;
-			int val;
-			val= this->WStore[sz];
 			int xsize=x2-x1+1;
 			int ysize=y2-y1+1;
-			val=3*val/2 +1;
-			System::Windows::Forms::MessageBox::Show(val.ToString(),"Threshold Size");
 			this->WidthLabel->Text=xsize.ToString();
 			this->cropImage=new Bitmap(xsize,ysize,Imaging::PixelFormat::Format24bppRgb);
-				for(int i=y1;i<=y2;i++)//traverse throughy
+				for(int i=y1;i<=y2;i++)//traverse through y
 				{
 					for(int j=x1;j<=x2;j++)//traverse through x
 					{
 						if(this->BArray[i][j])
 						{
-							this->cropImage->SetPixel(j-x1,i-y1,Color::White);
+							this->cropImage->SetPixel(j-x1,i-y1,Color::Beige);
 						}
 						else
 						{
@@ -843,7 +767,7 @@ private: void display(int lineno,int wordno,int charno)
 						}
 					}
 				}
-			if (xsize>=2 && xsize<=val)
+			if (xsize>=2 && xsize<=11)
 			{
 			 	this->SmallImage->Image=cropImage;
 			}
@@ -851,59 +775,44 @@ private: void display(int lineno,int wordno,int charno)
 			{
 				Bitmap *cutImage1,*cutImage2;
 				int col=this->MultiFactorialAnalysis(cropImage);
-				cutImage1=new Bitmap(col+1,ysize,Imaging::PixelFormat::Format24bppRgb);
-				cutImage2=new Bitmap(xsize-col-1,ysize,Imaging::PixelFormat::Format24bppRgb);
-
+				cutImage1=new Bitmap(xsize,ysize,Imaging::PixelFormat::Format24bppRgb);
+				cutImage2=new Bitmap(xsize,ysize,Imaging::PixelFormat::Format24bppRgb);
 
 				System::Windows::Forms::MessageBox::Show("Cut Column:",col.ToString());
-				for(int k=y1;k<=y2;k++)
-				{
-					this->tmpBArray[k][x1+col]=true;
-				}
-				for(int i=0;i<this->ImHeight;i++)//traverse throughy
-				{
-					for(int j=0;j<this->ImWidth;j++)//traverse through x
-					{
-						if(this->tmpBArray[i][j])
-						{
-							this->FinalImage->SetPixel(j,i,Color::White);
-						}
-						else
-						{
-							this->FinalImage->SetPixel(j,i,Color::Black);
-						}
-					}
-				}
 				for(int i=y1;i<=y2;i++)//traverse throughy
 				{
-					for(int j=x1;j<=col+x1;j++)//traverse through x
+					for(int j=x1;j<=x2;j++)//traverse through x
 					{
-						if(this->BArray[i][j])
+						if((j-x1)<=col)
 						{
-							cutImage1->SetPixel(j-x1,i-y1,Color::White);
+							if(this->BArray[i][j])
+							{
+								cutImage1->SetPixel(j-x1,i-y1,Color::White);
+								cutImage2->SetPixel(j-x1,i-y1,Color::White);
+
+							}
+							else
+							{
+								cutImage1->SetPixel(j-x1,i-y1,Color::Black);
+								cutImage2->SetPixel(j-x1,i-y1,Color::White);
+							}
 						}
 						else
 						{
-							cutImage1->SetPixel(j-x1,i-y1,Color::Black);
-						}
-					}
-				}
-				for(int i=y1;i<=y2;i++)//traverse throughy
-				{
-					for(int j=x1+1+col;j<=x2;j++)//traverse through x
-					{
-						if(this->BArray[i][j])
-						{
-							cutImage2->SetPixel(j-x1-col-1,i-y1,Color::White);
-						}
-						else
-						{
-							cutImage2->SetPixel(j-x1-col-1,i-y1,Color::Black);
+							if(this->BArray[i][j])
+							{
+								cutImage2->SetPixel(j-x1,i-y1,Color::White);
+								cutImage1->SetPixel(j-x1,i-y1,Color::White);
+							}
+							else
+							{
+								cutImage2->SetPixel(j-x1,i-y1,Color::Black);
+								cutImage1->SetPixel(j-x1,i-y1,Color::White);
+							}
 						}
 					}
 				}
 				this->SmallImage->Image=cropImage;
-				this->FinalResult->Image=this->FinalImage;
 				this->Part1->Image=cutImage1;
 				this->Part2->Image=cutImage2;
 			}
@@ -913,8 +822,6 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 		 {
 			 if(this->ImageLoaded && this->BinaryDone)
 			 {
-				this->widthStore();
-				System::Windows::Forms::MessageBox::Show(this->totalunits.ToString(),"Total Units Without |");
 				linecount=this->numberOfLines;
 				LineInfo=Lines;
 				if(charno<this->LineInfo[lineno].Words[wordno].getTotalUnit()-1)
@@ -963,7 +870,11 @@ private: System::Void pictureBox2_Click_1(System::Object *  sender, System::Even
 		 }
 
 
- 
+
+private: System::Void pictureBox1_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+		 }
+
 };
 }
 
