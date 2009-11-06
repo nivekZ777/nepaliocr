@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<title>OCR: rgbConvert.h Source File</title>
+<link href="ocr.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Created By Rajesh Pandey   -->
+<h1>rgbConvert.h</h1><div class="fragment"><pre>00001 <span class="preprocessor">#pragma once</span>
+00002 <span class="preprocessor"></span><span class="keyword">using</span> <span class="keyword">namespace </span>System::Drawing;
+00003 
+00004 <span class="keyword">public</span> __gc <span class="keyword">class </span>rgbConvert
+00005 {
+00006 <span class="keyword">private</span>: 
+00007     System::Drawing::Bitmap* grayImage;
+00008     System::Drawing::Bitmap* bainaryImage;
+00009     System::Drawing::Bitmap* rgbImage;
+00010     <span class="keywordtype">int</span> xsize;
+00011     <span class="keywordtype">int</span> ysize;
+00012     <span class="keywordtype">bool</span> **BArray;
+00013     <span class="keywordtype">int</span> **GrayArray;
+00014 
+00015     <span class="keyword">static</span> <span class="keywordtype">float</span> coef01 = (<span class="keywordtype">float</span>)0.2989;
+00016     <span class="keyword">static</span> <span class="keywordtype">float</span> coef02 = (<span class="keywordtype">float</span>)0.5870;
+00017     <span class="keyword">static</span> <span class="keywordtype">float</span> coef03 = (<span class="keywordtype">float</span>)0.1140;
+00018 
+00019 <span class="keyword">public</span>:
+00020 
+00021     rgbConvert(System::Drawing::Bitmap* im)
+00022     {
+00023         rgbImage = im;
+00024         xsize = rgbImage-&gt;Width;
+00025         ysize = rgbImage-&gt;Height;
+00026         BArray = <span class="keyword">new</span> <span class="keywordtype">bool</span> * [ysize];
+00027         GrayArray = <span class="keyword">new</span> <span class="keywordtype">int</span> * [ysize];
+00028         <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; ysize; i++ )
+00029         {
+00030             BArray[i] = <span class="keyword">new</span> <span class="keywordtype">bool</span>[xsize];
+00031             GrayArray[i] = <span class="keyword">new</span> <span class="keywordtype">int</span>[xsize];
+00032         }
+00033 
+00034         bainaryImage = <span class="keyword">new</span> Bitmap(xsize, ysize, Imaging::PixelFormat::Format24bppRgb);
+00035     }
+00036 
+00037     System::Drawing::Bitmap* getGrayImage ()
+00038     {
+00039         <span class="keywordflow">for</span>( <span class="keywordtype">int</span> i = 0; i &lt; this-&gt;xsize; i++ )
+00040         {
+00041             <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> j = 0; j &lt; this-&gt;ysize; j++ )
+00042             {
+00043                 System::Drawing::Color clr = this-&gt;rgbImage-&gt;GetPixel(i,j);
+00044                 <span class="keywordtype">int</span> pixel = clr.ToArgb();               
+00045 
+00046                 <span class="comment">//int alpha = (pixel &gt;&gt; 24) &amp; 0xff;// no need here</span>
+00047                 <span class="keywordtype">int</span> red = (pixel &gt;&gt; 16) &amp; 0xff;
+00048                 <span class="keywordtype">int</span> green = (pixel &gt;&gt;  8) &amp; 0xff;
+00049                 <span class="keywordtype">int</span> blue = (pixel      ) &amp; 0xff;
+00050 
+00051                 <span class="keywordtype">int</span> grayC = int(coef01*red + coef02*green + coef03*blue);
+00052 
+00053                 GrayArray[i][j] = grayC;
+00054             }<span class="comment">// inner for*/</span>
+00055         }
+00056 
+00057         <span class="keywordflow">return</span> grayImage;
+00058     }
+00059 
+00060     System::Drawing::Bitmap* GetBinaryImage()
+00061     {
+00062         <span class="keywordflow">return</span> this-&gt;bainaryImage;
+00063     }
+00064 
+00065     <span class="keywordtype">bool</span>** GetBinaryArray( <span class="keywordtype">int</span> level )
+00066     {
+00067         <span class="keywordflow">for</span>( <span class="keywordtype">int</span> yVal = 0; yVal &lt; ysize; yVal++ )
+00068         {
+00069             <span class="keywordflow">for</span> ( <span class="keywordtype">int</span> xVal = 0; xVal &lt; xsize; xVal++ )
+00070             {
+00071                 System::Drawing::Color clr = this-&gt;rgbImage-&gt;GetPixel(xVal,yVal);
+00072                 <span class="keywordtype">int</span> pixel = clr.ToArgb();               
+00073 
+00074                 <span class="comment">//int alpha = (pixel &gt;&gt; 24) &amp; 0xff;// no need here</span>
+00075                 <span class="keywordtype">int</span> red = (pixel &gt;&gt; 16) &amp; 0xff;
+00076                 <span class="keywordtype">int</span> green = (pixel &gt;&gt;  8) &amp; 0xff;
+00077                 <span class="keywordtype">int</span> blue = (pixel      ) &amp; 0xff;
+00078                 <span class="keywordtype">int</span> grayC = int(coef01*red + coef02*green + coef03*blue);
+00079 
+00080                 <span class="keywordflow">if</span> ( grayC &gt;= level )
+00081                 {
+00082                     BArray[yVal][xVal] = <span class="keyword">true</span>;
+00083                     GrayArray[yVal][xVal] = 1;
+00084                     this-&gt;bainaryImage-&gt;SetPixel(xVal,yVal,Color::White);
+00085                 }
+00086                 <span class="keywordflow">else</span>
+00087                 {
+00088                     BArray[yVal][xVal] = <span class="keyword">false</span>;
+00089                     GrayArray[yVal][xVal] = 0;
+00090                     this-&gt;bainaryImage-&gt;SetPixel(xVal,yVal,Color::Black);
+00091                 }
+00092 
+00093             }<span class="comment">// inner for*/</span>
+00094         }
+00095         <span class="keywordflow">return</span> BArray;
+00096     }
+00097 
+00098     <span class="keywordtype">int</span>** GetImageArray( )
+00099     {   
+00100         <span class="keywordflow">return</span> GrayArray;
+00101     }
+00102 
+00103 };
+</pre></div><hr><address style="align: right;"><small>
+Generated on Tue Jul 1 18:54:50 2008 for OCR by <a href="http://www.mpp.org.np">
+<img src="doxygen.png" alt="doxygen" align="middle" border=0 width=110 height=53>
+</a>    </small></address>
+</body>
+</html>
