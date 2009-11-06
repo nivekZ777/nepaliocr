@@ -295,7 +295,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 			this->picture_panel->DragEnter += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragEnter);
 			this->picture_panel->MouseUp += new System::Windows::Forms::MouseEventHandler(this, picture_panel_MouseUp);
 			this->picture_panel->DragDrop += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragDrop);
-			this->picture_panel->DoubleClick += new System::EventHandler(this, picture_panel_DoubleClick);
+
 			// 
 			// statusBar1
 			// 
@@ -829,7 +829,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 					this->meanDone=false;
 					this->deskewDone=false;
 					// creating a bitmap
-					im = new Bitmap(this->openImageDialog->OpenFile());
+					im = new System::Drawing::Bitmap(this->openImageDialog->OpenFile());
 					this->pictureBox1->Image = im;
 					g=this->pictureBox1->CreateGraphics();
 					myInfo->Text="";
@@ -1683,10 +1683,7 @@ private: System::Void mnuCropper_Click(System::Object *  sender, System::EventAr
 
 
 
-private: System::Void picture_panel_DoubleClick(System::Object *  sender, System::EventArgs *  e)
-		 {
-			this->openImageFile();
-		 }
+
 
 private: System::Void mnuRecognize_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
@@ -1756,20 +1753,7 @@ private: System::Void picture_panel_Click(System::Object *  sender, System::Even
 
 private: System::Void picture_panel_MouseUp(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
 		 {
-			 if(e->Button == MouseButtons::Left){
-				 if(this->ImageLoaded == false){
-					 this->cMenuLoadImage->Enabled = true;
-					 this->cMenuFastRecognize->Enabled = false;
-				 this->ocrCntMenu->Show(this,System::Drawing::Point(e->X,e->Y));
-				 }
-				 if(this->ImageLoaded==true){
-					  this->cMenuLoadImage->Enabled = false;
-					  this->cMenuFastRecognize->Enabled = true;
-					this->ocrCntMenu->Show(this,System::Drawing::Point(e->X,e->Y));
-				 }
-
-
-			 }
+			 this->drawContextMenu(e);
 		 }
 
 private: System::Void cMenuFastRecognize_Click(System::Object *  sender, System::EventArgs *  e)
@@ -1811,20 +1795,57 @@ private: System::Void cMenuFastRecognize_Click(System::Object *  sender, System:
 
 private: System::Void pictureBox1_MouseUp(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
 		 {
-			 if(e->Button == MouseButtons::Left){
-				 if(this->ImageLoaded == false){
-					 this->cMenuLoadImage->Enabled = true;
-					 this->cMenuFastRecognize->Enabled = false;
-				 this->ocrCntMenu->Show(this,System::Drawing::Point(e->X,e->Y));
-				 }
-				 if(this->ImageLoaded==true){
-					  this->cMenuLoadImage->Enabled = false;
-					  this->cMenuFastRecognize->Enabled = true;
-					this->ocrCntMenu->Show(this,System::Drawing::Point(e->X,e->Y));
-				 }
+				 this->drawContextMenu(e);
+		 }
+
+private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
+
+			 //Left Click
+			 if(e->Button == MouseButtons::Left){ //Left Click
+					System::Windows::Forms::ContextMenu *ocrCMenu = new System::Windows::Forms::ContextMenu();
+
+				if(this->ImageLoaded ==false){//Left Click, If image not loaded, load image
+					
+					ocrCMenu->MenuItems->Add(this->mnuLoadImage);
+					
+				} // if(e->Button == MouseButtons::Left){if(this->ImageLoaded ==false)
+				else{
+					if(this->ImageLoaded ==true && this->BinaryDone==false){ //Left click, if image loaded, recognize it
+						ocrCMenu->MenuItems->Add(this->mnuFastRecognize);
+						ocrCMenu->MenuItems->Add(this->mnuBinarize);
+						
+					}
+					if(this->ImageLoaded ==true && this->BinaryDone==true){ //Left click, if image loaded, and Binarized, separate it
+						ocrCMenu->MenuItems->Add(this->mnuSeparate);
+						ocrCMenu->MenuItems->Add(this->mnuFastRecognize);
+					}
+					
+
+				}//end Else
+				if(this->SeparateDone==true){
+					ocrCMenu->MenuItems->Add(this->mnuRecognize);
+					ocrCMenu->MenuItems->Add(this->mnuTrain);
+
+				}
+
+				ocrCMenu->Show(this,System::Drawing::Point(e->X,e->Y));
+			} // if(e->Button == MouseButtons::Left) 
 
 
-			 }
+		 
+		
+			 //Right Click
+			 if(e->Button == MouseButtons::Right){//Right Click
+				 if(this->ImageLoaded==true){ //Rotate Image on right click
+					System::Windows::Forms::ContextMenu *ocrCMenu = new System::Windows::Forms::ContextMenu();
+
+					ocrCMenu->MenuItems->Add(this->mnuRotate);
+					ocrCMenu->MenuItems->Add(this->mnuLoadImage);
+					ocrCMenu->Show(this,System::Drawing::Point(e->X,e->Y));
+				 }
+			 } // if(e->Button == MouseButtons::Right)
+
+
 		 }
 
 };
