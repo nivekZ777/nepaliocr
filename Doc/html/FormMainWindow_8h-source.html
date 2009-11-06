@@ -1,0 +1,1317 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<title>OCR: FormMainWindow.h Source File</title>
+<link href="ocr.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Created By Rajesh Pandey   -->
+<h1>FormMainWindow.h</h1><div class="fragment"><pre>00001 <span class="preprocessor">#include "TrainingForm.h"</span>
+00002 <span class="preprocessor">#include "RecognitionForm.h"</span>
+00003 <span class="preprocessor">#include "RecognitionProcess.h"</span>
+00004 <span class="preprocessor">#include "ThresholedValue.h"</span>
+00005 <span class="preprocessor">#include "rgbConvert.h"</span>
+00006 <span class="preprocessor">#include "Separate.h"</span>
+00007 <span class="preprocessor">#include "Convolution.h"</span>
+00008 <span class="preprocessor">#include "Deskew.h"</span>
+00009 <span class="preprocessor">#include "myWindow.h"</span>
+00010 
+00011 
+00012 <span class="preprocessor">#pragma once</span>
+00013 <span class="preprocessor"></span>
+00014 
+00015 <span class="keyword">namespace </span>OCR
+00016 {
+00017     <span class="keyword">using</span> <span class="keyword">namespace </span>System;
+00018     <span class="keyword">using</span> <span class="keyword">namespace </span>System::IO;
+00019     <span class="keyword">using</span> <span class="keyword">namespace </span>System::Data;
+00020     <span class="keyword">using</span> <span class="keyword">namespace </span>System::Drawing;
+00021     <span class="keyword">using</span> <span class="keyword">namespace </span>System::Collections;
+00022     <span class="keyword">using</span> <span class="keyword">namespace </span>System::Windows::Forms;
+00023     <span class="keyword">using</span> <span class="keyword">namespace </span>System::ComponentModel;
+00024     <span class="keyword">using</span> <span class="keyword">namespace </span>System::Drawing::Imaging;
+00025 
+00035     
+00036 <span class="comment">/*</span>
+00037 <span class="comment"> </span>
+00038 <span class="comment">        The main Class of the program.</span>
+00039 <span class="comment">        This program initiates the start dialog box. This class control other classes and initiates them.</span>
+00040 <span class="comment"> </span>
+00041 <span class="comment">*/</span>
+00042 
+<a name="l00043"></a><a class="code" href="classOCR_1_1FormMainWindow.html">00043</a>     <span class="keyword">public</span> __gc <span class="keyword">class </span><a class="code" href="classOCR_1_1FormMainWindow.html">FormMainWindow</a> : <span class="keyword">public</span> System::Windows::Forms::Form
+00044     {   
+00045     <span class="keyword">public</span>:
+00046         <a class="code" href="classOCR_1_1FormMainWindow.html">FormMainWindow</a>(<span class="keywordtype">void</span>)
+00047         {
+00048             <span class="comment">//user declarations</span>
+00049             this-&gt;BinaryDone=<span class="keyword">false</span>;
+00050             this-&gt;ImageLoaded=<span class="keyword">false</span>;
+00051             this-&gt;SeparateDone=<span class="keyword">false</span>;
+00052             this-&gt;ContrastDone=<span class="keyword">false</span>;
+00053             this-&gt;meanDone=<span class="keyword">false</span>;
+00054             this-&gt;deskewDone=<span class="keyword">false</span>;
+00055 
+00056             InitializeComponent();
+00057 
+00058             this-&gt;applicationPath=Application::StartupPath-&gt;ToString();
+00059             
+00060             <span class="keywordtype">int</span> len = this-&gt;applicationPath-&gt;Length -1;         
+00061             <span class="keywordflow">if</span>(this-&gt;applicationPath-&gt;Substring(len)-&gt;Equals(<span class="stringliteral">"\\"</span>))
+00062             {
+00063                 this-&gt;applicationPath = this-&gt;applicationPath-&gt;Substring(0,len);                
+00064             }
+00065 
+00066             <span class="comment">// getting the character database path</span>
+00067             <span class="comment">//System::Windows::Forms::MessageBox::Show(this-&gt;applicationPath,"Path of characterDB path");</span>
+00068 
+00069 <span class="comment">//          this-&gt;characterDBPath=this-&gt;characterDBPath-&gt;Concat(this-&gt;applicationPath ,"\\htk\\DataBaseFile\\characters.txt");  </span>
+00070             <span class="comment">//System::Windows::Forms::MessageBox::Show(this-&gt;characterDBPath,"Path of characterDB path");</span>
+00071             
+00072             this-&gt;modelTrainDBPath = this-&gt;modelTrainDBPath-&gt;Concat(this-&gt;applicationPath , <span class="stringliteral">"\\htk\\DataBaseFile\\modelTrainDataBase.txt"</span>);
+00073             
+00074             this-&gt;alModelRec = <span class="keyword">new</span> System::Collections::ArrayList();
+00075             this-&gt;characterDBPath=this-&gt;characterDBPath-&gt;Concat(this-&gt;applicationPath ,<span class="stringliteral">"\\htk\\DataBaseFile\\characters.txt"</span>);  
+00076             this-&gt;scriptFilePath = this-&gt;scriptFilePath-&gt;Concat(this-&gt;applicationPath ,<span class="stringliteral">"\\htk\\recognizer\\script.txt"</span>);
+00077 
+00078             this-&gt;LoadFromFile();
+00079             
+00080         }
+00081   
+00082     <span class="keyword">protected</span>:
+00083         <span class="keywordtype">void</span> Dispose(Boolean disposing)
+00084         {
+00085             <span class="keywordflow">if</span> (disposing &amp;&amp; components)
+00086             {
+00087                 components-&gt;Dispose();
+00088             }
+00089             __super::Dispose(disposing);
+00090         }
+00091 
+00092 
+00093 
+00094     <span class="comment">//user variable start </span>
+00095     <span class="keyword">private</span>: Bitmap* im;
+00096     <span class="keyword">private</span>: Bitmap* BinaryImage;
+00097     <span class="keyword">private</span>: Graphics* g;
+00098     <span class="keyword">private</span>: <span class="keywordtype">int</span> intLevel;
+00099     <span class="keyword">private</span>: <span class="keywordtype">int</span> **ImgArray;
+00100 
+00101     <span class="keyword">private</span>: <span class="keywordtype">bool</span> **BArray;
+00102              <span class="keywordtype">bool</span> **tmpBArray;
+00103     <span class="keyword">private</span>: <span class="keywordtype">bool</span> BinaryDone;
+00104     <span class="keyword">private</span>: <span class="keywordtype">bool</span> ImageLoaded;
+00105              <span class="keywordtype">bool</span> SeparateDone;
+00106              <span class="keywordtype">bool</span> ContrastDone;
+00107              <span class="keywordtype">bool</span> meanDone;
+00108              <span class="keywordtype">bool</span> deskewDone;
+00109 
+00110 
+00111     <span class="keyword">private</span>: <span class="keywordtype">int</span> numberOfLines;
+00112     <span class="keyword">private</span>: Line* Lines; 
+00113 
+00114     <span class="keyword">private</span>: String* applicationPath;
+00115              String* modelTrainDBPath;
+00116              String* scriptFilePath;
+00117              String* characterDBPath;
+00118 
+00119     
+00120     <span class="keyword">private</span>: System::Collections::SortedList* slForCharacters;
+00121     <span class="keyword">private</span>: System::Collections::SortedList* slModelTranscription; <span class="comment">// for storing the model transcriptions</span>
+00122     <span class="keyword">private</span>: System::Collections::ArrayList* alModelRec;            <span class="comment">// for models that already recognized</span>
+00123     
+00124              
+00125     
+00126     <span class="comment">//private: Graphics* g; </span>
+00127 <span class="comment">//    private: BinaryImgProcessor* bim;</span>
+00128     <span class="comment">//user variable end </span>
+00129     
+00130     <span class="keyword">private</span>: System::Windows::Forms::Panel *  picture_panel;
+00131     <span class="keyword">private</span>: System::Windows::Forms::PictureBox *  pictureBox1;
+00132     <span class="keyword">private</span>: System::Windows::Forms::Button *  convertToBinary_button;
+00133     <span class="keyword">private</span>: System::Windows::Forms::Button *  openImage;
+00134     <span class="keyword">private</span>: System::Windows::Forms::OpenFileDialog *  openImageDialog;
+00135     <span class="keyword">private</span>: System::Windows::Forms::Button *  separate_button;
+00136     <span class="keyword">private</span>: System::Windows::Forms::SaveFileDialog *  saveImageDialog;
+00137     <span class="keyword">private</span>: System::Windows::Forms::Button *  saveImage;
+00138     <span class="keyword">private</span>: System::Windows::Forms::Button *  imContrast;
+00139     <span class="keyword">private</span>: System::Windows::Forms::Button *  meanRemoval;
+00140     <span class="keyword">private</span>: System::Windows::Forms::Button *  deSkew;
+00141     <span class="keyword">private</span>: System::Windows::Forms::Button *  train;
+00142     <span class="keyword">private</span>: System::Windows::Forms::Button *  recognize;
+00143     <span class="keyword">private</span>: System::Windows::Forms::Button *  fastRecognizeButton;
+00144     <span class="keyword">private</span>: System::Windows::Forms::Label *  myInfo;
+00145     <span class="keyword">private</span>: System::Windows::Forms::Label *  myInfo1;
+00146     <span class="keyword">private</span>: System::Windows::Forms::Button *  findMagnification;
+00147     <span class="keyword">private</span>: System::Windows::Forms::Button *  cb;
+00148 <span class="keyword">private</span>: System::Windows::Forms::Button *  btnRotate_right;
+00149 
+00150 
+00151 
+00152 
+00153 
+00154 
+00155 
+00159         System::ComponentModel::Container * components;
+00160 
+00165         <span class="keywordtype">void</span> InitializeComponent(<span class="keywordtype">void</span>)
+00166         {
+00167             System::Resources::ResourceManager *  resources = <span class="keyword">new</span> System::Resources::ResourceManager(__typeof(<a class="code" href="classOCR_1_1FormMainWindow.html">OCR::FormMainWindow</a>));
+00168             this-&gt;convertToBinary_button = <span class="keyword">new</span> System::Windows::Forms::Button();
+00169             this-&gt;picture_panel = <span class="keyword">new</span> System::Windows::Forms::Panel();
+00170             this-&gt;pictureBox1 = <span class="keyword">new</span> System::Windows::Forms::PictureBox();
+00171             this-&gt;openImage = <span class="keyword">new</span> System::Windows::Forms::Button();
+00172             this-&gt;openImageDialog = <span class="keyword">new</span> System::Windows::Forms::OpenFileDialog();
+00173             this-&gt;separate_button = <span class="keyword">new</span> System::Windows::Forms::Button();
+00174             this-&gt;saveImageDialog = <span class="keyword">new</span> System::Windows::Forms::SaveFileDialog();
+00175             this-&gt;saveImage = <span class="keyword">new</span> System::Windows::Forms::Button();
+00176             this-&gt;imContrast = <span class="keyword">new</span> System::Windows::Forms::Button();
+00177             this-&gt;meanRemoval = <span class="keyword">new</span> System::Windows::Forms::Button();
+00178             this-&gt;deSkew = <span class="keyword">new</span> System::Windows::Forms::Button();
+00179             this-&gt;train = <span class="keyword">new</span> System::Windows::Forms::Button();
+00180             this-&gt;recognize = <span class="keyword">new</span> System::Windows::Forms::Button();
+00181             this-&gt;fastRecognizeButton = <span class="keyword">new</span> System::Windows::Forms::Button();
+00182             this-&gt;myInfo = <span class="keyword">new</span> System::Windows::Forms::Label();
+00183             this-&gt;myInfo1 = <span class="keyword">new</span> System::Windows::Forms::Label();
+00184             this-&gt;findMagnification = <span class="keyword">new</span> System::Windows::Forms::Button();
+00185             this-&gt;cb = <span class="keyword">new</span> System::Windows::Forms::Button();
+00186             this-&gt;btnRotate_right = <span class="keyword">new</span> System::Windows::Forms::Button();
+00187             this-&gt;picture_panel-&gt;SuspendLayout();
+00188             this-&gt;SuspendLayout();
+00189             <span class="comment">// </span>
+00190             <span class="comment">// convertToBinary_button</span>
+00191             <span class="comment">// </span>
+00192             this-&gt;convertToBinary_button-&gt;Cursor = System::Windows::Forms::Cursors::Hand;
+00193             this-&gt;convertToBinary_button-&gt;Location = System::Drawing::Point(232, 96);
+00194             this-&gt;convertToBinary_button-&gt;Name = S<span class="stringliteral">"convertToBinary_button"</span>;
+00195             this-&gt;convertToBinary_button-&gt;Size = System::Drawing::Size(72, 24);
+00196             this-&gt;convertToBinary_button-&gt;TabIndex = 5;
+00197             this-&gt;convertToBinary_button-&gt;Text = S<span class="stringliteral">"BINARY"</span>;
+00198             this-&gt;convertToBinary_button-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, close_button_Click_1);
+00199             <span class="comment">// </span>
+00200             <span class="comment">// picture_panel</span>
+00201             <span class="comment">// </span>
+00202             this-&gt;picture_panel-&gt;AllowDrop = <span class="keyword">true</span>;
+00203             this-&gt;picture_panel-&gt;AutoScroll = <span class="keyword">true</span>;
+00204             this-&gt;picture_panel-&gt;BackColor = System::Drawing::Color::AliceBlue;
+00205             this-&gt;picture_panel-&gt;BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
+00206             this-&gt;picture_panel-&gt;Controls-&gt;Add(this-&gt;pictureBox1);
+00207             this-&gt;picture_panel-&gt;Location = System::Drawing::Point(8, 128);
+00208             this-&gt;picture_panel-&gt;Name = S<span class="stringliteral">"picture_panel"</span>;
+00209             this-&gt;picture_panel-&gt;Size = System::Drawing::Size(776, 384);
+00210             this-&gt;picture_panel-&gt;TabIndex = 1;
+00211             this-&gt;picture_panel-&gt;DragEnter += <span class="keyword">new</span> System::Windows::Forms::DragEventHandler(<span class="keyword">this</span>, picture_panel_DragEnter);
+00212             this-&gt;picture_panel-&gt;DragDrop += <span class="keyword">new</span> System::Windows::Forms::DragEventHandler(<span class="keyword">this</span>, picture_panel_DragDrop);
+00213             <span class="comment">// </span>
+00214             <span class="comment">// pictureBox1</span>
+00215             <span class="comment">// </span>
+00216             this-&gt;pictureBox1-&gt;Location = System::Drawing::Point(5, 12);
+00217             this-&gt;pictureBox1-&gt;Name = S<span class="stringliteral">"pictureBox1"</span>;
+00218             this-&gt;pictureBox1-&gt;Size = System::Drawing::Size(100, 100);
+00219             this-&gt;pictureBox1-&gt;SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
+00220             this-&gt;pictureBox1-&gt;TabIndex = 0;
+00221             this-&gt;pictureBox1-&gt;TabStop = <span class="keyword">false</span>;
+00222             <span class="comment">// </span>
+00223             <span class="comment">// openImage</span>
+00224             <span class="comment">// </span>
+00225             this-&gt;openImage-&gt;BackColor = System::Drawing::Color::Transparent;
+00226             this-&gt;openImage-&gt;Cursor = System::Windows::Forms::Cursors::Hand;
+00227             this-&gt;openImage-&gt;Location = System::Drawing::Point(24, 16);
+00228             this-&gt;openImage-&gt;Name = S<span class="stringliteral">"openImage"</span>;
+00229             this-&gt;openImage-&gt;Size = System::Drawing::Size(112, 48);
+00230             this-&gt;openImage-&gt;TabIndex = 1;
+00231             this-&gt;openImage-&gt;Text = S<span class="stringliteral">"OPEN IMAGE"</span>;
+00232             this-&gt;openImage-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, openImage_Click);
+00233             <span class="comment">// </span>
+00234             <span class="comment">// openImageDialog</span>
+00235             <span class="comment">// </span>
+00236             this-&gt;openImageDialog-&gt;Filter = S<span class="stringliteral">"Image Files(*.BMP;*.JPG;*.GIF;*.png)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*"</span>;
+00237             <span class="comment">// </span>
+00238             <span class="comment">// separate_button</span>
+00239             <span class="comment">// </span>
+00240             this-&gt;separate_button-&gt;Cursor = System::Windows::Forms::Cursors::Hand;
+00241             this-&gt;separate_button-&gt;Location = System::Drawing::Point(416, 96);
+00242             this-&gt;separate_button-&gt;Name = S<span class="stringliteral">"separate_button"</span>;
+00243             this-&gt;separate_button-&gt;TabIndex = 6;
+00244             this-&gt;separate_button-&gt;Text = S<span class="stringliteral">"SEPARATE"</span>;
+00245             this-&gt;separate_button-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, separate_button_Click);
+00246             <span class="comment">// </span>
+00247             <span class="comment">// saveImageDialog</span>
+00248             <span class="comment">// </span>
+00249             this-&gt;saveImageDialog-&gt;DefaultExt = S<span class="stringliteral">"*.jpg"</span>;
+00250             <span class="comment">// </span>
+00251             <span class="comment">// saveImage</span>
+00252             <span class="comment">// </span>
+00253             this-&gt;saveImage-&gt;BackColor = System::Drawing::Color::WhiteSmoke;
+00254             this-&gt;saveImage-&gt;Cursor = System::Windows::Forms::Cursors::Hand;
+00255             this-&gt;saveImage-&gt;Location = System::Drawing::Point(264, 8);
+00256             this-&gt;saveImage-&gt;Name = S<span class="stringliteral">"saveImage"</span>;
+00257             this-&gt;saveImage-&gt;Size = System::Drawing::Size(112, 48);
+00258             this-&gt;saveImage-&gt;TabIndex = 2;
+00259             this-&gt;saveImage-&gt;Text = S<span class="stringliteral">"SAVE IMAGE"</span>;
+00260             this-&gt;saveImage-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, saveImage_Click);
+00261             <span class="comment">// </span>
+00262             <span class="comment">// imContrast</span>
+00263             <span class="comment">// </span>
+00264             this-&gt;imContrast-&gt;BackColor = System::Drawing::Color::Transparent;
+00265             this-&gt;imContrast-&gt;Cursor = System::Windows::Forms::Cursors::Hand;
+00266             this-&gt;imContrast-&gt;Location = System::Drawing::Point(232, 64);
+00267             this-&gt;imContrast-&gt;Name = S<span class="stringliteral">"imContrast"</span>;
+00268             this-&gt;imContrast-&gt;TabIndex = 3;
+00269             this-&gt;imContrast-&gt;Text = S<span class="stringliteral">"CONTRAST"</span>;
+00270             this-&gt;imContrast-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, imContrast_Click);
+00271             <span class="comment">// </span>
+00272             <span class="comment">// meanRemoval</span>
+00273             <span class="comment">// </span>
+00274             this-&gt;meanRemoval-&gt;Cursor = System::Windows::Forms::Cursors::Hand;
+00275             this-&gt;meanRemoval-&gt;Location = System::Drawing::Point(312, 64);
+00276             this-&gt;meanRemoval-&gt;Name = S<span class="stringliteral">"meanRemoval"</span>;
+00277             this-&gt;meanRemoval-&gt;TabIndex = 4;
+00278             this-&gt;meanRemoval-&gt;Text = S<span class="stringliteral">"MEAN"</span>;
+00279             this-&gt;meanRemoval-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, meanRemoval_Click);
+00280             <span class="comment">// </span>
+00281             <span class="comment">// deSkew</span>
+00282             <span class="comment">// </span>
+00283             this-&gt;deSkew-&gt;Cursor = System::Windows::Forms::Cursors::Hand;
+00284             this-&gt;deSkew-&gt;Location = System::Drawing::Point(32, 80);
+00285             this-&gt;deSkew-&gt;Name = S<span class="stringliteral">"deSkew"</span>;
+00286             this-&gt;deSkew-&gt;TabIndex = 7;
+00287             this-&gt;deSkew-&gt;Text = S<span class="stringliteral">"DE-SKEW"</span>;
+00288             this-&gt;deSkew-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, deSkew_Click);
+00289             <span class="comment">// </span>
+00290             <span class="comment">// train</span>
+00291             <span class="comment">// </span>
+00292             this-&gt;train-&gt;Cursor = System::Windows::Forms::Cursors::Hand;
+00293             this-&gt;train-&gt;Location = System::Drawing::Point(600, 88);
+00294             this-&gt;train-&gt;Name = S<span class="stringliteral">"train"</span>;
+00295             this-&gt;train-&gt;TabIndex = 8;
+00296             this-&gt;train-&gt;Text = S<span class="stringliteral">"TRAIN"</span>;
+00297             this-&gt;train-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, train_Click);
+00298             <span class="comment">// </span>
+00299             <span class="comment">// recognize</span>
+00300             <span class="comment">// </span>
+00301             this-&gt;recognize-&gt;Cursor = System::Windows::Forms::Cursors::Hand;
+00302             this-&gt;recognize-&gt;Location = System::Drawing::Point(688, 88);
+00303             this-&gt;recognize-&gt;Name = S<span class="stringliteral">"recognize"</span>;
+00304             this-&gt;recognize-&gt;Size = System::Drawing::Size(88, 23);
+00305             this-&gt;recognize-&gt;TabIndex = 9;
+00306             this-&gt;recognize-&gt;Text = S<span class="stringliteral">"RECOGNIZE"</span>;
+00307             this-&gt;recognize-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, recognize_Click);
+00308             <span class="comment">// </span>
+00309             <span class="comment">// fastRecognizeButton</span>
+00310             <span class="comment">// </span>
+00311             this-&gt;fastRecognizeButton-&gt;Location = System::Drawing::Point(160, 8);
+00312             this-&gt;fastRecognizeButton-&gt;Name = S<span class="stringliteral">"fastRecognizeButton"</span>;
+00313             this-&gt;fastRecognizeButton-&gt;Size = System::Drawing::Size(88, 48);
+00314             this-&gt;fastRecognizeButton-&gt;TabIndex = 10;
+00315             this-&gt;fastRecognizeButton-&gt;Text = S<span class="stringliteral">"Fast Recognize"</span>;
+00316             this-&gt;fastRecognizeButton-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, fastRecognizeButton_Click);
+00317             <span class="comment">// </span>
+00318             <span class="comment">// myInfo</span>
+00319             <span class="comment">// </span>
+00320             this-&gt;myInfo-&gt;Location = System::Drawing::Point(520, 16);
+00321             this-&gt;myInfo-&gt;Name = S<span class="stringliteral">"myInfo"</span>;
+00322             this-&gt;myInfo-&gt;Size = System::Drawing::Size(264, 24);
+00323             this-&gt;myInfo-&gt;TabIndex = 11;
+00324             <span class="comment">// </span>
+00325             <span class="comment">// myInfo1</span>
+00326             <span class="comment">// </span>
+00327             this-&gt;myInfo1-&gt;Location = System::Drawing::Point(440, 16);
+00328             this-&gt;myInfo1-&gt;Name = S<span class="stringliteral">"myInfo1"</span>;
+00329             this-&gt;myInfo1-&gt;Size = System::Drawing::Size(72, 24);
+00330             this-&gt;myInfo1-&gt;TabIndex = 12;
+00331             <span class="comment">// </span>
+00332             <span class="comment">// findMagnification</span>
+00333             <span class="comment">// </span>
+00334             this-&gt;findMagnification-&gt;Cursor = System::Windows::Forms::Cursors::Hand;
+00335             this-&gt;findMagnification-&gt;Location = System::Drawing::Point(400, 56);
+00336             this-&gt;findMagnification-&gt;Name = S<span class="stringliteral">"findMagnification"</span>;
+00337             this-&gt;findMagnification-&gt;Size = System::Drawing::Size(88, 24);
+00338             this-&gt;findMagnification-&gt;TabIndex = 13;
+00339             this-&gt;findMagnification-&gt;Text = S<span class="stringliteral">"Magnification"</span>;
+00340             this-&gt;findMagnification-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, findMagnification_Click);
+00341             <span class="comment">// </span>
+00342             <span class="comment">// cb</span>
+00343             <span class="comment">// </span>
+00344             this-&gt;cb-&gt;Location = System::Drawing::Point(136, 96);
+00345             this-&gt;cb-&gt;Name = S<span class="stringliteral">"cb"</span>;
+00346             this-&gt;cb-&gt;Size = System::Drawing::Size(88, 24);
+00347             this-&gt;cb-&gt;TabIndex = 14;
+00348             this-&gt;cb-&gt;Text = S<span class="stringliteral">"C and B"</span>;
+00349             this-&gt;cb-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, cb_Click);
+00350             <span class="comment">// </span>
+00351             <span class="comment">// btnRotate_right</span>
+00352             <span class="comment">// </span>
+00353             this-&gt;btnRotate_right-&gt;Location = System::Drawing::Point(312, 96);
+00354             this-&gt;btnRotate_right-&gt;Name = S<span class="stringliteral">"btnRotate_right"</span>;
+00355             this-&gt;btnRotate_right-&gt;Size = System::Drawing::Size(88, 24);
+00356             this-&gt;btnRotate_right-&gt;TabIndex = 15;
+00357             this-&gt;btnRotate_right-&gt;Text = S<span class="stringliteral">"Rotate"</span>;
+00358             this-&gt;btnRotate_right-&gt;Click += <span class="keyword">new</span> System::EventHandler(<span class="keyword">this</span>, btnRotate_right_Click);
+00359             <span class="comment">// </span>
+00360             <span class="comment">// FormMainWindow</span>
+00361             <span class="comment">// </span>
+00362             this-&gt;AccessibleRole = System::Windows::Forms::AccessibleRole::Application;
+00363             this-&gt;AllowDrop = <span class="keyword">true</span>;
+00364             this-&gt;AutoScaleBaseSize = System::Drawing::Size(5, 13);
+00365             this-&gt;AutoScroll = <span class="keyword">true</span>;
+00366             this-&gt;BackColor = System::Drawing::Color::WhiteSmoke;
+00367             this-&gt;ClientSize = System::Drawing::Size(794, 518);
+00368             this-&gt;Controls-&gt;Add(this-&gt;btnRotate_right);
+00369             this-&gt;Controls-&gt;Add(this-&gt;cb);
+00370             this-&gt;Controls-&gt;Add(this-&gt;findMagnification);
+00371             this-&gt;Controls-&gt;Add(this-&gt;myInfo1);
+00372             this-&gt;Controls-&gt;Add(this-&gt;myInfo);
+00373             this-&gt;Controls-&gt;Add(this-&gt;fastRecognizeButton);
+00374             this-&gt;Controls-&gt;Add(this-&gt;recognize);
+00375             this-&gt;Controls-&gt;Add(this-&gt;train);
+00376             this-&gt;Controls-&gt;Add(this-&gt;meanRemoval);
+00377             this-&gt;Controls-&gt;Add(this-&gt;imContrast);
+00378             this-&gt;Controls-&gt;Add(this-&gt;saveImage);
+00379             this-&gt;Controls-&gt;Add(this-&gt;separate_button);
+00380             this-&gt;Controls-&gt;Add(this-&gt;openImage);
+00381             this-&gt;Controls-&gt;Add(this-&gt;picture_panel);
+00382             this-&gt;Controls-&gt;Add(this-&gt;convertToBinary_button);
+00383             this-&gt;Controls-&gt;Add(this-&gt;deSkew);
+00384             this-&gt;FormBorderStyle = System::Windows::Forms::FormBorderStyle::Fixed3D;
+00385             this-&gt;Icon = (__try_cast&lt;System::Drawing::Icon *  &gt;(resources-&gt;GetObject(S<span class="stringliteral">"$this.Icon"</span>)));
+00386             this-&gt;MaximizeBox = <span class="keyword">false</span>;
+00387             this-&gt;Name = S<span class="stringliteral">"FormMainWindow"</span>;
+00388             this-&gt;Text = S<span class="stringliteral">"Nepali OCR"</span>;
+00389             this-&gt;picture_panel-&gt;ResumeLayout(<span class="keyword">false</span>);
+00390             this-&gt;ResumeLayout(<span class="keyword">false</span>);
+00391 
+00392         }   
+00393 
+00394 
+00395         
+00396         <span class="comment">/*</span>
+00397 <span class="comment"></span>
+00398 <span class="comment">            The InitializeComponent method initializes the application. </span>
+00399 <span class="comment"></span>
+00400 <span class="comment">            </span>
+00401 <span class="comment"></span>
+00402 <span class="comment">        */</span>
+00403 
+00404         <span class="keyword">public</span>: <span class="keywordtype">void</span> Conv3x3(ConvMatrix* m)
+00405         {
+00406             this-&gt;Cursor = System::Windows::Forms::Cursors::WaitCursor;
+00407             
+00408             <span class="keywordflow">try</span>{
+00409             <span class="comment">// Avoid divide by zero errors</span>
+00410             <span class="keywordflow">if</span> (0 == m-&gt;Factor) <span class="keywordflow">return</span>;
+00411 
+00412             Bitmap* bSrc = (Bitmap*)im-&gt;Clone(); 
+00413 
+00414             <span class="comment">// GDI+ still lies to us - the return format is BGR, NOT RGB.</span>
+00415             BitmapData* bmData = im-&gt;LockBits(Rectangle(0, 0, im-&gt;Width, im-&gt;Height), ImageLockMode::ReadWrite, PixelFormat::Format24bppRgb);
+00416             BitmapData* bmSrc = bSrc-&gt;LockBits(Rectangle(0, 0, bSrc-&gt;Width, bSrc-&gt;Height), ImageLockMode::ReadWrite, PixelFormat::Format24bppRgb);
+00417 
+00418             <span class="keywordtype">int</span> stride = bmData-&gt;Stride;
+00419             <span class="keywordtype">int</span> stride2 = stride * 2;
+00420             IntPtr Scan0 = bmData-&gt;Scan0;
+00421             IntPtr SrcScan0 = bmSrc-&gt;Scan0;
+00422 
+00423                 Byte * p = (Byte *)(<span class="keywordtype">void</span> *)Scan0;
+00424                 Byte * pSrc = (Byte *)(<span class="keywordtype">void</span> *)SrcScan0;
+00425 
+00426                 <span class="keywordtype">int</span> nOffset = stride - im-&gt;Width*3;
+00427                 <span class="keywordtype">int</span> nWidth = im-&gt;Width - 2;
+00428                 <span class="keywordtype">int</span> nHeight = im-&gt;Height - 2;
+00429 
+00430                 <span class="keywordtype">int</span> nPixel;
+00431 
+00432                 <span class="keywordflow">for</span>(<span class="keywordtype">int</span> y=0;y &lt; nHeight;++y)
+00433                 {
+00434                     <span class="keywordflow">for</span>(<span class="keywordtype">int</span> x=0; x &lt; nWidth; ++x )
+00435                     {
+00436                         nPixel = ( ( ( (pSrc[2] * m-&gt;TopLeft) + (pSrc[5] * m-&gt;TopMid) + (pSrc[8] * m-&gt;TopRight) +
+00437                             (pSrc[2 + stride] * m-&gt;MidLeft) + (pSrc[5 + stride] * m-&gt;Pixel) + (pSrc[8 + stride] * m-&gt;MidRight) +
+00438                             (pSrc[2 + stride2] * m-&gt;BottomLeft) + (pSrc[5 + stride2] * m-&gt;BottomMid) + (pSrc[8 + stride2] * m-&gt;BottomRight)) / m-&gt;Factor) + m-&gt;Offset); 
+00439 
+00440                         <span class="keywordflow">if</span> (nPixel &lt; 0) nPixel = 0;
+00441                         <span class="keywordflow">if</span> (nPixel &gt; 255) nPixel = 255;
+00442 
+00443                         p[5 + stride]= (Byte)nPixel;
+00444 
+00445                         nPixel = ( ( ( (pSrc[1] * m-&gt;TopLeft) + (pSrc[4] * m-&gt;TopMid) + (pSrc[7] * m-&gt;TopRight) +
+00446                             (pSrc[1 + stride] * m-&gt;MidLeft) + (pSrc[4 + stride] * m-&gt;Pixel) + (pSrc[7 + stride] * m-&gt;MidRight) +
+00447                             (pSrc[1 + stride2] * m-&gt;BottomLeft) + (pSrc[4 + stride2] * m-&gt;BottomMid) + (pSrc[7 + stride2] * m-&gt;BottomRight)) / m-&gt;Factor) + m-&gt;Offset); 
+00448 
+00449                         <span class="keywordflow">if</span> (nPixel &lt; 0) nPixel = 0;
+00450                         <span class="keywordflow">if</span> (nPixel &gt; 255) nPixel = 255;
+00451                             
+00452                         p[4 + stride] = (Byte)nPixel;
+00453 
+00454                         nPixel = ( ( ( (pSrc[0] * m-&gt;TopLeft) + (pSrc[3] * m-&gt;TopMid) + (pSrc[6] * m-&gt;TopRight) +
+00455                             (pSrc[0 + stride] * m-&gt;MidLeft) + (pSrc[3 + stride] * m-&gt;Pixel) + (pSrc[6 + stride] * m-&gt;MidRight) +
+00456                             (pSrc[0 + stride2] * m-&gt;BottomLeft) + (pSrc[3 + stride2] * m-&gt;BottomMid) + (pSrc[6 + stride2] * m-&gt;BottomRight)) / m-&gt;Factor) + m-&gt;Offset); 
+00457 
+00458                         <span class="keywordflow">if</span> (nPixel &lt; 0) nPixel = 0;
+00459                         <span class="keywordflow">if</span> (nPixel &gt; 255) nPixel = 255;
+00460 
+00461                         p[3 + stride] = (Byte)nPixel;
+00462 
+00463                         p += 3;
+00464                         pSrc += 3;
+00465                     }
+00466                     p += nOffset;
+00467                     pSrc += nOffset;
+00468                 }
+00469             
+00470             im-&gt;UnlockBits(bmData);
+00471             bSrc-&gt;UnlockBits(bmSrc);
+00472 
+00473             this-&gt;pictureBox1-&gt;Image = im;
+00474             g=this-&gt;pictureBox1-&gt;CreateGraphics();
+00475             <span class="comment">//System::Windows::Forms::MessageBox::Show("Mean Removal Done!!!!"/*fLevel.ToString()*/,"Threshold Value");</span>
+00476             }
+00477         <span class="keywordflow">catch</span>(Exception* ex)
+00478             {
+00479                 System::Windows::Forms::MessageBox::Show(ex-&gt;Message-&gt;ToString(),<span class="stringliteral">"Failed to Apply Mean Removal!!"</span>,System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+00480             }
+00481         this-&gt;Cursor = System::Windows::Forms::Cursors::Default;
+00482             
+00483         }
+00484         
+00485         <span class="keyword">private</span>: <span class="keywordtype">void</span> MeanRemoval(<span class="keywordtype">int</span> nWeight)
+00486         {
+00487             
+00488             <span class="comment">/*</span>
+00489 <span class="comment"></span>
+00490 <span class="comment">                This method does the mean removal of the image, before it is binarized. </span>
+00491 <span class="comment">                Yhis is an essentinal part of the ` part. </span>
+00492 <span class="comment"></span>
+00493 <span class="comment">            */</span>
+00494 
+00495             ConvMatrix* m=<span class="keyword">new</span> ConvMatrix();
+00496             <span class="comment">//ConvMatrix* h1[];</span>
+00497             <span class="comment">//h1=new ConvMatrix* [20];</span>
+00498             <span class="comment">//h1=this-&gt;GetTopValR();</span>
+00499             
+00500             m-&gt;SetAll(-1);
+00501             m-&gt;Pixel=nWeight;
+00502             m-&gt;Factor=nWeight-8;
+00503             this-&gt;Conv3x3(m);
+00504         }
+00505 
+00506         <span class="comment">/*private: ConvMatrix* GetTopValR()[]</span>
+00507 <span class="comment">                 {</span>
+00508 <span class="comment">                    ConvMatrix* h1[];</span>
+00509 <span class="comment">                    h1=new ConvMatrix* [20];</span>
+00510 <span class="comment">            </span>
+00511 <span class="comment">                    return h1;</span>
+00512 <span class="comment">                 }</span>
+00513 <span class="comment">         */</span>
+00514         <span class="keyword">private</span>: <span class="keywordtype">void</span> Contrast(<span class="keywordtype">int</span> nContrast)
+00515         {
+00516 
+00517             <span class="comment">/*</span>
+00518 <span class="comment"></span>
+00519 <span class="comment">                This method increases the contrast of the image. </span>
+00520 <span class="comment">                Thus making the image more visible. </span>
+00521 <span class="comment"></span>
+00522 <span class="comment">            */</span>
+00523             <span class="keywordflow">if</span>(this-&gt;im-&gt;PixelFormat != System::Drawing::Imaging::PixelFormat::Format24bppRgb){
+00524                 System::Windows::Forms::MessageBox::Show(<span class="stringliteral">"Pixelformat is not 24 bytes per pixel RGB"</span>,<span class="stringliteral">"Format24bppRgb"</span>);
+00525                 <span class="keywordflow">return</span>;
+00526             }
+00527             this-&gt;Cursor = System::Windows::Forms::Cursors::WaitCursor;
+00528             <span class="keywordflow">try</span>{
+00529             <span class="keywordtype">double</span> pixel = 0, contrast = (100.0+nContrast)/100.0;
+00530 
+00531             contrast *= contrast;
+00532 
+00533             <span class="keywordtype">int</span> red, green, blue;
+00534             
+00535             <span class="comment">// GDI+ still lies to us - the return format is BGR, NOT RGB.</span>
+00536             BitmapData* bmData = im-&gt;LockBits(Rectangle(0, 0, im-&gt;Width, im-&gt;Height), ImageLockMode::ReadWrite, PixelFormat::Format24bppRgb);
+00537             <span class="keywordtype">int</span> stride = bmData-&gt;Stride;
+00538             IntPtr Scan0 = bmData-&gt;Scan0;
+00539             
+00540             <span class="comment">//System::Byte p;</span>
+00541             Byte* p = (Byte*)(<span class="keywordtype">void</span> *)Scan0;
+00542             
+00543             
+00544                 <span class="comment">//Color clr = b-&gt;GetPixel(i,j);</span>
+00545                 <span class="comment">//int p= clr.ToArgb();              </span>
+00546             
+00547                 <span class="keywordtype">int</span> nOffset = stride - im-&gt;Width*3;
+00548 
+00549                 <span class="keywordflow">for</span>(<span class="keywordtype">int</span> y=0;y&lt;im-&gt;Height;++y)
+00550                 {
+00551                     <span class="keywordflow">for</span>(<span class="keywordtype">int</span> x=0; x &lt; im-&gt;Width; ++x )
+00552                     {
+00553                         blue = p[0];
+00554                         green = p[1];
+00555                         red = p[2];
+00556                 
+00557                         pixel = red/255.0;
+00558                         pixel -= 0.5;
+00559                         pixel *= contrast;
+00560                         pixel += 0.5;
+00561                         pixel *= 255;
+00562                         <span class="keywordflow">if</span> (pixel &lt; 0) pixel = 0;
+00563                         <span class="keywordflow">if</span> (pixel &gt; 255) pixel = 255;
+00564                         p[2] = (Byte) pixel;
+00565 
+00566                         pixel = green/255.0;
+00567                         pixel -= 0.5;
+00568                         pixel *= contrast;
+00569                         pixel += 0.5;
+00570                         pixel *= 255;
+00571                         <span class="keywordflow">if</span> (pixel &lt; 0) pixel = 0;
+00572                         <span class="keywordflow">if</span> (pixel &gt; 255) pixel = 255;
+00573                         p[1] = (Byte) pixel;
+00574 
+00575                         pixel = blue/255.0;
+00576                         pixel -= 0.5;
+00577                         pixel *= contrast;
+00578                         pixel += 0.5;
+00579                         pixel *= 255;
+00580                         <span class="keywordflow">if</span> (pixel &lt; 0) pixel = 0;
+00581                         <span class="keywordflow">if</span> (pixel &gt; 255) pixel = 255;
+00582                         p[0] = (Byte) pixel;                    
+00583 
+00584                         p += 3;
+00585                     }
+00586                     p += nOffset;
+00587                 }
+00588             
+00589 
+00590             im-&gt;UnlockBits(bmData);
+00591             
+00592             this-&gt;pictureBox1-&gt;Image = im;
+00593             g=this-&gt;pictureBox1-&gt;CreateGraphics();
+00594             <span class="comment">//System::Windows::Forms::MessageBox::Show("Contrast Done!!!!"/*fLevel.ToString()*/,"Threshold Value");</span>
+00595             }
+00596         <span class="keywordflow">catch</span>(Exception* ex)
+00597             {
+00598                 System::Windows::Forms::MessageBox::Show(ex-&gt;Message-&gt;ToString(),<span class="stringliteral">"Failed to Improve the Contrast!!"</span>,System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+00599             }
+00600         this-&gt;Cursor = System::Windows::Forms::Cursors::Default;
+00601     
+00602 
+00603 <span class="comment">//          return true;</span>
+00604         }
+00605         <span class="keyword">private</span>: <span class="keywordtype">void</span> makeBinary()
+00606              {
+00607                 <span class="comment">/*</span>
+00608 <span class="comment"></span>
+00609 <span class="comment">                This method binarizes the image. </span>
+00610 <span class="comment">                The binarized image is used during the recognition process and training process.</span>
+00611 <span class="comment"> </span>
+00612 <span class="comment">                */</span>
+00613 
+00614                  <span class="keywordflow">if</span>(this-&gt;ImageLoaded)
+00615                  {
+00616                     <span class="comment">//if (this-&gt;BinaryDone)</span>
+00617                     <span class="comment">//  return;</span>
+00618                  
+00619                         
+00620                     
+00621                     <span class="keywordflow">try</span>{
+00622                      <span class="comment">// set the cursor to wait.... </span>
+00623                         this-&gt;Cursor = System::Windows::Forms::Cursors::WaitCursor;
+00624 
+00625                      
+00626                      <span class="comment">// calculating Thresholed Value for binary image                    </span>
+00627                         ThresholedValue* ts = <span class="keyword">new</span> ThresholedValue(im);
+00628                         <span class="keywordtype">float</span> fLevel = ts-&gt;GetThresholed();
+00629                         intLevel = int(fLevel*255);
+00630                     
+00631                      
+00632                      
+00633                      <span class="comment">// getting an binary array of                   </span>
+00634                         rgbConvert* rgbC = <span class="keyword">new</span> rgbConvert(im);
+00635                         BArray = rgbC-&gt;GetBinaryArray(intLevel);
+00636                         ImgArray = rgbC-&gt;GetImageArray( );
+00637                         
+00638                      <span class="comment">// Showing the binary image</span>
+00639                         this-&gt;BinaryImage = rgbC-&gt;GetBinaryImage();
+00640                         this-&gt;pictureBox1-&gt;Image = this-&gt;BinaryImage;
+00641                         
+00642                      <span class="comment">// set the cursor to Default.... </span>
+00643                         this-&gt;Cursor = System::Windows::Forms::Cursors::Default;
+00644                         <span class="comment">//System::Windows::Forms::MessageBox::Show(this-&gt;intLevel.ToString()/*fLevel.ToString()*/,"Threshold Value");</span>
+00645                         
+00646                         myInfo1-&gt;Text = <span class="stringliteral">"Threshold Value"</span>;
+00647                         myInfo-&gt;Text = this-&gt;intLevel.ToString();
+00648                         this-&gt;BinaryDone=<span class="keyword">true</span>;
+00649                     }
+00650                  <span class="keywordflow">catch</span>(System::Exception* ex)
+00651                     {
+00652                     System::Windows::Forms::MessageBox::Show(ex-&gt;Message-&gt;ToString(),<span class="stringliteral">"Failed to Binarize the Image!!"</span>,System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+00653                     this-&gt;Update();
+00654                     }
+00655                  this-&gt;Update();
+00656                  }
+00657     }<span class="comment">// end of function </span>
+00658 
+00659 
+00660         <span class="keyword">private</span>: <span class="keywordtype">void</span> openImageFile()
+00661             {
+00662                 System::Windows::Forms::DialogResult d = this-&gt;openImageDialog-&gt;ShowDialog();
+00663                 <span class="keywordflow">if</span> (d == System::Windows::Forms::DialogResult::OK)               
+00664                  {           
+00665                     
+00666 
+00667                     <span class="comment">//reset all flags after successfull image loading</span>
+00668                     this-&gt;ImageLoaded = <span class="keyword">true</span>;
+00669                     
+00670                     this-&gt;BinaryDone=<span class="keyword">false</span>;
+00671                     this-&gt;SeparateDone=<span class="keyword">false</span>;
+00672                     this-&gt;ContrastDone=<span class="keyword">false</span>;
+00673                     this-&gt;meanDone=<span class="keyword">false</span>;
+00674                     this-&gt;deskewDone=<span class="keyword">false</span>;
+00675                     <span class="comment">// creating a bitmap</span>
+00676                     im = <span class="keyword">new</span> Bitmap(this-&gt;openImageDialog-&gt;OpenFile());
+00677                     this-&gt;pictureBox1-&gt;Image = im;
+00678                     g=this-&gt;pictureBox1-&gt;CreateGraphics();
+00679                     myInfo-&gt;Text=<span class="stringliteral">""</span>;
+00680                     myInfo1-&gt;Text=<span class="stringliteral">""</span>;
+00681                     
+00682                     
+00683                     <span class="comment">//System::Windows::Forms::MessageBox::Show("Image successfully loaded","Success");</span>
+00684                  }
+00685                 this-&gt;Update();
+00686                  
+00687             }
+00688         <span class="keyword">private</span>: <span class="keywordtype">void</span> saveImageFile()
+00689             {
+00690 
+00691             <span class="comment">/*</span>
+00692 <span class="comment"></span>
+00693 <span class="comment">            This method is used to save the image file after certain image processing portion is complete.</span>
+00694 <span class="comment">            In case we need the file in future.</span>
+00695 <span class="comment"></span>
+00696 <span class="comment">            */</span>
+00697 
+00698 
+00699                 <span class="comment">//if(this-&gt;BinaryDone)</span>
+00700                 <span class="comment">//{ </span>
+00701                     saveImageDialog-&gt;Filter= <span class="stringliteral">"PNG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png"</span> ;
+00702                     saveImageDialog-&gt;FilterIndex = 1 ;
+00703                     saveImageDialog-&gt;RestoreDirectory = <span class="keyword">true</span> ;
+00704 
+00705                     System::Windows::Forms::DialogResult d = this-&gt;saveImageDialog-&gt;ShowDialog();
+00706                         <span class="keywordflow">if</span> (d == System::Windows::Forms::DialogResult::OK)               
+00707                             {            
+00708                             <span class="comment">// creating a bitmap</span>
+00709                             Bitmap* save;
+00710                             save=<span class="keyword">new</span> Bitmap(this-&gt;pictureBox1-&gt;Image);
+00711                             save-&gt;Save(saveImageDialog-&gt;FileName);
+00712                             
+00713                             }
+00714                 <span class="comment">//}</span>
+00715                 <span class="comment">//else{</span>
+00716             <span class="comment">//      System::Windows::Forms::MessageBox::Show("The file was not saved because \n the image processing is not completed", "Action Incomplete");</span>
+00717                     
+00718             <span class="comment">//  }</span>
+00719                  
+00720             }
+00721 
+00722         
+00723         <span class="keyword">private</span>: <span class="keywordtype">void</span> separateChar()
+00724                  {
+00725 <span class="comment">/*</span>
+00726 <span class="comment"></span>
+00727 <span class="comment">    This method is used to separate the characters, or the connected units  after the words are separated.</span>
+00728 <span class="comment"></span>
+00729 <span class="comment">*/</span>
+00730                      Pen* p=<span class="keyword">new</span> Pen(Color::Blue,1);
+00731     
+00732                                 <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=0;i&lt;this-&gt;numberOfLines;i++)
+00733                                     {
+00734                                         <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j=0;j&lt;this-&gt;Lines[i].getTotalWord();j++)
+00735                                             {
+00736                                                 <span class="keywordflow">for</span>(<span class="keywordtype">int</span> k=0;k&lt;this-&gt;Lines[i].Words[j].getTotalUnit();k++)
+00737                                                     {
+00738                                                         <span class="keywordtype">int</span> x1=this-&gt;Lines[i].Words[j].Units[k].getStartColumn();
+00739                                                         <span class="keywordtype">int</span> x2=this-&gt;Lines[i].Words[j].Units[k].getEndColumn();
+00740                                                         <span class="keywordtype">int</span> y1=this-&gt;Lines[i].getStartRow();
+00741                                                         <span class="keywordtype">int</span> y2=this-&gt;Lines[i].getEndRow();
+00742 
+00743                                                         g-&gt;DrawLine(p,x1,y1,x1,y2);
+00744                                                         g-&gt;DrawLine(p,x2,y1,x2,y2);
+00745                                                     }
+00746                                             }
+00747                                     }
+00748 
+00749                  }
+00750         <span class="keyword">private</span>: <span class="keywordtype">void</span> separate()
+00751                  {
+00752 
+00753                 <span class="comment">/*</span>
+00754 <span class="comment">                This method is used to separate the words and lines after binarization.</span>
+00755 <span class="comment">                */</span>
+00756 
+00757                      this-&gt;tmpBArray=<span class="keyword">new</span> <span class="keywordtype">bool</span>*[im-&gt;Height];
+00758                      <span class="comment">//System::Windows::Forms::MessageBox::Show(im-&gt;Height.ToString(),"Height");</span>
+00759                      myInfo1-&gt;Text = <span class="stringliteral">"Image Height"</span>;
+00760                      myInfo-&gt;Text = im-&gt;Height.ToString();
+00761                      <span class="comment">//this-&gt;tmpBArray=this-&gt;BArray;</span>
+00762                      <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=0;i&lt;im-&gt;Height;i++)
+00763                      {
+00764                          this-&gt;tmpBArray[i]=<span class="keyword">new</span> <span class="keywordtype">bool</span>[im-&gt;Width];
+00765                          <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j=0;j&lt;im-&gt;Width;j++)
+00766                          {
+00767                              this-&gt;tmpBArray[i][j]=this-&gt;BArray[i][j];
+00768                          }
+00769 
+00770                      }
+00771                      <span class="keywordflow">if</span>(this-&gt;BinaryDone==<span class="keyword">true</span>) <span class="comment">//If binarization is done</span>
+00772                         {
+00773 
+00774                             <span class="keywordflow">if</span>(this-&gt;SeparateDone==<span class="keyword">false</span>)
+00775                             {
+00776                             Separate* sp=<span class="keyword">new</span> Separate(im,BArray,g);
+00777                             sp-&gt;LineSeparate();                     <span class="comment">//Separate Lines from the image</span>
+00778 
+00779                             this-&gt;numberOfLines=sp-&gt;getNumberOfLines(); <span class="comment">//Get Number of Lines</span>
+00780                             this-&gt;Lines=sp-&gt;getLines();         <span class="comment">//Get Lines</span>
+00781                             this-&gt;SeparateDone=<span class="keyword">true</span>;
+00782                             this-&gt;separateChar();               <span class="comment">//separate Characters                   </span>
+00783                             }
+00784 
+00785                             <span class="keywordflow">else</span>
+00786                             {
+00787                                 this-&gt;separateChar();           <span class="comment">//separate Characters</span>
+00788                             }
+00789 
+00790                              
+00791                         }
+00792                      
+00793                     this-&gt;Update();
+00794                  }
+00795  
+00796         <span class="keyword">private</span>: <span class="keywordtype">void</span> doDeSkew()
+00797                   {
+00798                 
+00799                 <span class="comment">//If the lines in the image is tilted or slanted, this method is used to deskew the image. </span>
+00800                      
+00801                  
+00802                     Deskew* ds=<span class="keyword">new</span> Deskew(im);
+00803                     <span class="keywordtype">double</span> skewAngle=ds-&gt;GetSkewAngle();
+00804                     
+00805                     myInfo1-&gt;Text = <span class="stringliteral">"Skew Angle:"</span>;
+00806                     myInfo-&gt;Text = skewAngle.ToString();
+00807 
+00808                     
+00809 
+00810                     <span class="comment">//System::Windows::Forms::MessageBox::Show(skewAngle.ToString(),"Skew Angle");</span>
+00811 
+00812                     <span class="keywordflow">if</span>(skewAngle !=0){
+00813                         im=this-&gt;RotateImage(-skewAngle); 
+00814                         this-&gt;pictureBox1-&gt;Image = im;
+00815                         }
+00816                     <span class="comment">//System::Windows::Forms::MessageBox::Show(" Image rotated successfully","Action Complete");</span>
+00817 
+00818                  
+00819                     
+00820                     
+00821                   }
+00822 
+00823 
+00824                   
+00825         <span class="keyword">private</span>: Bitmap* RotateImage(<span class="keywordtype">double</span> angle)
+00826                     {
+00827                         Graphics* gr;
+00828                         Bitmap* tmp=<span class="keyword">new</span> Bitmap(2*im-&gt;Width,2*im-&gt;Height,PixelFormat::Format24bppRgb);
+00829                         tmp-&gt;SetResolution(im-&gt;HorizontalResolution,im-&gt;VerticalResolution);
+00830                         gr=Graphics::FromImage(tmp);
+00831                         gr-&gt;FillRectangle(Brushes::White,0,0,2*im-&gt;Width,2*im-&gt;Height);
+00832                         gr-&gt;RotateTransform(angle);
+00833                         gr-&gt;DrawImage(im,15,0);
+00834                         gr-&gt;Dispose();
+00835                         <span class="keywordflow">return</span> tmp;
+00836                     }
+00837         
+00838         
+00839         <span class="keyword">private</span>: <span class="keywordtype">void</span> Recognize()
+00840         {
+00841 <span class="comment">/*</span>
+00842 <span class="comment">        This method is used to recognize the text in the image.</span>
+00843 <span class="comment">*/</span>   
+00844                         RecognitionProcess* rp = <span class="keyword">new</span> RecognitionProcess(this-&gt;applicationPath,this-&gt;ImgArray);
+00845 
+00846                         <span class="comment">// load the transcription of the models</span>
+00847                         this-&gt;slModelTranscription = rp-&gt;LoadModelTranscriptions(this-&gt;modelTrainDBPath);
+00848                          
+00849                         <span class="keywordtype">int</span> lineCount = this-&gt;numberOfLines;
+00850                         <span class="keywordtype">int</span> wordCount = 0;
+00851                         <span class="keywordtype">int</span> totalUnit = 0;
+00852                         <span class="keywordtype">int</span> unitCount = 0;
+00853                         <span class="keywordtype">int</span> left_x,right_x,top_y,bottom_y;
+00854                         System::String* wordToRec;
+00855                         System::String* dirOfRecFile = rp-&gt;recognitionTempFileDir;
+00856 
+00857                         <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=0; i&lt;lineCount;i++)
+00858                         {                
+00859                             top_y = this-&gt;Lines[i].getStartRow();<span class="comment">//line start</span>
+00860                             bottom_y = this-&gt;Lines[i].getEndRow();<span class="comment">//line end</span>
+00861 
+00862                             wordCount = this-&gt;Lines[i].getTotalWord();
+00863                             <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j=0;j&lt;wordCount;j++)
+00864                             {                    
+00865                                 unitCount = this-&gt;Lines[i].Words[j].getTotalUnit();                  
+00866                                 <span class="keywordflow">for</span>(<span class="keywordtype">int</span> k=0; k&lt;unitCount; k++)
+00867                                 {
+00868                                     left_x = this-&gt;Lines[i].Words[j].Units[k].getStartColumn();<span class="comment">//wrod start</span>
+00869                                     right_x = this-&gt;Lines[i].Words[j].Units[k].getEndColumn();<span class="comment">//word end</span>
+00870 
+00871                                     <span class="comment">// setting the actual image boundary</span>
+00872                                     rp-&gt;SetImageBoundary(left_x,right_x,top_y,bottom_y);
+00873                                     totalUnit++;
+00874                                     wordToRec = wordToRec-&gt;Concat(dirOfRecFile,totalUnit.ToString(),<span class="stringliteral">".txt"</span>);    
+00875                                     rp-&gt;PrepareWordData(wordToRec);
+00876                                 } 
+00877                             }<span class="comment">//wordcount</span>
+00878                         }
+00879                           
+00880                         <span class="comment">// preparing the script file to be recognized</span>
+00881                         <span class="keywordflow">try</span>
+00882                         {
+00883                             System::IO::StreamWriter* sw = System::IO::File::AppendText(rp-&gt;scriptFilePath);    
+00884                             <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=1;i&lt;=totalUnit;i++)   
+00885                             {
+00886                                 System::String* tmp=tmp-&gt;Concat((String*)<span class="stringliteral">"\""</span>,dirOfRecFile,i.ToString(),(String*)<span class="stringliteral">".txt"</span>,(String*)<span class="stringliteral">"\""</span>);
+00887                                 sw-&gt;WriteLine(tmp);
+00888                                 sw-&gt;Flush();
+00889                                 <span class="comment">//sw-&gt;WriteLine("\"" + dirOfRecFile+i + ".txt" + "\"");</span>
+00890                             }
+00891                             sw-&gt;Close();
+00892                         }
+00893                         <span class="keywordflow">catch</span>(System::Exception* ex)
+00894                         {
+00895                             System::Windows::Forms::MessageBox::Show(ex-&gt;Message-&gt;ToString(),<span class="stringliteral">"Failed to prepare the script file!!"</span>,System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+00896                             exit(0);
+00897                         }
+00898 
+00899                         <span class="comment">// recognize the words from the features file using the Viterbi decoder of the HTK Toolkit HVite</span>
+00900                         <span class="comment">// then read the Master Labeled File(MLF) and fetch the output models</span>
+00901                         this-&gt;alModelRec = rp-&gt;RecognizeByHTK();
+00902                         
+00903                          
+00904 
+00905                          
+00906                         this-&gt;ProvideOutput();
+00907 
+00908                         <span class="comment">/* after recognizing is done remove the script file and also the associated image features files */</span>
+00909                         <span class="comment">// remove the script file</span>
+00910                          
+00911                         System::IO::File::Delete(rp-&gt;scriptFilePath);
+00912 
+00913                         <span class="comment">// remove all the temporary word image feature files</span>
+00914                         <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i=1;i&lt;=totalUnit;i++)   
+00915                         {
+00916                             System::String* tmp=tmp-&gt;Concat(dirOfRecFile,i.ToString(),<span class="stringliteral">".txt"</span>);
+00917                             <span class="comment">//System::IO::File::Delete(dirOfRecFile+i+".txt");</span>
+00918                             System::IO::File::Delete(tmp);
+00919                         }
+00920 
+00921         }
+00922 
+00923 
+00924         <span class="keyword">private</span>: <span class="keywordtype">void</span> LoadFromFile()
+00925          {
+00926             System::IO::StreamReader* sr = System::IO::StreamReader::Null;
+00927             System::String* tempStr;
+00928             System::String* charStr;
+00929             System::String* unicodeStr;
+00930             <span class="keywordtype">int</span> index;
+00931 
+00932             <span class="keywordflow">try</span>
+00933             {
+00934                 this-&gt;slForCharacters = <span class="keyword">new</span> System::Collections::SortedList();
+00935                 <span class="comment">// read the characters and store</span>
+00936                 sr = <span class="keyword">new</span> System::IO::StreamReader(this-&gt;characterDBPath);
+00937                 tempStr = sr-&gt;ReadLine();
+00938                 <span class="keywordflow">while</span> (tempStr-&gt;Length!=0)
+00939                 {
+00940                     index = tempStr-&gt;IndexOf(<span class="stringliteral">" "</span>);
+00941                     charStr = tempStr-&gt;Substring(0,index);
+00942                     unicodeStr = tempStr-&gt;Substring(index+1);
+00943                     slForCharacters-&gt;Add(charStr,unicodeStr);
+00944                     tempStr = sr-&gt;ReadLine();
+00945                 }
+00946                 sr-&gt;Close();
+00947             }
+00948             <span class="keywordflow">catch</span>(System::Exception* ex)
+00949             {
+00950                 System::String* errorString1=<span class="stringliteral">""</span>;
+00951                 errorString1 = ex-&gt;Message-&gt;ToString();
+00952                 errorString1 = errorString1-&gt;Concat(<span class="stringliteral">"Database file access error \n\nThe system generated the following error:\n"</span>,errorString1);
+00953                 System::Windows::Forms::MessageBox::Show( errorString1,<span class="stringliteral">"Error"</span>);
+00954                 
+00955                 exit(0);
+00956             }
+00957          }
+00958 
+00959         <span class="keyword">private</span>: <span class="keywordtype">void</span> ProvideOutput()
+00960          {
+00961 <span class="comment">/*</span>
+00962 <span class="comment">        This method prints the output in a new dialog box.</span>
+00963 <span class="comment"> */</span>
+00964              
+00965             System::String* tempStr = <span class="stringliteral">""</span>;
+00966             System::String* text = <span class="stringliteral">""</span>;
+00967             System::Collections::ArrayList* tempAl; <span class="comment">// temporary working array list</span>
+00968             System::String* ucodeStr;   
+00969 
+00970             <span class="keywordflow">try</span>
+00971             {   
+00972                 <span class="keywordtype">int</span> index = 0;
+00973                 <span class="keywordtype">int</span> ind = 0;
+00974                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; this-&gt;numberOfLines; i++  )
+00975                 {
+00976                     <span class="keywordflow">for</span> (<span class="keywordtype">int</span> j = 0; j &lt; this-&gt;Lines[i].getTotalWord(); j++)
+00977                     {
+00978                         <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k = 0; k &lt; this-&gt;Lines[i].Words[j].getTotalUnit(); k++)
+00979                         {
+00980                             <span class="keywordflow">if</span> ( ind &lt; this-&gt;alModelRec-&gt;Count)
+00981                             {
+00982                                 ucodeStr = <span class="stringliteral">""</span>;
+00983                                     
+00984                             System::Collections::IEnumerator* ENum;
+00985                             ENum=this-&gt;alModelRec-&gt;GetEnumerator();
+00986                             System::String* tempStr=<span class="stringliteral">""</span>;
+00987                             <span class="keywordtype">int</span> tempCount=0;
+00988                             <span class="keywordflow">while</span>(ENum-&gt;MoveNext())
+00989                                 {
+00990                                     <span class="keywordflow">if</span>(ind==tempCount)
+00991                                     {
+00992                                     tempStr=ENum-&gt;Current-&gt;ToString();
+00993                                     <span class="keywordflow">break</span>;
+00994                                     }
+00995                                     tempCount++;
+00996                                     
+00997                                 }
+00998                                  
+00999 
+01000                                 index = this-&gt;slModelTranscription-&gt;IndexOfKey(tempStr);
+01001                                 ind++;
+01002                                 tempAl = (System::Collections::ArrayList*)slModelTranscription-&gt;GetByIndex(index);
+01003                                 System::Collections::IEnumerator* tempNum=tempAl-&gt;GetEnumerator();
+01004                                 <span class="keywordflow">while</span>(tempNum-&gt;MoveNext())
+01005                                 {
+01006                                     tempStr = (String*)tempNum-&gt;Current;
+01007                                     ucodeStr = ucodeStr-&gt;Concat(ucodeStr,slForCharacters-&gt;GetKey(slForCharacters-&gt;IndexOfValue(tempStr)));
+01008                                 }
+01009                                                 
+01010                                 text = text-&gt;Concat(text,ucodeStr);
+01011                             }<span class="comment">// end if</span>
+01012                         }
+01013                         text = text-&gt;Concat(text,(String*)<span class="stringliteral">" "</span>);                     
+01014                     }
+01015                     text = text-&gt;Concat(text,(String*)<span class="stringliteral">"\n"</span>);
+01016                 }
+01017             }
+01018             <span class="keywordflow">catch</span>(System::Exception* ex)
+01019             {
+01020                 System::Windows::Forms::MessageBox::Show(ex-&gt;Message-&gt;ToString(),<span class="stringliteral">"Failed to provide the output!!"</span>,System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+01021                 exit(0);
+01022             }
+01023          
+01024             <a class="code" href="classOCR_1_1RecognitionForm.html">OCR::RecognitionForm</a>* rw=<span class="keyword">new</span> <a class="code" href="classOCR_1_1RecognitionForm.html">OCR::RecognitionForm</a>();
+01025             rw-&gt;<a class="code" href="classOCR_1_1RecognitionForm.html#a1">showText</a>(text);
+01026             rw-&gt;ShowDialog();
+01027 
+01028          }
+01029 
+01030 <span class="keyword">private</span>: System::Void close_button_Click_1(System::Object *  sender, System::EventArgs *  e)
+01031              {
+01032                 <span class="comment">//this-&gt;Dispose(true);</span>
+01033                 this-&gt;makeBinary();
+01034             
+01035                     
+01036              }
+01037 
+01038 
+01039 <span class="keyword">private</span>: System::Void openImage_Click(System::Object *  sender, System::EventArgs *  e)
+01040             {
+01041                 this-&gt;openImageFile();
+01042                 
+01043                 
+01044             }
+01045 
+01046 <span class="keyword">private</span>: System::Void separate_button_Click(System::Object *  sender, System::EventArgs *  e)
+01047          {
+01048              <span class="keywordflow">if</span>( (this-&gt;ImageLoaded==<span class="keyword">true</span>  ) &amp;&amp; (this-&gt;BinaryDone==<span class="keyword">true</span>) )
+01049              {
+01050                 this-&gt;separate();
+01051              }
+01052              <span class="keywordflow">else</span> <span class="keywordflow">if</span>( (this-&gt;ImageLoaded==<span class="keyword">false</span>  ) )
+01053              {
+01054                  System::Windows::Forms::MessageBox::Show(<span class="stringliteral">"Please load the image first"</span>,<span class="stringliteral">"Image not loaded"</span>);
+01055              }
+01056              <span class="keywordflow">else</span> <span class="keywordflow">if</span>(this-&gt;BinaryDone==<span class="keyword">false</span>)
+01057                      {
+01058                          <span class="comment">//System::Windows::Forms::Show("Please binarize the image before separating","Binarization not done");</span>
+01059                          System::Windows::Forms::MessageBox::Show(<span class="stringliteral">"Please binarize the image first"</span>,<span class="stringliteral">"Binarization not done"</span>);
+01060 
+01061                 }
+01062          }
+01063 
+01064 <span class="keyword">private</span>: System::Void saveImage_Click(System::Object *  sender, System::EventArgs *  e)
+01065          {
+01066              this-&gt;saveImageFile();
+01067          }
+01068 
+01069 <span class="keyword">private</span>: System::Void imContrast_Click(System::Object *  sender, System::EventArgs *  e)
+01070          {
+01071             <span class="keywordflow">if</span>(this-&gt;ImageLoaded==<span class="keyword">true</span>){
+01072             this-&gt;Contrast(10);
+01073             this-&gt;ContrastDone=<span class="keyword">true</span>;
+01074             this-&gt;Update();
+01075              }
+01076              <span class="keywordflow">else</span>{
+01077                  System::Windows::Forms::MessageBox::Show(<span class="stringliteral">"Please load the image first"</span>,<span class="stringliteral">"Image not loaded"</span>);
+01078              }
+01079          }
+01080 
+01081 <span class="keyword">private</span>: System::Void meanRemoval_Click(System::Object *  sender, System::EventArgs *  e)
+01082          {
+01083 
+01084              <span class="keywordflow">if</span>( (this-&gt;ImageLoaded==<span class="keyword">true</span>) ){
+01085                 this-&gt;MeanRemoval(9);
+01086                 this-&gt;meanDone= <span class="keyword">true</span>;
+01087                 this-&gt;Update();
+01088                 
+01089              }
+01090              
+01091 
+01092          }
+01093 
+01094 <span class="keyword">private</span>: System::Void deSkew_Click(System::Object *  sender, System::EventArgs *  e)
+01095          {
+01096              <span class="keywordflow">if</span>(this-&gt;ImageLoaded==<span class="keyword">true</span>){
+01097              this-&gt;doDeSkew();
+01098               }
+01099              <span class="keywordflow">else</span>{
+01100                  System::Windows::Forms::MessageBox::Show(<span class="stringliteral">"Please Load the image first"</span>,<span class="stringliteral">"Image not loaded"</span>);
+01101              }
+01102          }
+01103 
+01104 <span class="keyword">private</span>: System::Void train_Click(System::Object *  sender, System::EventArgs *  e)
+01105          {
+01106              <span class="comment">//Check If the image is loaded or not.</span>
+01107              <span class="keywordflow">if</span>(this-&gt;ImageLoaded){
+01108             
+01109                  <span class="comment">//Check If the image is binarized first or not.</span>
+01110 
+01111                  <span class="keywordflow">if</span>(this-&gt;BinaryDone){
+01112                         <a class="code" href="classOCR_1_1TrainingForm.html">OCR::TrainingForm</a>* tw=<span class="keyword">new</span> <a class="code" href="classOCR_1_1TrainingForm.html">OCR::TrainingForm</a>();
+01113                         tw-&gt;<a class="code" href="classOCR_1_1TrainingForm.html#a1">defineVar</a>(this-&gt;ImgArray,this-&gt;tmpBArray,this-&gt;Lines,this-&gt;numberOfLines);
+01114                         tw-&gt;ShowDialog();
+01115                  }
+01116                     <span class="comment">//If not binarized print an error message               </span>
+01117                  <span class="keywordflow">else</span>{
+01118                      System::Windows::Forms::MessageBox::Show(<span class="stringliteral">"Image is not Binarized"</span>,<span class="stringliteral">"Please Binarize first"</span>);
+01119                  }
+01120                 
+01121                 }
+01122              <span class="comment">//If an Image is not loaded, Print an error message to load the image.</span>
+01123              <span class="keywordflow">else</span>{
+01124                  <span class="comment">//Please Browse for image and Load the image</span>
+01125                  System::Windows::Forms::MessageBox::Show(<span class="stringliteral">"Image not loaded, Please Browse for image and load image first "</span>,<span class="stringliteral">"Image Not loaded"</span>);
+01126              }
+01127              
+01128             
+01129          }
+01130 
+01131 <span class="keyword">private</span>: System::Void recognize_Click(System::Object *  sender, System::EventArgs *  e)
+01132          {
+01133              <span class="keywordflow">if</span>(this-&gt;ImageLoaded){
+01134                  <span class="keywordflow">if</span>(this-&gt;SeparateDone){
+01135                      <span class="comment">//if the image is loaded and words are separated.. recognition process is started</span>
+01136                         this-&gt;Recognize();
+01137 
+01138                  }
+01139                  <span class="keywordflow">else</span>{
+01140                      System::Windows::Forms::MessageBox::Show(<span class="stringliteral">"First Complete the preprocessing steps, words are not separated"</span>,<span class="stringliteral">"Preprocessing steps not complete"</span>);
+01141                  }
+01142              }
+01143              <span class="keywordflow">else</span>{
+01144                  <span class="comment">//Image is not loaded</span>
+01145                  System::Windows::Forms::MessageBox::Show(<span class="stringliteral">"Image not loaded, Please load the image first"</span>,<span class="stringliteral">"Image not loaded"</span>);
+01146              }
+01147              <span class="comment">//OCR::RecognitionForm* rw=new OCR::RecognitionForm();</span>
+01148              <span class="comment">//rw-&gt;ShowDialog();</span>
+01149          }
+01150 
+01151 <span class="keyword">private</span>: System::Void fastRecognizeButton_Click(System::Object *  sender, System::EventArgs *  e)
+01152          {
+01153              <span class="keywordflow">if</span>(this-&gt;ImageLoaded==<span class="keyword">true</span>){
+01154                  
+01155                 <span class="comment">//contrast</span>
+01156                 this-&gt;Contrast(10);
+01157                 this-&gt;ContrastDone=<span class="keyword">true</span>;
+01158                 this-&gt;Update();
+01159                 
+01160                 <span class="comment">//mean removal</span>
+01161                 this-&gt;MeanRemoval(9);
+01162                 this-&gt;meanDone= <span class="keyword">true</span>;
+01163                 this-&gt;Update();
+01164 
+01165                 <span class="comment">//Binarization</span>
+01166                 this-&gt;makeBinary();
+01167                 
+01168                 <span class="comment">//separation</span>
+01169                 this-&gt;separate();
+01170 
+01171                 <span class="comment">//Recognition</span>
+01172                  this-&gt;Recognize();
+01173 
+01174 
+01175              }
+01176              <span class="keywordflow">else</span>{
+01177                  System::Windows::Forms::MessageBox::Show(<span class="stringliteral">"Please load the image first"</span>,<span class="stringliteral">"Image not loaded"</span>);
+01178 
+01179              }
+01180 
+01181          }<span class="comment">//End function recognize button</span>
+01182 <span class="comment">//Try magnify function</span>
+01183          
+01184 <span class="keyword">private</span>: <span class="keywordtype">void</span> tryMagnify(){
+01185               
+01186                 this-&gt;Contrast(10);
+01187                 this-&gt;ContrastDone=<span class="keyword">true</span>;
+01188                 this-&gt;Update();
+01189                 
+01190                 <span class="comment">//mean removal</span>
+01191                 this-&gt;MeanRemoval(9);
+01192                 this-&gt;meanDone= <span class="keyword">true</span>;
+01193                 this-&gt;Update();
+01194 
+01195                 <span class="comment">//Binarization</span>
+01196                 this-&gt;makeBinary();
+01197                 
+01198                 <span class="comment">//separation</span>
+01199                 this-&gt;separate();
+01200                 
+01201 
+01202                     <a class="code" href="classOCR_1_1myWindow.html">OCR::myWindow</a>* mw = <span class="keyword">new</span> <a class="code" href="classOCR_1_1myWindow.html">OCR::myWindow</a>(this-&gt;im,
+01203                     this-&gt;BinaryImage,
+01204                         this-&gt;g,
+01205                         this-&gt;intLevel,
+01206                         this-&gt;ImgArray,
+01207                         this-&gt;BArray,
+01208                         this-&gt;tmpBArray,
+01209                         this-&gt;BinaryDone,
+01210                         this-&gt;ImageLoaded,
+01211                         this-&gt;SeparateDone,
+01212                         this-&gt;ContrastDone,
+01213                         this-&gt;meanDone,
+01214                         this-&gt;deskewDone,
+01215                         this-&gt;numberOfLines,
+01216                         this-&gt;Lines, 
+01217                         this-&gt;applicationPath,
+01218                         this-&gt;modelTrainDBPath,
+01219                         this-&gt;scriptFilePath,
+01220                         this-&gt;characterDBPath,
+01221                         this-&gt;slForCharacters,
+01222                         this-&gt;slModelTranscription, <span class="comment">// for storing the model transcriptions</span>
+01223                         this-&gt;alModelRec
+01224                         );
+01225                 
+01226                  
+01227                 mw-&gt;<a class="code" href="classOCR_1_1myWindow.html#a1">defineVar</a>(this-&gt;ImgArray,this-&gt;tmpBArray,this-&gt;Lines,this-&gt;numberOfLines);
+01228                 mw-&gt;ShowDialog();
+01229                   }
+01230 
+01231 <span class="keyword">private</span>: System::Void findMagnification_Click(System::Object *  sender, System::EventArgs *  e)
+01232          {
+01233              <span class="keywordflow">if</span>(this-&gt;ImageLoaded){ 
+01234             tryMagnify();       
+01235              }
+01236              <span class="keywordflow">else</span>{
+01237                  System::Windows::Forms::MessageBox::Show(<span class="stringliteral">"Please load the image first"</span>,<span class="stringliteral">"Image not loaded"</span>);
+01238              }
+01239 
+01240          }
+01241 
+01242 
+01243 <span class="keyword">private</span>: System::Void cb_Click(System::Object *  sender, System::EventArgs *  e)
+01244          {
+01245             <span class="keywordflow">if</span>(this-&gt;ImageLoaded==<span class="keyword">true</span>){
+01246             this-&gt;Contrast(10);
+01247             this-&gt;ContrastDone=<span class="keyword">true</span>;
+01248             this-&gt;makeBinary();
+01249             this-&gt;Update();
+01250              }
+01251              <span class="keywordflow">else</span>{
+01252                  System::Windows::Forms::MessageBox::Show(<span class="stringliteral">"Please load the image first"</span>,<span class="stringliteral">"Image not loaded"</span>);
+01253              }
+01254          }
+01255 
+01256 <span class="keyword">private</span>: System::Void picture_panel_DragDrop(System::Object *  sender, System::Windows::Forms::DragEventArgs *  e)
+01257          {
+01258              <span class="keywordtype">bool</span> allowFlag = <span class="keyword">true</span>;
+01259              String* fileName[];
+01260               
+01261             fileName = (String *[]) e-&gt;Data-&gt;GetData(DataFormats::FileDrop, <span class="keyword">false</span>);
+01262               
+01263             
+01264              <span class="keywordflow">for</span>(<span class="keywordtype">int</span> a=0;a&lt;fileName-&gt;Length;a++){
+01265                  String *ext = Path::GetExtension(fileName)::tolower();
+01266                    <span class="keywordflow">if</span>( (ext != <span class="stringliteral">".jpg"</span>)|| (ext != <span class="stringliteral">".jpeg"</span>)|| (ext != <span class="stringliteral">".gif"</span>)|| (ext != <span class="stringliteral">".png"</span>)|| (ext != <span class="stringliteral">".tif"</span>)|| (ext != <span class="stringliteral">".tiff"</span>)|| (ext != <span class="stringliteral">".bmp"</span>) ) allow = <span class="keyword">false</span>;
+01267 
+01268              }
+01269              <span class="keywordflow">if</span>(e-&gt;Data-&gt;GetDataPresent(DataFormats::FileDrop))
+01270                             e-&gt;Effect = DragDropEffects::All;
+01271              <span class="keywordflow">else</span>
+01272                     e-&gt;Effect = DragDropEffects::None;
+01273 
+01274              
+01275                
+01276                
+01277               fileName = (String *[]) e-&gt;Data-&gt;GetData(DataFormats::FileDrop, <span class="keyword">false</span>);
+01278               
+01279               <span class="keywordflow">for</span>(<span class="keywordtype">int</span> a=0;a&lt;fileName-&gt;Length;a++){
+01280                   
+01281                 this-&gt;ImageLoaded = <span class="keyword">true</span>;
+01282                 this-&gt;BinaryDone=<span class="keyword">false</span>;
+01283                 this-&gt;SeparateDone=<span class="keyword">false</span>;
+01284                 this-&gt;ContrastDone=<span class="keyword">false</span>;
+01285                 this-&gt;meanDone=<span class="keyword">false</span>;
+01286                 this-&gt;deskewDone=<span class="keyword">false</span>;
+01287                 im = <span class="keyword">new</span> Bitmap(fileName[a]);
+01288                 this-&gt;pictureBox1-&gt;Image = im;
+01289                 g=this-&gt;pictureBox1-&gt;CreateGraphics();
+01290                 myInfo-&gt;Text=<span class="stringliteral">""</span>;
+01291                 myInfo1-&gt;Text=<span class="stringliteral">""</span>;
+01292               
+01293              }
+01294          
+01295          }
+01296 
+01297 <span class="keyword">private</span>: System::Void picture_panel_DragEnter(System::Object *  sender, System::Windows::Forms::DragEventArgs *  e)
+01298          {
+01299             <span class="keywordflow">if</span>(e-&gt;Data-&gt;GetDataPresent(DataFormats::FileDrop))
+01300                             e-&gt;Effect = DragDropEffects::All;
+01301              <span class="keywordflow">else</span>
+01302                     e-&gt;Effect = DragDropEffects::None;
+01303          }
+01304 
+01305 <span class="keyword">private</span>: System::Void btnRotate_right_Click(System::Object *  sender, System::EventArgs *  e)
+01306          {
+01307              <span class="comment">//Function to rotate clockwise direction by 90 degrees</span>
+01308              <span class="comment">//Button_rotate_right : click event</span>
+01309  
+01310              im-&gt;RotateFlip(RotateFlipType::Rotate90FlipNone);
+01311              this-&gt;pictureBox1-&gt;Image = im;
+01312          }
+01313 
+01314 };
+01315 
+01316 
+01317 
+01318 
+01319 }
+01320 
+01321 
+</pre></div><hr><address style="align: right;"><small>
+Generated on Tue Jul 1 18:54:50 2008 for OCR by <a href="http://www.mpp.org.np">
+<img src="doxygen.png" alt="doxygen" align="middle" border=0 width=110 height=53>
+</a>    </small></address>
+</body>
+</html>

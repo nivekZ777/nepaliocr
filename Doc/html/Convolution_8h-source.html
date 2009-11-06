@@ -1,0 +1,26 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<title>OCR: Convolution.h Source File</title>
+<link href="ocr.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Created By Rajesh Pandey   -->
+<h1>Convolution.h</h1><div class="fragment"><pre>00001 <span class="preprocessor">#pragma once</span>
+00002 <span class="preprocessor"></span>
+00003 <span class="keyword">using</span> <span class="keyword">namespace </span>System;
+00004 
+00005 <span class="keyword">public</span> __gc <span class="keyword">class </span>ConvMatrix
+00006     {   
+00007     <span class="keyword">public</span>: <span class="keyword">static</span> <span class="keywordtype">int</span> TopLeft = 0, TopMid = 0, TopRight = 0;
+00008     <span class="keyword">public</span>: <span class="keyword">static</span> <span class="keywordtype">int</span> MidLeft = 0, Pixel = 1, MidRight = 0;
+00009     <span class="keyword">public</span>: <span class="keyword">static</span> <span class="keywordtype">int</span> BottomLeft = 0, BottomMid = 0, BottomRight = 0;
+00010     <span class="keyword">public</span>: <span class="keyword">static</span> <span class="keywordtype">int</span> Factor = 1;
+00011     <span class="keyword">public</span>: <span class="keyword">static</span> <span class="keywordtype">int</span> Offset = 0;
+00012     <span class="keyword">public</span>: <span class="keyword">static</span> <span class="keywordtype">void</span> SetAll(<span class="keywordtype">int</span> nVal)
+00013         {
+00014             TopLeft = TopMid = TopRight = MidLeft = Pixel = MidRight = BottomLeft = BottomMid = BottomRight = nVal;
+00015         }
+00016     };
+00017 
+</pre></div><hr>
+</body>
+</html>
