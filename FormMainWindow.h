@@ -5,7 +5,7 @@
  *
  * Requirements:
  *  
- * win2k or later\n
+ * win2k or later
  * .NET FrameWork 1.1 or later 
  *
  * Version 1.0
@@ -209,6 +209,11 @@ private: System::Windows::Forms::MenuItem *  menuItem5;
 private: System::Windows::Forms::ContextMenu *  ocrCntMenu;
 private: System::Windows::Forms::MenuItem *  cMenuLoadImage;
 private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
+private: System::Windows::Forms::ProgressBar *  pbOCR; 
+private: System::Windows::Forms::MenuItem *  cropperEnabler; 
+
+private: int pointX1,pointX2,pointY1,pointY2; //for capturing the points
+
 
 
 
@@ -272,10 +277,12 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 			this->mnuDeskew = new System::Windows::Forms::MenuItem();
 			this->mnuRotate = new System::Windows::Forms::MenuItem();
 			this->mnuCropper = new System::Windows::Forms::MenuItem();
+			this->cropperEnabler = new System::Windows::Forms::MenuItem();
 			this->splitter1 = new System::Windows::Forms::Splitter();
 			this->ocrCntMenu = new System::Windows::Forms::ContextMenu();
 			this->cMenuLoadImage = new System::Windows::Forms::MenuItem();
 			this->cMenuFastRecognize = new System::Windows::Forms::MenuItem();
+			this->pbOCR = new System::Windows::Forms::ProgressBar();
 			this->picture_panel->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -283,25 +290,24 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 			// 
 			this->picture_panel->AllowDrop = true;
 			this->picture_panel->AutoScroll = true;
-			this->picture_panel->BackColor = System::Drawing::Color::AliceBlue;
+			this->picture_panel->BackColor = System::Drawing::Color::White;
 			this->picture_panel->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
 			this->picture_panel->Controls->Add(this->statusBar1);
 			this->picture_panel->Controls->Add(this->pictureBox1);
 			this->picture_panel->Location = System::Drawing::Point(8, 32);
 			this->picture_panel->Name = S"picture_panel";
-			this->picture_panel->Size = System::Drawing::Size(776, 464);
+			this->picture_panel->Size = System::Drawing::Size(728, 360);
 			this->picture_panel->TabIndex = 1;
 			this->picture_panel->Click += new System::EventHandler(this, picture_panel_Click);
 			this->picture_panel->DragEnter += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragEnter);
 			this->picture_panel->MouseUp += new System::Windows::Forms::MouseEventHandler(this, picture_panel_MouseUp);
 			this->picture_panel->DragDrop += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragDrop);
-
 			// 
 			// statusBar1
 			// 
-			this->statusBar1->Location = System::Drawing::Point(0, 444);
+			this->statusBar1->Location = System::Drawing::Point(0, 340);
 			this->statusBar1->Name = S"statusBar1";
-			this->statusBar1->Size = System::Drawing::Size(772, 16);
+			this->statusBar1->Size = System::Drawing::Size(724, 16);
 			this->statusBar1->TabIndex = 1;
 			// 
 			// pictureBox1
@@ -312,7 +318,9 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
 			this->pictureBox1->TabIndex = 0;
 			this->pictureBox1->TabStop = false;
+			this->pictureBox1->Paint += new System::Windows::Forms::PaintEventHandler(this, pictureBox1_Paint);
 			this->pictureBox1->MouseUp += new System::Windows::Forms::MouseEventHandler(this, pictureBox1_MouseUp);
+			this->pictureBox1->MouseDown += new System::Windows::Forms::MouseEventHandler(this, pictureBox1_MouseDown);
 			// 
 			// openImageDialog
 			// 
@@ -324,14 +332,14 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 			// 
 			// myInfo
 			// 
-			this->myInfo->Location = System::Drawing::Point(520, 8);
+			this->myInfo->Location = System::Drawing::Point(440, 8);
 			this->myInfo->Name = S"myInfo";
 			this->myInfo->Size = System::Drawing::Size(264, 24);
 			this->myInfo->TabIndex = 11;
 			// 
 			// myInfo1
 			// 
-			this->myInfo1->Location = System::Drawing::Point(440, 8);
+			this->myInfo1->Location = System::Drawing::Point(360, 8);
 			this->myInfo1->Name = S"myInfo1";
 			this->myInfo1->Size = System::Drawing::Size(72, 24);
 			this->myInfo1->TabIndex = 12;
@@ -465,11 +473,12 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 			// menuItem2
 			// 
 			this->menuItem2->Index = 3;
-			System::Windows::Forms::MenuItem* __mcTemp__5[] = new System::Windows::Forms::MenuItem*[4];
+			System::Windows::Forms::MenuItem* __mcTemp__5[] = new System::Windows::Forms::MenuItem*[5];
 			__mcTemp__5[0] = this->mnuSaveImage;
 			__mcTemp__5[1] = this->mnuDeskew;
 			__mcTemp__5[2] = this->mnuRotate;
 			__mcTemp__5[3] = this->mnuCropper;
+			__mcTemp__5[4] = this->cropperEnabler;
 			this->menuItem2->MenuItems->AddRange(__mcTemp__5);
 			this->menuItem2->Text = S"Image";
 			// 
@@ -497,11 +506,16 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 			this->mnuCropper->Text = S"Image Cropper";
 			this->mnuCropper->Click += new System::EventHandler(this, mnuCropper_Click);
 			// 
+			// cropperEnabler
+			// 
+			this->cropperEnabler->Index = 4;
+			this->cropperEnabler->Text = S"Crop";
+			// 
 			// splitter1
 			// 
 			this->splitter1->Location = System::Drawing::Point(0, 0);
 			this->splitter1->Name = S"splitter1";
-			this->splitter1->Size = System::Drawing::Size(3, 503);
+			this->splitter1->Size = System::Drawing::Size(3, 399);
 			this->splitter1->TabIndex = 17;
 			this->splitter1->TabStop = false;
 			// 
@@ -524,18 +538,27 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 			this->cMenuFastRecognize->Text = S"Fast Recognize";
 			this->cMenuFastRecognize->Click += new System::EventHandler(this, cMenuFastRecognize_Click);
 			// 
+			// pbOCR
+			// 
+			this->pbOCR->Location = System::Drawing::Point(8, 8);
+			this->pbOCR->Name = S"pbOCR";
+			this->pbOCR->Size = System::Drawing::Size(120, 8);
+			this->pbOCR->Step = 100;
+			this->pbOCR->TabIndex = 0;
+			// 
 			// FormMainWindow
 			// 
 			this->AccessibleRole = System::Windows::Forms::AccessibleRole::Application;
 			this->AllowDrop = true;
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
 			this->AutoScroll = true;
-			this->BackColor = System::Drawing::Color::WhiteSmoke;
-			this->ClientSize = System::Drawing::Size(798, 503);
+			this->BackColor = System::Drawing::SystemColors::InactiveCaption;
+			this->ClientSize = System::Drawing::Size(750, 399);
 			this->Controls->Add(this->splitter1);
 			this->Controls->Add(this->myInfo1);
 			this->Controls->Add(this->myInfo);
 			this->Controls->Add(this->picture_panel);
+			this->Controls->Add(this->pbOCR);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::Fixed3D;
 			this->Icon = (__try_cast<System::Drawing::Icon *  >(resources->GetObject(S"$this.Icon")));
 			this->MaximizeBox = false;
@@ -760,6 +783,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 		}
 		private: void makeBinary()
 			 {
+				 this->pbOCR->Value = 0;
 				/*
 
 				This method binarizes the image. 
@@ -777,24 +801,28 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 					try{
 					 // set the cursor to wait.... 
 						this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
-
+						this->pbOCR->Value+= 5;
 					 
 					 // calculating Thresholed Value for binary image					 
 						ThresholedValue* ts = new ThresholedValue(im);
 						float fLevel = ts->GetThresholed();
 						intLevel = int(fLevel*255);
 					
-					 
-					 
+						 this->pbOCR->Value+= 5;
+						 
 					 // getting an binary array of 					 
 						rgbConvert* rgbC = new rgbConvert(im);
 						BArray = rgbC->GetBinaryArray(intLevel);
 						ImgArray = rgbC->GetImageArray( );
+
+						this->pbOCR->Value+= 5;
 					   	
 					 // Showing the binary image
 						this->BinaryImage = rgbC->GetBinaryImage();
 						this->pictureBox1->Image = this->BinaryImage;
 						
+						this->pbOCR->Value+= 5;
+
 					 // set the cursor to Default.... 
 						this->Cursor = System::Windows::Forms::Cursors::Default;
 						//System::Windows::Forms::MessageBox::Show(this->intLevel.ToString()/*fLevel.ToString()*/,"Threshold Value");
@@ -802,6 +830,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 						myInfo1->Text = "Threshold Value";
 						myInfo->Text = this->intLevel.ToString();
 						this->BinaryDone=true;
+						this->pbOCR->Value+= 5;
 					}
 				 catch(System::Exception* ex)
 					{
@@ -809,17 +838,21 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 					this->Update();
 					}
 				 this->Update();
+				 this->statusBar1->Text = "Binarization Done.";
 				 }
 	}// end of function 
 
 
 		private: void openImageFile()
 			{
+				this->pbOCR->Value =30;
+				
 				System::Windows::Forms::DialogResult d = this->openImageDialog->ShowDialog();
+				
 				if (d == System::Windows::Forms::DialogResult::OK)				 
 				 {			 
 					
-
+					
 					//reset all flags after successfull image loading
 					this->ImageLoaded = true;
 					
@@ -830,15 +863,20 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 					this->deskewDone=false;
 					// creating a bitmap
 					im = new System::Drawing::Bitmap(this->openImageDialog->OpenFile());
+					this->pbOCR->Value =40;
 					this->pictureBox1->Image = im;
+					this->pbOCR->Value =70;
 					g=this->pictureBox1->CreateGraphics();
+					this->pbOCR->Value =80;
 					myInfo->Text="";
 					myInfo1->Text="";
 					
 					
 					//System::Windows::Forms::MessageBox::Show("Image successfully loaded","Success");
-				 }
+				 } // if (d == System::Windows::Forms::DialogResult::OK)
+				 this->pbOCR->Value = 99;
 				this->Update();
+				this->pbOCR->Value = 0; //reset value in progressbar
 				 
 			}
 		private: void saveImageFile()
@@ -865,6 +903,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 							Bitmap* save;
 							save=new Bitmap(this->pictureBox1->Image);
 							save->Save(saveImageDialog->FileName);
+							this->statusBar1->Text = "Image Saved Successfully";
 							
 							}
 				//}
@@ -882,7 +921,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 
 	This method is used to separate the characters, or the connected units  after the words are separated.
 
-*/
+	*/				this->statusBar1->Text = "Separating Characters... ";
 					 Pen* p=new Pen(Color::Blue,1);
 	
 								for(int i=0;i<this->numberOfLines;i++)
@@ -900,12 +939,17 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 														g->DrawLine(p,x2,y1,x2,y2);
 													}
 											}
-									}
+									} // for(int i=0;i<this->numberOfLines;i++)
+									this->statusBar1->Text = "Character Separation Done";
+									if(this->pbOCR->Value <50) this->pbOCR->Value +=10;
 
 				 }
 		private: void separate()
 				 {
-
+					 
+					 try{
+					 this->pbOCR->Value = 40;
+					 this->statusBar1->Text  = "Separating lines and Words...";
 				/*
 				This method is used to separate the words and lines after binarization.
 				*/
@@ -922,7 +966,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 						 {
 							 this->tmpBArray[i][j]=this->BArray[i][j];
 						 }
-
+	
 					 }
 					 if(this->BinaryDone==true) //If binarization is done
 						{
@@ -931,32 +975,47 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 							{
 							Separate* sp=new Separate(im,BArray,g);
 							sp->LineSeparate();						//Separate Lines from the image
+							this->pbOCR->Value =50;
 
 							this->numberOfLines=sp->getNumberOfLines(); //Get Number of Lines
 							this->Lines=sp->getLines();			//Get Lines
 							this->SeparateDone=true;
-							this->separateChar();				//separate Characters					
+							this->separateChar();				//separate Characters	
+							this->pbOCR->Value =60;
 							}
 
 							else
 							{
 								this->separateChar();			//separate Characters
+								this->pbOCR->Value =60;
 							}
 
 							 
 						}
-					 
+						this->statusBar1->Text = "Separation done"; 	
 					this->Update();
+					this->pbOCR->Value =70;
+					 
+					 }//end try 
+					 catch(System::Exception *ex){
+						 this->statusBar1->Text = "!!!!! Separate Failed !!!!";
+						 MessageBox::Show( "Cannot Separate line, words and characters","Error!!");
+					 }
+
+
+
 				 }
  
 		private: void doDeSkew()
 				  {
 				
 				//If the lines in the image is tilted or slanted, this method is used to deskew the image. 
-					 
+					  this->pbOCR->Value = 0;
 				 
 					Deskew* ds=new Deskew(im);
+						this->pbOCR->Value +=10;
 					double skewAngle=ds->GetSkewAngle();
+						this->pbOCR->Value +=10;
 					
 					myInfo1->Text = "Skew Angle:";
 					myInfo->Text = skewAngle.ToString();
@@ -967,10 +1026,12 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 
 					if(skewAngle !=0){
 						im=this->RotateImage(-skewAngle); 
+							this->pbOCR->Value +=30;
 						this->pictureBox1->Image = im;
+							this->pbOCR->Value +=30;
 						}
 					//System::Windows::Forms::MessageBox::Show(" Image rotated successfully","Action Complete");
-
+				
 				 
 					
 					
@@ -1073,7 +1134,8 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 							//System::IO::File::Delete(dirOfRecFile+i+".txt");
 							System::IO::File::Delete(tmp);
 						}
-
+						this->statusBar1->Text = "Recognition Complete ";
+						this->pbOCR->Value = 100;
 		}
 
 
@@ -1176,8 +1238,22 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 				System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to provide the output!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 				exit(0);
 			}
-		 
+			
+			/*
+			Adding just in time box
+			System::Windows::Forms::RichTextBox *  rtbOutput;
+			rtbOutput->AutoWordSelection = true;
+			rtbOutput->Location = System::Drawing::Point(8, 40);
+			rtbOutput->Name = S"charRecBox";
+			rtbOutput->ScrollBars = System::Windows::Forms::RichTextBoxScrollBars::Vertical;
+			rtbOutput->Size = System::Drawing::Size(424, 296);
+			rtbOutput->TabIndex = 0;
+			rtbOutput->Text = text;
+			*/
+
 			OCR::RecognitionForm* rw=new OCR::RecognitionForm();
+			this->pbOCR->Value = 100;
+			this->statusBar1->Text = "Recognition Complete";
 			rw->showText(text);
 			rw->ShowDialog();
 
@@ -1306,26 +1382,43 @@ private: System::Void recognize_Click(System::Object *  sender, System::EventArg
 
 private: System::Void fastRecognizeButton_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
+			 this->pbOCR->Value = 5;
 			 if(this->ImageLoaded==true){
 				 
 				//contrast
 				this->Contrast(10);
+				 this->pbOCR->Value = 10;
 				this->ContrastDone=true;
+				 this->pbOCR->Value = 15;
 				this->Update();
+				 this->statusBar1->Text = "Contrast added.";
 				
 				//mean removal
 				this->MeanRemoval(9);
+				 this->pbOCR->Value = 20;
 				this->meanDone= true;
+				 this->statusBar1->Text = "Mean removed";
+
 				this->Update();
 
 				//Binarization
+				 this->statusBar1->Text = "Binarizing Image...";
 				this->makeBinary();
+				 this->pbOCR->Value = 30;
+				  this->statusBar1->Text = "Binarization Complete";
 				
 				//separation
+				   this->statusBar1->Text = "Separating Images... ";
 				this->separate();
+				 this->pbOCR->Value = 50;
+				  this->statusBar1->Text = "Separation of Line, words and characters complete";
 
 				//Recognition
+				   this->statusBar1->Text = "Recognition Started.";
+				    this->statusBar1->Text = "Recognizing... ";
 				 this->Recognize();
+				  this->pbOCR->Value = 100;
+				  this->statusBar1->Text = "Recognition Complete";
 
 
 			 }
@@ -1333,6 +1426,7 @@ private: System::Void fastRecognizeButton_Click(System::Object *  sender, System
 				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
 
 			 }
+			 this->pbOCR->Value = 0;
 
 		 }//End function recognize button
 //Try magnify function
@@ -1623,6 +1717,7 @@ private: System::Void mnuSeparate_Click(System::Object *  sender, System::EventA
 					 {
 						 //System::Windows::Forms::Show("Please binarize the image before separating","Binarization not done");
 						 System::Windows::Forms::MessageBox::Show("Please binarize the image first","Binarization not done");
+						 this->statusBar1->Text = "Please binarize the image first, Binarization not done";
 
 				}
 		 }
@@ -1795,7 +1890,10 @@ private: System::Void cMenuFastRecognize_Click(System::Object *  sender, System:
 
 private: System::Void pictureBox1_MouseUp(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
 		 {
+
 				 this->drawContextMenu(e);
+				 if(this->BinaryDone == true) cropMe(e);
+
 		 }
 
 private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
@@ -1844,6 +1942,75 @@ private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
 					ocrCMenu->Show(this,System::Drawing::Point(e->X,e->Y));
 				 }
 			 } // if(e->Button == MouseButtons::Right)
+
+
+		 }
+
+private: System::Void pictureBox1_Paint(System::Object *  sender, System::Windows::Forms::PaintEventArgs *  e)
+		 {
+			 //e->Graphics->DrawRectangle(Pens::Blue, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+		 }
+
+private: System::Void pictureBox1_MouseDown(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
+		 {
+			 this->pointX1 = e->X;
+			 this->pointY1 = e->Y;
+		 }
+
+private: void cropMe(System::Windows::Forms::MouseEventArgs *  e){
+			
+			 this->pointX2 = e->X;
+			 this->pointY2 = e->Y;
+			 int temp;
+
+
+			 if(this->pointX1 != this->pointX2 && this->pointY1 != this->pointY2)
+			 {
+				if(this->pointX1>this->pointX2)
+				{
+					temp=this->pointX1;
+					this->pointX1=this->pointX2;
+					this->pointX2=temp;
+				} // if(this->pointX1>this->pointX2)
+                
+				if(this->pointY1>this->pointY2)
+				{
+					temp=this->pointY1;
+					this->pointY1=this->pointY2;
+					this->pointY2=temp;
+				} // if(this->pointY1>this->pointY2) 
+                
+			 } // if(this->pointX1 != this->pointX2 && this->pointY1 != this->pointY2)
+
+
+			 //int mouse_dragged_Image_width = System::Math::Abs(this->x2 - this->x1) ;
+			int mouse_dragged_Image_width = (this->pointX2 - this->pointX1) ;
+		//int mouse_dragged_Image_height = System::Math::Abs(this->y2 - this->y1);
+			int mouse_dragged_Image_height = (this->pointY2 - this->pointY1);
+
+			 Bitmap *cropImage1 = new Bitmap( mouse_dragged_Image_width+1,mouse_dragged_Image_height+1,Imaging::PixelFormat::Format24bppRgb);
+		 for(int cropRow=0;  cropRow<(cropImage1->Height); cropRow++){
+			 for(int cropColumn=0;cropColumn<(cropImage1->Width) ;cropColumn++){
+				cropImage1->SetPixel(cropColumn,cropRow,System::Drawing::Color::White);
+				} // for(int cropRow=0;  cropRow<(cropImage->Height); cropRow++){for(int cropColumn=0;cropColumn<(cropImage->Width) ;cropColumn++)
+          } // for(int cropRow=0;  cropRow<(cropImage->Height); cropRow++)
+
+		 for(int i=this->pointY1, int cropRow=0;  i<this->pointY2,cropRow<(cropImage1->Height)-1; i++,cropRow++){
+			 for(int cropColumn=0,j=this->pointX1; j<this->pointX2,cropColumn<(cropImage1->Width)-1 ; j++,cropColumn++){
+				 
+				 if(this->BArray[i][j]==true)
+					 cropImage1->SetPixel(cropColumn,cropRow,System::Drawing::Color::White);
+				 else
+					 cropImage1->SetPixel(cropColumn,cropRow,System::Drawing::Color::Black);
+				 
+			 } // for(int i=0;i<cropImage->Height;i++){for(int j=0;j<cropImage->Width;j++)
+		 } // for(int i=0;i<cropImage->Height;i++)
+
+		 this->g->DrawRectangle(Pens::Blue, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+		 this->g->Flush();
+		
+		 this->pictureBox1->Image = cropImage1;
+
 
 
 		 }

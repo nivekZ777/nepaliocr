@@ -1,4 +1,32 @@
 
+/**
+ *   OCR
+ * FileName: myWindow.h
+ *
+ * Requirements:
+ *  
+ * win2k or later
+ * .NET FrameWork 1.1 or later 
+ *
+ * Version 1.0
+ * first version
+ *
+ * Date 07-01-2008
+ *
+ * Author Rajesh Pandey
+ *
+ * license
+ * This code is absolutely free to use and modify. The code is provided "as is" with
+ * no expressed or implied warranty. The author accepts no liability if it causes
+ * any damage to your computer, causes your pet to fall ill, increases baldness
+ * or makes your car start emitting strange noises when you start it up.
+ * This code has no bugs, just undocumented features!
+ * 
+ *  
+ *
+ *  
+ *
+ */
 #include "Separate.h"
 #include "Line.h"
 #include "ThresholedValue.h"
@@ -218,6 +246,7 @@ namespace OCR
 			this->bigHeightLabel = new System::Windows::Forms::Label();
 			this->label1 = new System::Windows::Forms::Label();
 			this->groupBox2 = new System::Windows::Forms::GroupBox();
+			this->rtbRecognize = new System::Windows::Forms::RichTextBox();
 			this->btnSingleRecognize = new System::Windows::Forms::Button();
 			this->avgHeightLabel = new System::Windows::Forms::Label();
 			this->label6 = new System::Windows::Forms::Label();
@@ -239,7 +268,6 @@ namespace OCR
 			this->menuItem1 = new System::Windows::Forms::MenuItem();
 			this->mnuSingleRecognize = new System::Windows::Forms::MenuItem();
 			this->mnuRecognizeAll = new System::Windows::Forms::MenuItem();
-			this->rtbRecognize = new System::Windows::Forms::RichTextBox();
 			this->panel1->SuspendLayout();
 			this->groupBox1->SuspendLayout();
 			this->groupBox2->SuspendLayout();
@@ -329,6 +357,14 @@ namespace OCR
 			this->groupBox2->TabStop = false;
 			this->groupBox2->Text = S"Sliced Single Image";
 			// 
+			// rtbRecognize
+			// 
+			this->rtbRecognize->Location = System::Drawing::Point(120, 160);
+			this->rtbRecognize->Name = S"rtbRecognize";
+			this->rtbRecognize->Size = System::Drawing::Size(120, 72);
+			this->rtbRecognize->TabIndex = 12;
+			this->rtbRecognize->Text = S"";
+			// 
 			// btnSingleRecognize
 			// 
 			this->btnSingleRecognize->Location = System::Drawing::Point(24, 184);
@@ -340,14 +376,14 @@ namespace OCR
 			// 
 			// avgHeightLabel
 			// 
-			this->avgHeightLabel->Location = System::Drawing::Point(120, 72);
+			this->avgHeightLabel->Location = System::Drawing::Point(120, 96);
 			this->avgHeightLabel->Name = S"avgHeightLabel";
 			this->avgHeightLabel->Size = System::Drawing::Size(128, 24);
 			this->avgHeightLabel->TabIndex = 10;
 			// 
 			// label6
 			// 
-			this->label6->Location = System::Drawing::Point(8, 72);
+			this->label6->Location = System::Drawing::Point(8, 96);
 			this->label6->Name = S"label6";
 			this->label6->Size = System::Drawing::Size(88, 24);
 			this->label6->TabIndex = 9;
@@ -355,14 +391,14 @@ namespace OCR
 			// 
 			// avgWidthLabel
 			// 
-			this->avgWidthLabel->Location = System::Drawing::Point(120, 48);
+			this->avgWidthLabel->Location = System::Drawing::Point(120, 64);
 			this->avgWidthLabel->Name = S"avgWidthLabel";
 			this->avgWidthLabel->Size = System::Drawing::Size(128, 24);
 			this->avgWidthLabel->TabIndex = 8;
 			// 
 			// label5
 			// 
-			this->label5->Location = System::Drawing::Point(8, 48);
+			this->label5->Location = System::Drawing::Point(8, 64);
 			this->label5->Name = S"label5";
 			this->label5->Size = System::Drawing::Size(80, 24);
 			this->label5->TabIndex = 7;
@@ -388,7 +424,7 @@ namespace OCR
 			// 
 			// label3
 			// 
-			this->label3->Location = System::Drawing::Point(24, 32);
+			this->label3->Location = System::Drawing::Point(24, 40);
 			this->label3->Name = S"label3";
 			this->label3->Size = System::Drawing::Size(56, 16);
 			this->label3->TabIndex = 4;
@@ -396,9 +432,9 @@ namespace OCR
 			// 
 			// smallWidthLabel
 			// 
-			this->smallWidthLabel->Location = System::Drawing::Point(120, 32);
+			this->smallWidthLabel->Location = System::Drawing::Point(120, 40);
 			this->smallWidthLabel->Name = S"smallWidthLabel";
-			this->smallWidthLabel->Size = System::Drawing::Size(128, 8);
+			this->smallWidthLabel->Size = System::Drawing::Size(128, 16);
 			this->smallWidthLabel->TabIndex = 3;
 			// 
 			// smallHeightLabel
@@ -480,14 +516,6 @@ namespace OCR
 			this->mnuRecognizeAll->Index = 3;
 			this->mnuRecognizeAll->Text = S"Recognize all";
 			this->mnuRecognizeAll->Click += new System::EventHandler(this, mnuRecognizeAll_Click);
-			// 
-			// rtbRecognize
-			// 
-			this->rtbRecognize->Location = System::Drawing::Point(120, 160);
-			this->rtbRecognize->Name = S"rtbRecognize";
-			this->rtbRecognize->Size = System::Drawing::Size(120, 72);
-			this->rtbRecognize->TabIndex = 12;
-			this->rtbRecognize->Text = S"";
 			// 
 			// myWindow
 			// 
