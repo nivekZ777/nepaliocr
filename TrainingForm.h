@@ -94,8 +94,7 @@ namespace OCR
 
 
 		private: System::Windows::Forms::TextBox *  combineChar;
-	private: System::Windows::Forms::StatusBar *  statusBar1;
-	private: System::Windows::Forms::Button *  addChar;
+		private: System::Windows::Forms::Button *  addChar;
 		
 
 
@@ -215,7 +214,6 @@ namespace OCR
 			this->trainButton = new System::Windows::Forms::Button();
 			this->combineChar = new System::Windows::Forms::TextBox();
 			this->addChar = new System::Windows::Forms::Button();
-			this->statusBar1 = new System::Windows::Forms::StatusBar();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -264,7 +262,7 @@ namespace OCR
 			// 
 			// trainButton
 			// 
-			this->trainButton->Location = System::Drawing::Point(248, 208);
+			this->trainButton->Location = System::Drawing::Point(232, 232);
 			this->trainButton->Name = S"trainButton";
 			this->trainButton->TabIndex = 10;
 			this->trainButton->Text = S"TRAIN";
@@ -285,18 +283,10 @@ namespace OCR
 			this->addChar->Text = S"ADD";
 			this->addChar->Click += new System::EventHandler(this, addChar_Click);
 			// 
-			// statusBar1
-			// 
-			this->statusBar1->Location = System::Drawing::Point(0, 244);
-			this->statusBar1->Name = S"statusBar1";
-			this->statusBar1->Size = System::Drawing::Size(400, 22);
-			this->statusBar1->TabIndex = 14;
-			// 
 			// TrainingForm
 			// 
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
 			this->ClientSize = System::Drawing::Size(400, 266);
-			this->Controls->Add(this->statusBar1);
 			this->Controls->Add(this->addChar);
 			this->Controls->Add(this->combineChar);
 			this->Controls->Add(this->trainButton);
@@ -433,8 +423,6 @@ private: System::Void trainButton_Click(System::Object *  sender, System::EventA
 		 {
 			 TrainingProcess* tp=new TrainingProcess(this->applicationPath,this->ImageArray,this->x1,this->x2,this->y1,this->y2);
 			 tp->PrepareTrainingData();
-			 this->statusBar1->Text = "Training Please wait..";
-			 this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
 			 tp->TrainingByHTK(tp->numOfFrame);
 			 this->modelName = tp->GetTrainedModelName();
 
@@ -488,8 +476,7 @@ private: System::Void trainButton_Click(System::Object *  sender, System::EventA
 				 exit(0);
 			 }
 			 
-			 this->statusBar1->Text = "          Done    ";
-			 this->Cursor = System::Windows::Forms::Cursors::Default;
+
 		 }
 
 };
