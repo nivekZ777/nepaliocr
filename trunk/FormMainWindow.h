@@ -1,32 +1,3 @@
-
-/**
- *   OCR
- *
- *
- * Requirements:
- *  
- * win2k or later\n
- * .NET FrameWork 1.1 or later 
- *
- * Version 1.0
- * first version
- *
- * Date 07-01-2008
- *
- * Author Rajesh Pandey
- *
- * license
- * This code is absolutely free to use and modify. The code is provided "as is" with
- * no expressed or implied warranty. The author accepts no liability if it causes
- * any damage to your computer, causes your pet to fall ill, increases baldness
- * or makes your car start emitting strange noises when you start it up.
- * This code has no bugs, just undocumented features!
- * 
- *  
- *
- *  
- *
- */
 #include "TrainingForm.h"
 #include "RecognitionForm.h"
 #include "RecognitionProcess.h"
@@ -36,7 +7,7 @@
 #include "Convolution.h"
 #include "Deskew.h"
 #include "myWindow.h"
-
+#include "Resegment.h"
 
 #pragma once
 
@@ -135,8 +106,7 @@ namespace OCR
 			 bool ContrastDone;
 			 bool meanDone;
 			 bool deskewDone;
-
-
+			
 	private: int numberOfLines;
 	private: Line* Lines; 
 
@@ -174,7 +144,6 @@ namespace OCR
 	private: System::Windows::Forms::Label *  myInfo1;
 	private: System::Windows::Forms::Button *  findMagnification;
 	private: System::Windows::Forms::Button *  cb;
-private: System::Windows::Forms::Button *  btnRotate_right;
 
 
 
@@ -212,7 +181,6 @@ private: System::Windows::Forms::Button *  btnRotate_right;
 			this->myInfo1 = new System::Windows::Forms::Label();
 			this->findMagnification = new System::Windows::Forms::Button();
 			this->cb = new System::Windows::Forms::Button();
-			this->btnRotate_right = new System::Windows::Forms::Button();
 			this->picture_panel->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -228,7 +196,6 @@ private: System::Windows::Forms::Button *  btnRotate_right;
 			// 
 			// picture_panel
 			// 
-			this->picture_panel->AllowDrop = true;
 			this->picture_panel->AutoScroll = true;
 			this->picture_panel->BackColor = System::Drawing::Color::AliceBlue;
 			this->picture_panel->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
@@ -237,8 +204,6 @@ private: System::Windows::Forms::Button *  btnRotate_right;
 			this->picture_panel->Name = S"picture_panel";
 			this->picture_panel->Size = System::Drawing::Size(776, 384);
 			this->picture_panel->TabIndex = 1;
-			this->picture_panel->DragEnter += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragEnter);
-			this->picture_panel->DragDrop += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragDrop);
 			// 
 			// pictureBox1
 			// 
@@ -253,7 +218,7 @@ private: System::Windows::Forms::Button *  btnRotate_right;
 			// 
 			this->openImage->BackColor = System::Drawing::Color::Transparent;
 			this->openImage->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->openImage->Location = System::Drawing::Point(24, 16);
+			this->openImage->Location = System::Drawing::Point(32, 8);
 			this->openImage->Name = S"openImage";
 			this->openImage->Size = System::Drawing::Size(112, 48);
 			this->openImage->TabIndex = 1;
@@ -267,7 +232,7 @@ private: System::Windows::Forms::Button *  btnRotate_right;
 			// separate_button
 			// 
 			this->separate_button->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->separate_button->Location = System::Drawing::Point(416, 96);
+			this->separate_button->Location = System::Drawing::Point(320, 96);
 			this->separate_button->Name = S"separate_button";
 			this->separate_button->TabIndex = 6;
 			this->separate_button->Text = S"SEPARATE";
@@ -310,7 +275,7 @@ private: System::Windows::Forms::Button *  btnRotate_right;
 			// deSkew
 			// 
 			this->deSkew->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->deSkew->Location = System::Drawing::Point(32, 80);
+			this->deSkew->Location = System::Drawing::Point(32, 72);
 			this->deSkew->Name = S"deSkew";
 			this->deSkew->TabIndex = 7;
 			this->deSkew->Text = S"DE-SKEW";
@@ -361,7 +326,7 @@ private: System::Windows::Forms::Button *  btnRotate_right;
 			// findMagnification
 			// 
 			this->findMagnification->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->findMagnification->Location = System::Drawing::Point(400, 56);
+			this->findMagnification->Location = System::Drawing::Point(416, 64);
 			this->findMagnification->Name = S"findMagnification";
 			this->findMagnification->Size = System::Drawing::Size(88, 24);
 			this->findMagnification->TabIndex = 13;
@@ -377,24 +342,13 @@ private: System::Windows::Forms::Button *  btnRotate_right;
 			this->cb->Text = S"C and B";
 			this->cb->Click += new System::EventHandler(this, cb_Click);
 			// 
-			// btnRotate_right
-			// 
-			this->btnRotate_right->Location = System::Drawing::Point(312, 96);
-			this->btnRotate_right->Name = S"btnRotate_right";
-			this->btnRotate_right->Size = System::Drawing::Size(88, 24);
-			this->btnRotate_right->TabIndex = 15;
-			this->btnRotate_right->Text = S"Rotate";
-			this->btnRotate_right->Click += new System::EventHandler(this, btnRotate_right_Click);
-			// 
 			// FormMainWindow
 			// 
 			this->AccessibleRole = System::Windows::Forms::AccessibleRole::Application;
-			this->AllowDrop = true;
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
 			this->AutoScroll = true;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->ClientSize = System::Drawing::Size(794, 518);
-			this->Controls->Add(this->btnRotate_right);
 			this->Controls->Add(this->cb);
 			this->Controls->Add(this->findMagnification);
 			this->Controls->Add(this->myInfo1);
@@ -802,21 +756,21 @@ private: System::Windows::Forms::Button *  btnRotate_right;
 
 							if(this->SeparateDone==false)
 							{
-							Separate* sp=new Separate(im,BArray,g);
-							sp->LineSeparate();						//Separate Lines from the image
-
-							this->numberOfLines=sp->getNumberOfLines(); //Get Number of Lines
-							this->Lines=sp->getLines();			//Get Lines
-							this->SeparateDone=true;
-							this->separateChar();				//separate Characters					
+								Separate* sp=new Separate(im,BArray,g);
+								sp->LineSeparate();						//Separate Lines from the image
+	
+								this->numberOfLines=sp->getNumberOfLines(); //Get Number of Lines
+								this->Lines=sp->getLines();			//Get Lines
+								this->SeparateDone=true;
+								this->separateChar();	//separate Characters					
 							}
-
 							else
 							{
 								this->separateChar();			//separate Characters
 							}
 
-							 
+							Resegment* rsg=new Resegment(im,BinaryDone,ImageLoaded,SeparateDone,BArray,this->numberOfLines,this->Lines,g);
+							rsg->Do_Segmentation();
 						}
 					 
 					this->Update();
@@ -1260,7 +1214,7 @@ private: void tryMagnify(){
 private: System::Void findMagnification_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 if(this->ImageLoaded){ 
-			tryMagnify();		
+                 tryMagnify();		
 			 }
 			 else{
 				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
@@ -1280,64 +1234,6 @@ private: System::Void cb_Click(System::Object *  sender, System::EventArgs *  e)
 			 else{
 				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
 			 }
-		 }
-
-private: System::Void picture_panel_DragDrop(System::Object *  sender, System::Windows::Forms::DragEventArgs *  e)
-		 {
-			 bool allowFlag = true;
-			 String* fileName[];
-			  
-			fileName = (String *[]) e->Data->GetData(DataFormats::FileDrop, false);
-			  
-			
-			// for(int a=0;a<fileName->Length;a++){
-//				 String *ext = Path::GetExtension(fileName)::tolower();
-				 //  if( (ext != ".jpg")|| (ext != ".jpeg")|| (ext != ".gif")|| (ext != ".png")|| (ext != ".tif")|| (ext != ".tiff")|| (ext != ".bmp") ) allow = false;
-
-			// }
-			 if(e->Data->GetDataPresent(DataFormats::FileDrop))
-							e->Effect = DragDropEffects::All;
-			 else
-					e->Effect = DragDropEffects::None;
-
-			 
-			   
-			   
-			  fileName = (String *[]) e->Data->GetData(DataFormats::FileDrop, false);
-			  
-			  for(int a=0;a<fileName->Length;a++){
-				  
-				this->ImageLoaded = true;
-				this->BinaryDone=false;
-				this->SeparateDone=false;
-				this->ContrastDone=false;
-				this->meanDone=false;
-				this->deskewDone=false;
-				im = new Bitmap(fileName[a]);
-				this->pictureBox1->Image = im;
-				g=this->pictureBox1->CreateGraphics();
-				myInfo->Text="";
-				myInfo1->Text="";
-			  
-			 }
-  		 
-		 }
-
-private: System::Void picture_panel_DragEnter(System::Object *  sender, System::Windows::Forms::DragEventArgs *  e)
-		 {
-			if(e->Data->GetDataPresent(DataFormats::FileDrop))
-							e->Effect = DragDropEffects::All;
-			 else
-					e->Effect = DragDropEffects::None;
-		 }
-
-private: System::Void btnRotate_right_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 //Function to rotate clockwise direction by 90 degrees
-			 //Button_rotate_right : click event
- 
-			 im->RotateFlip(RotateFlipType::Rotate90FlipNone);
-			 this->pictureBox1->Image = im;
 		 }
 
 };
