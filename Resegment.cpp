@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "Resegment.h"
 
-Resegment::Resegment(Bitmap* im,bool BinaryDone,bool ImageLoaded,bool SeparateDone, bool **BinArray,int numberOfLines, Line *Lines,Graphics *gg)
+Resegment::Resegment(Bitmap* im,bool BinaryDone,bool ImageLoaded,bool SeparateDone, bool **BinArray,int numberOfLines, Line *Lines,Graphics *gg,int totalUnits, int SizeThreshold,int flevel,int **headbottom)
 {
 	this->img=im;
 	this->BinaryDone=BinaryDone;
@@ -11,7 +11,72 @@ Resegment::Resegment(Bitmap* im,bool BinaryDone,bool ImageLoaded,bool SeparateDo
 	this->numberOfLines=numberOfLines;
 	this->Lines=Lines;
 	this->g=gg;
+	this->Resegmentation_Complete=false;
+	this->totalunits=totalUnits;
+	this->SizeThresHold=SizeThreshold;
+	this->flevel=flevel;
+	this->TouchingCharacterIndex=new int[this->totalunits];
+	this->HeadBottom=headbottom;
+	//	this->WidthStore();
+	//this->SizeThresHold=this->ThresholdSize();
 }
+
+void Resegment::getPixelInRows(int height,int width,bool **bArray)
+{
+	this->Horizontal=new int[height];
+	int count=0;
+	for(int i=0;i<height;i++)
+	{
+		for(int j=0;j<width;j++)
+		{
+			if (bArray[i][j]==false)
+			{
+				count++;
+			}
+		}
+		this->Horizontal[i]=count;
+	}
+}
+int Resegment::headLinePosition(int height,int width)
+{
+	int max=0;
+	int maxIndex=0;
+	for(int i=0;i<height;i++)
+	{
+		if(Horizontal[i]>max)
+		{
+			max=Horizontal[i];
+			maxIndex=i;
+		}
+	}
+	return maxIndex;
+}
+int Resegment::bottomLinePosition(int height,int width, int maxIndex,bool **BinaryArray)
+{
+	int *R2;
+	R2=new int[width];
+	for(int i=0;i<width;i++)
+	{
+		for(int j=maxIndex;j<height-1;j++)
+		{
+			if(BinaryArray[j][i]==false && BinaryArray[j+1][i]==true)
+			{
+				R2[i]=j;
+			}
+		}
+	//	System::Windows::Forms::MessageBox::Show(R2[i].ToString(),"R2");
+	}
+	int maxR2=maxIndex;
+	for(int i=0;i<width;i++)
+	{
+		if(maxR2<R2[i])
+		{
+			maxR2=R2[i];
+		}
+	}
+	return maxR2;
+}
+
 int Resegment::Truncate(int val)
 {
 	float temp=float(3*val)/2;
@@ -118,24 +183,20 @@ void Resegment::Crop_Image(int lineno,int wordno,int charno)
 	}
 }
 
-int Resegment::MultiFactorialAnalysis()
+int Resegment::MultiFactorialAnalysis(int Headline_Pos,int Bottom_Pos)
 {
 	int i,j;
-	
 	ThresholedValue* ts = new ThresholedValue(this->cropImage);
 	float fLevel;
 	fLevel= ts->GetThresholed();
 	int levl;
 	levl = int(fLevel*255);
 	rgbConvert* rgbC = new rgbConvert(this->cropImage);
-	
-	int **BArray;
+	int **BinArray;
 	int height;
 	bool **tempArray;
 	tempArray=rgbC->GetBinaryArray(levl);
-	BArray= rgbC->GetImageArray();
-	
-	
+	BinArray= rgbC->GetImageArray();
 	bool flag=false;
 	int width;
 	width=this->cropImage->Width;
@@ -145,153 +206,148 @@ int Resegment::MultiFactorialAnalysis()
 	int count=0;
 	bool temp,temp1;
 	float *Fic,*Fmt,*Fdm,*Fdmc,*Summation;;
-
-    top=new int[width];
+				
+	top=new int[width];
 	bottom=new int[width];
 	Fic=new float[width];
 	Fmt=new float[width];
 	Summation=new float[width];
 	Fdm=new float[width];
 	Fdmc=new float[width];
+
 	for(i=0;i<=this->cropImage->Width-1;i++)
 	{
 		flag=false;
-		top[i]=0;
-		bottom[i]=0;
-		Fic[i]=0;
-		Fmt[i]=0;
-		Summation[i]=0;
-		Fdm[i]=0;
-		Fdmc[i]=0;
-		for(j=0;j<=this->cropImage->Height-1;j++)
-		{
-			if(BArray[j][i]==0)
-			{
-				if(flag==false)
+				top[i]=0;
+				bottom[i]=0;
+				Fic[i]=0;
+				Fmt[i]=0;
+				Summation[i]=0;
+				Fdm[i]=0;
+				Fdmc[i]=0;
+				for(j=0;j<this->cropImage->Height;j++)
 				{
-					top[i]=j;
-					//	System::Windows::Forms::MessageBox::Show(top[i].ToString(),"Top Value");
-					flag=true;
+					if(BinArray[j][i]==0)
+					{
+						if(flag==false)
+						{
+							top[i]=j;
+							//	System::Windows::Forms::MessageBox::Show(top[i].ToString(),"Top Value");
+							flag=true;
+						}
+						else
+						{
+							bottom[i]=j;
+						}
+					}
+				}
+			}
+			
+			up=minimum(top,width);
+			down=maximum(bottom,width);
+			height=down-up;
+		/*	height=Bottom_Pos-Headline_Pos;
+			System::Windows::Forms::MessageBox::Show(Headline_Pos.ToString(),"HeadLine");
+			System::Windows::Forms::MessageBox::Show(Bottom_Pos.ToString(),"BottomLine");
+			System::Windows::Forms::MessageBox::Show(up.ToString(),"Up");
+			System::Windows::Forms::MessageBox::Show(down.ToString(),"Down");
+			System::Windows::Forms::MessageBox::Show(height.ToString(),"Height");*/
+
+			for(j=0;j<width;j++)
+			{
+                count=0;
+				for(i=0;i<height;i++)
+				{
+					temp=tempArray[i][j];
+					temp1=tempArray[i+1][j];
+					if(temp!=temp1)
+					{
+						count++;
+					}
+				}
+				if(count!=0)
+				{
+					Fic[j]=(float)1/(float)count;
 				}
 				else
 				{
-					bottom[i]=j;
+                    Fic[j]=-1;
 				}
 			}
-		}
-	}
-	
-	up=minimum(top,width);
-	down=maximum(bottom,width);
-	height=down-up;
-/*	
-	this->richTextBox1->AppendText("up:");
-	this->richTextBox1->AppendText(up.ToString());
-	this->richTextBox1->AppendText("down:");
-	this->richTextBox1->AppendText(down.ToString());
-	this->richTextBox1->AppendText("Height:");
-	this->richTextBox1->AppendText(height.ToString());
-	//System::Windows::Forms::MessageBox::Show(up.ToString(),"Up");
-	//System::Windows::Forms::MessageBox::Show(down.ToString(),"Down");
-	//System::Windows::Forms::MessageBox::Show(height.ToString(),"Height");
-*/
-	for(j=0;j<width;j++)
-	{
-        count=0;
-		for(i=0;i<height;i++)
-		{
-			temp=tempArray[i][j];
-			temp1=tempArray[i+1][j];
-			if(temp!=temp1)
+			float inccount;
+			
+			for(i=0;i<width;i++)
 			{
-				count++;
+				inccount=0;
+				for(j=0;j<height;j++)
+				{
+					if(BinArray[j][i]==0)
+					{
+						inccount++;
+					}
+				}
+				//System::Windows::Forms::MessageBox::Show(inccount.ToString(),"blob size");
+			//	System::Windows::Forms::MessageBox::Show(height.ToString(),"Bigger T");
+				Fmt[i]=1-inccount/(float)height;
 			}
-		}
-		if(count!=0)
-		{
-			Fic[j]=(float)1/(float)count;
-		}
-		else
-		{
-            Fic[j]=-1;
-		}
-	}
-	
-	float inccount;
-	
-	for(i=0;i<width;i++)
-	{
-		inccount=0;
-		for(j=0;j<height;j++)
-		{
-			if(BArray[j][i]==0)
+			float mid=(float)width/2;
+
+			for(i=0;i<width;i++)
 			{
-				inccount++;
+				int l1=top[i]-Headline_Pos;
+				int l2=Bottom_Pos-bottom[i];
+				int mn,mx;
+				if(l1>=l2)
+				{
+					mn=l2;
+					mx=l1;
+				}
+				else
+				{
+					mn=l1;
+					mx=l2;
+				}
+				if(mx==0)
+				{
+					Fdm[i]=-10;
+				}	
+				else
+				{
+					Fdm[i]=(float)mn/(float)mx;
+				}
+				int ll1=i;
+				int ll2=width-i-1;
+				int mmn,mmx;
+				if(ll1>=ll2)
+				{
+					mmn=ll2;
+					mmx=ll1;
+				}
+				else
+				{
+					mmn=ll1;
+					mmx=ll2;
+				}
+				if(mmx==0)
+				{
+					Fdmc[i]=-10;
+				}
+				else
+				{
+					Fdmc[i]=(float)mmn/(float)mmx;
+				}
 			}
-		}
-		//System::Windows::Forms::MessageBox::Show(inccount.ToString(),"blob size");
-		//	System::Windows::Forms::MessageBox::Show(height.ToString(),"Bigger T");
-		Fmt[i]=1-inccount/(float)height;
-	}
-	
-	float mid=(float)width/2;
-
-	for(i=0;i<width;i++)
-	{
-		int l1=top[i]-up;
-		int l2=down-bottom[i];
-		int mn,mx;
-		if(l1>=l2)
-		{
-			mn=l2;
-			mx=l1;
-		}
-		else
-		{
-			mn=l1;
-			mx=l2;
-		}
-		if(mx==0)
-		{
-			Fdm[i]=-10;
-		}	
-		else
-		{
-			Fdm[i]=(float)mn/(float)mx;
-		}
-		int ll1=i;
-		int ll2=width-i-1;
-		int mmn,mmx;
-		if(ll1>=ll2)
-		{
-			mmn=ll2;
-			mmx=ll1;
-		}
-		else
-		{
-			mmn=ll1;
-			mmx=ll2;
-		}
-		if(mmx==0)
-		{
-			Fdmc[i]=-10;
-		}
-		else
-		{
-			Fdmc[i]=(float)mmn/(float)mmx;
-		}
-	}
-
-	for(i=0;i<width;i++)
-	{
-		float sum=0.0;
-		sum=Fic[i]+Fmt[i]+Fdm[i]+Fdmc[i];
-	//	System::Windows::Forms::MessageBox::Show(sum.ToString(),"Sum");
-		Summation[i]=sum/4;
-	}
-		
-	int cutcolumn=maximum(Summation,width);
-	return cutcolumn;
+				
+			for(i=0;i<width;i++)
+			{
+				float sum=0.0;
+				sum=Fic[i]+Fmt[i]+Fdm[i]+Fdmc[i];
+				//System::Windows::Forms::MessageBox::Show(sum.ToString(),"Sum");
+				Summation[i]=sum/4;
+			}
+			
+			int cutcolumn=maximum(Summation,width);
+			return cutcolumn-1;
 }
 
 
@@ -372,8 +428,8 @@ void Resegment::adjustUnits(int lineno,int wordno,int charno)
 
 	this->Crop_Image(lineno,wordno,charno);
 
-	int col=this->MultiFactorialAnalysis();
-
+	int col=this->MultiFactorialAnalysis(this->HeadBottom[lineno][0],this->HeadBottom[lineno][1]);
+	//System::Windows::Forms::MessageBox::Show(col.ToString()," Cut Column");
 	//		this->richTextBox1->AppendText(col.ToString());
 	//		this->richTextBox1->AppendText("Cut column ");
 	
@@ -435,13 +491,16 @@ void Resegment::adjustUnits(int lineno,int wordno,int charno)
 				this->richTextBox1->AppendText("\n");*/
      }
 }
-void Resegment::Do_Segmentation()
+/*
+void Resegment::PrepareTouchingCharIndex()
 {
+	this->TouchingCharacterIndex=new int[this->totalunits];
 	if(this->ImageLoaded && this->BinaryDone)
 	{
-		this->WidthStore();
-		this->SizeThresHold=this->ThresholdSize();
-		//System::Windows::Forms::MessageBox::Show(this->SizeThresHold.ToString(),"Size Threshold");
+		
+		System::Windows::Forms::MessageBox::Show(this->SizeThresHold.ToString(),"Size Threshold");
+		//this->Resegmentation_Complete=true;
+		int count=0;
 		for(int i=0;i<this->numberOfLines;i++)
 		{
 			for(int j=0;j<this->Lines[i].getTotalWord();j++)
@@ -452,13 +511,62 @@ void Resegment::Do_Segmentation()
 					int x2=this->Lines[i].Words[j].Units[k].getEndColumn();
 					int y1=this->Lines[i].getStartRow();
 					int y2=this->Lines[i].getEndRow();
-	
+		
 					int wchar=x2-x1+1;
-					//System::Windows::Forms::MessageBox::Show(wchar.ToString(),"Char Width");								
-					if(this->SizeThresHold < wchar)
+					//System::Windows::Forms::MessageBox::Show(wchar.ToString(),"Char Width");	
+					if(wchar > 2)
 					{
-					//	System::Windows::Forms::MessageBox::Show(wchar.ToString(),"Char Width");
-						this->adjustUnits(i,j,k);
+													
+						if(this->SizeThresHold < wchar)
+						{
+//							System::Windows::Forms::MessageBox::Show(wchar.ToString(),"Char Width");
+							this->TouchingCharacterIndex[count]=1;
+						}
+						else
+						{
+							this->TouchingCharacterIndex[count]=0;
+						}
+						count++;
+					}
+				}
+			}
+		}
+		//System::Windows::Forms::MessageBox::Show(this->totalunits.ToString(),"Total Units");
+	//	System::Windows::Forms::MessageBox::Show(count.ToString(),"count");
+	}
+	
+}*/
+void Resegment::Do_Segmentation()
+{
+	
+	if(this->ImageLoaded && this->BinaryDone)
+	{
+		while(!this->Resegmentation_Complete)
+		{
+		//System::Windows::Forms::MessageBox::Show(this->SizeThresHold.ToString(),"Size Threshold");
+			this->WidthStore();
+			this->SizeThresHold=this->ThresholdSize();
+			//System::Windows::Forms::MessageBox::Show(this->SizeThresHold.ToString(),"Size Threshold");
+			this->Resegmentation_Complete=true;
+			for(int i=0;i<this->numberOfLines;i++)
+			{
+				for(int j=0;j<this->Lines[i].getTotalWord();j++)
+				{
+					for(int k=0;k<this->Lines[i].Words[j].getTotalUnit();k++)
+					{
+						int x1=this->Lines[i].Words[j].Units[k].getStartColumn();
+						int x2=this->Lines[i].Words[j].Units[k].getEndColumn();
+						int y1=this->Lines[i].getStartRow();
+						int y2=this->Lines[i].getEndRow();
+	
+						int wchar=x2-x1+1;
+						//System::Windows::Forms::MessageBox::Show(wchar.ToString(),"Char Width");								
+						if (wchar>this->SizeThresHold)		
+						{	
+						//		System::Windows::Forms::MessageBox::Show(count.ToString(),"Count");
+							this->Resegmentation_Complete=false;
+							this->adjustUnits(i,j,k);
+						}
 					}
 				}
 			}

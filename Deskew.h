@@ -8,8 +8,6 @@
 using namespace System::Collections;
 using namespace System;
 using namespace System::IO;
-using namespace System::Drawing;
-//using namespace System::Drawing::Graphics;
 //using namespace System::Drawing::Bitmap;
 
 public __gc class Deskew
@@ -47,7 +45,8 @@ public:
 	void Calc(int x,int y);
 	double CalcDIndex(double d);
 	HoughLine* GetTop(int count)[];
-	
+
+
 
 };
 
