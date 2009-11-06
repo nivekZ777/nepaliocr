@@ -70,7 +70,7 @@ externalPostProcessor::externalPostProcessor(System::String *applicationPath,Sys
 				 }*/
 				 }
 				 catch(System::Exception *ex){
-					 System::Windows::Forms::MessageBox::Show("Error running PostProcessor",ex->ToString(),System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+					 System::Windows::Forms::MessageBox::Show(ex->ToString(),"Error running PostProcessor",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 				 }
 
 

@@ -1467,10 +1467,10 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			notepadOutSw->Write(text);
 			notepadOutSw->Close();
 			try{
-				this->callPostProcessor();
+				this->callPostProcessor(text);
 			}
 			catch(System::Exception *ex){
-				System::Windows::Forms::MessageBox::Show("I am sorry, the PostProcessor failed, \nit seems like you don't have postprocessor or it cannot be run","Garbled Output");
+				System::Windows::Forms::MessageBox::Show("Garbled Output","I am sorry, the PostProcessor failed, \nit seems like you don't have postprocessor or it cannot be run");
 				this->statusBar1->Text = "PostProcessor Failed";
 				this->rtbMainOutput->Text = text;
 			}
@@ -1501,7 +1501,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 		 }
 
 
-private: void callPostProcessor(){
+private: void callPostProcessor(String *text){
 			 String *finalOutputFileName =  String::Concat(Application::StartupPath->ToString(),"\\","rawOutput.txt");
 				//Delete previous file
 				if(System::IO::File::Exists(finalOutputFileName)){
@@ -1554,7 +1554,9 @@ private: void callPostProcessor(){
 				}
 				else{
 					this->logFile->WriteLine("The output file could not be found"); 
-					System::Windows::Forms::MessageBox::Show("Still not complete");
+					//System::Windows::Forms::MessageBox::Show("Still not complete");
+					this->rtbMainOutput->Text = text;
+					 
 				}
 		 }
 
