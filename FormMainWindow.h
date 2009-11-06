@@ -27,7 +27,7 @@
  *  
  *
  */
-#include "croper.h"
+
 #include "TrainingForm.h"
 #include "RecognitionForm.h"
 #include "RecognitionProcess.h"
@@ -224,6 +224,8 @@ System::Windows::Forms::RichTextBox *rtbOutput;
 
 private: int pointX1,pointX2,pointY1,pointY2,xMouseDistance,yMouseDistance; //for capturing the points
 private: System::Windows::Forms::StatusBar *  statusBar1;
+private: System::Windows::Forms::MenuItem *  menuItem2;
+private: System::Windows::Forms::MenuItem *  menuItem3;
 
 
 
@@ -264,6 +266,7 @@ private: System::Windows::Forms::StatusBar *  statusBar1;
 		{
 			System::Resources::ResourceManager *  resources = new System::Resources::ResourceManager(__typeof(OCR::FormMainWindow));
 			this->picture_panel = new System::Windows::Forms::Panel();
+			this->statusBar1 = new System::Windows::Forms::StatusBar();
 			this->pictureBox1 = new System::Windows::Forms::PictureBox();
 			this->openImageDialog = new System::Windows::Forms::OpenFileDialog();
 			this->saveImageDialog = new System::Windows::Forms::SaveFileDialog();
@@ -279,10 +282,12 @@ private: System::Windows::Forms::StatusBar *  statusBar1;
 			this->mnuFastRecognize2 = new System::Windows::Forms::MenuItem();
 			this->mnuRecognize = new System::Windows::Forms::MenuItem();
 			this->mnuAdvanced = new System::Windows::Forms::MenuItem();
-			this->mnuSeparate = new System::Windows::Forms::MenuItem();
 			this->mnuBinarize = new System::Windows::Forms::MenuItem();
+			this->menuItem2 = new System::Windows::Forms::MenuItem();
+			this->mnuSeparate = new System::Windows::Forms::MenuItem();
 			this->mnuTrain = new System::Windows::Forms::MenuItem();
 			this->mnuRecognize2 = new System::Windows::Forms::MenuItem();
+			this->menuItem3 = new System::Windows::Forms::MenuItem();
 			this->mnuMeanRemoval = new System::Windows::Forms::MenuItem();
 			this->mnuContrast = new System::Windows::Forms::MenuItem();
 			this->mnuContrastAndBinarize = new System::Windows::Forms::MenuItem();
@@ -297,7 +302,6 @@ private: System::Windows::Forms::StatusBar *  statusBar1;
 			this->pbOCR = new System::Windows::Forms::ProgressBar();
 			this->panel1 = new System::Windows::Forms::Panel();
 			this->rtbOutput = new System::Windows::Forms::RichTextBox();
-			this->statusBar1 = new System::Windows::Forms::StatusBar();
 			this->picture_panel->SuspendLayout();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
@@ -317,6 +321,13 @@ private: System::Windows::Forms::StatusBar *  statusBar1;
 			this->picture_panel->DragEnter += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragEnter);
 			this->picture_panel->MouseUp += new System::Windows::Forms::MouseEventHandler(this, picture_panel_MouseUp);
 			this->picture_panel->DragDrop += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragDrop);
+			// 
+			// statusBar1
+			// 
+			this->statusBar1->Location = System::Drawing::Point(0, 332);
+			this->statusBar1->Name = S"statusBar1";
+			this->statusBar1->Size = System::Drawing::Size(588, 16);
+			this->statusBar1->TabIndex = 1;
 			// 
 			// pictureBox1
 			// 
@@ -430,36 +441,44 @@ private: System::Windows::Forms::StatusBar *  statusBar1;
 			// 
 			this->mnuAdvanced->Enabled = false;
 			this->mnuAdvanced->Index = 2;
-			System::Windows::Forms::MenuItem* __mcTemp__4[] = new System::Windows::Forms::MenuItem*[7];
-			__mcTemp__4[0] = this->mnuSeparate;
-			__mcTemp__4[1] = this->mnuBinarize;
-			__mcTemp__4[2] = this->mnuTrain;
-			__mcTemp__4[3] = this->mnuRecognize2;
-			__mcTemp__4[4] = this->mnuMeanRemoval;
-			__mcTemp__4[5] = this->mnuContrast;
-			__mcTemp__4[6] = this->mnuContrastAndBinarize;
+			System::Windows::Forms::MenuItem* __mcTemp__4[] = new System::Windows::Forms::MenuItem*[9];
+			__mcTemp__4[0] = this->mnuBinarize;
+			__mcTemp__4[1] = this->menuItem2;
+			__mcTemp__4[2] = this->mnuSeparate;
+			__mcTemp__4[3] = this->mnuTrain;
+			__mcTemp__4[4] = this->mnuRecognize2;
+			__mcTemp__4[5] = this->menuItem3;
+			__mcTemp__4[6] = this->mnuMeanRemoval;
+			__mcTemp__4[7] = this->mnuContrast;
+			__mcTemp__4[8] = this->mnuContrastAndBinarize;
 			this->mnuAdvanced->MenuItems->AddRange(__mcTemp__4);
 			this->mnuAdvanced->Text = S"Advanced";
-			// 
-			// mnuSeparate
-			// 
-			this->mnuSeparate->Enabled = false;
-			this->mnuSeparate->Index = 0;
-			this->mnuSeparate->Text = S"Separate";
-			this->mnuSeparate->Click += new System::EventHandler(this, mnuSeparate_Click);
 			// 
 			// mnuBinarize
 			// 
 			this->mnuBinarize->Enabled = false;
-			this->mnuBinarize->Index = 1;
+			this->mnuBinarize->Index = 0;
 			this->mnuBinarize->Shortcut = System::Windows::Forms::Shortcut::CtrlB;
 			this->mnuBinarize->Text = S"Binarize";
 			this->mnuBinarize->Click += new System::EventHandler(this, mnuBinarize_Click);
 			// 
+			// menuItem2
+			// 
+			this->menuItem2->Index = 1;
+			this->menuItem2->Text = S"-";
+			// 
+			// mnuSeparate
+			// 
+			this->mnuSeparate->Enabled = false;
+			this->mnuSeparate->Index = 2;
+			this->mnuSeparate->Shortcut = System::Windows::Forms::Shortcut::CtrlP;
+			this->mnuSeparate->Text = S"Separate";
+			this->mnuSeparate->Click += new System::EventHandler(this, mnuSeparate_Click);
+			// 
 			// mnuTrain
 			// 
 			this->mnuTrain->Enabled = false;
-			this->mnuTrain->Index = 2;
+			this->mnuTrain->Index = 3;
 			this->mnuTrain->Shortcut = System::Windows::Forms::Shortcut::CtrlT;
 			this->mnuTrain->Text = S"Train";
 			this->mnuTrain->Click += new System::EventHandler(this, mnuTrain_Click);
@@ -467,29 +486,34 @@ private: System::Windows::Forms::StatusBar *  statusBar1;
 			// mnuRecognize2
 			// 
 			this->mnuRecognize2->Enabled = false;
-			this->mnuRecognize2->Index = 3;
+			this->mnuRecognize2->Index = 4;
 			this->mnuRecognize2->Shortcut = System::Windows::Forms::Shortcut::CtrlE;
 			this->mnuRecognize2->Text = S"Recognize";
 			this->mnuRecognize2->Click += new System::EventHandler(this, mnuRecognize2_Click);
 			// 
+			// menuItem3
+			// 
+			this->menuItem3->Index = 5;
+			this->menuItem3->Text = S"-";
+			// 
 			// mnuMeanRemoval
 			// 
 			this->mnuMeanRemoval->Enabled = false;
-			this->mnuMeanRemoval->Index = 4;
+			this->mnuMeanRemoval->Index = 6;
 			this->mnuMeanRemoval->Text = S"Mean Removal";
 			this->mnuMeanRemoval->Click += new System::EventHandler(this, mnuMeanRemoval_Click);
 			// 
 			// mnuContrast
 			// 
 			this->mnuContrast->Enabled = false;
-			this->mnuContrast->Index = 5;
+			this->mnuContrast->Index = 7;
 			this->mnuContrast->Text = S"Contrast Only";
 			this->mnuContrast->Click += new System::EventHandler(this, mnuContrast_Click);
 			// 
 			// mnuContrastAndBinarize
 			// 
 			this->mnuContrastAndBinarize->Enabled = false;
-			this->mnuContrastAndBinarize->Index = 6;
+			this->mnuContrastAndBinarize->Index = 8;
 			this->mnuContrastAndBinarize->Text = S"Contrast and Binarize";
 			this->mnuContrastAndBinarize->Click += new System::EventHandler(this, mnuContrastAndBinarize_Click);
 			// 
@@ -551,7 +575,7 @@ private: System::Windows::Forms::StatusBar *  statusBar1;
 			// 
 			this->splitter1->Location = System::Drawing::Point(0, 0);
 			this->splitter1->Name = S"splitter1";
-			this->splitter1->Size = System::Drawing::Size(3, 488);
+			this->splitter1->Size = System::Drawing::Size(3, 415);
 			this->splitter1->TabIndex = 17;
 			this->splitter1->TabStop = false;
 			// 
@@ -579,19 +603,11 @@ private: System::Windows::Forms::StatusBar *  statusBar1;
 			this->rtbOutput->TabIndex = 0;
 			this->rtbOutput->Text = S"";
 			// 
-			// statusBar1
-			// 
-			this->statusBar1->Location = System::Drawing::Point(0, 315);
-			this->statusBar1->Name = S"statusBar1";
-			this->statusBar1->Size = System::Drawing::Size(592, 16);
-			this->statusBar1->TabIndex = 1;
-			// 
 			// FormMainWindow
 			// 
 			this->AccessibleRole = System::Windows::Forms::AccessibleRole::Application;
 			this->AllowDrop = true;
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
-			this->AutoScroll = true;
 			this->BackColor = System::Drawing::SystemColors::InactiveCaption;
 			this->ClientSize = System::Drawing::Size(614, 415);
 			this->Controls->Add(this->panel1);
@@ -1477,20 +1493,7 @@ private: System::Void btnRotate_right_Click(System::Object *  sender, System::Ev
 			 this->resetVariablesAfterRotation();
 		 }
 
-private: void tryImageCropperLoad(){
-			 if(this->BinaryDone ==false) 
-						this->makeBinary(); //binarize before cropping
 
-			 croper *myCroper = new croper(im,this->BArray);
-			 myCroper->Show();
-			 //myCroper->ImgArray = this->ImgArray;
-			 //myCroper->BinArray  = this->BArray;
-			 this->Hide();
-
-			 
-
-
-		 }
 
 private: System::Void mnuFastRecognize_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
@@ -1683,7 +1686,7 @@ private: System::Void mnuRecognize2_Click(System::Object *  sender, System::Even
 
 private: System::Void mnuCropper_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 this->tryImageCropperLoad();
+			 MessageBox::Show("Cropper disabled");
 
 		 }
 
@@ -1942,7 +1945,7 @@ private:	void setResetMenu(bool ImageLoaded, bool BinaryDone,bool SeparateDone){
 				 
 				 this->mnuBinarize->Enabled = true;
 				 this->mnuBinarize->DefaultItem = true;
-				 this->mnuBinarize->Visible = true;
+				// this->mnuBinarize->Visible = true;
 
 				 this->mnuFastRecognize->Enabled = true;
 				 this->mnuFastRecognize->DefaultItem = true;
@@ -1974,7 +1977,7 @@ private:	void setResetMenu(bool ImageLoaded, bool BinaryDone,bool SeparateDone){
 					 
 						this->mnuSeparate->Enabled = true;
 						this->mnuSeparate->DefaultItem = true;
-						this->mnuSeparate->Visible = true;
+						//this->mnuSeparate->Visible = true;
 
 						if(SeparateDone){
 							this->mnuBinarize->DefaultItem = false;
@@ -2097,13 +2100,8 @@ private: void enableCropper(System::Windows::Forms::ContextMenu *ocrCMenu){
 			this->imageSelection = true;
 }
 
-		 public: void mnuCropSelected_Click(System::Object *  sender, System::EventArgs *  e){
-
-			 //int mouse_dragged_Image_width = System::Math::Abs(this->x2 - this->x1) ;
-			//this->xMouseDistance = (this->pointX2 - this->pointX1) ;
-			//int mouse_dragged_Image_height = System::Math::Abs(this->y2 - this->y1);
-			//this->yMouseDistance = (this->pointY2 - this->pointY1);
-			
+public: void mnuCropSelected_Click(System::Object *  sender, System::EventArgs *  e){
+			if(this->xMouseDistance < this->im->Width && this->yMouseDistance < this->im->Height){
 			
 			Bitmap *cropImage1 = new Bitmap( this->xMouseDistance+1,this->yMouseDistance+1,Imaging::PixelFormat::Format24bppRgb);
 		 for(int cropRow=0;  cropRow<(cropImage1->Height); cropRow++){
@@ -2127,7 +2125,11 @@ private: void enableCropper(System::Windows::Forms::ContextMenu *ocrCMenu){
 		 this->ImageLoaded = true;
 		 this->makeBinary();
 		 
-		 }
+		 } // if(this->xMouseDistance < this->im->Width && this->yMouseDistance < this->im->Height)
+			else{
+				MessageBox::Show("Image cropped must be smaller than the original image ","Crop Again");
+			}
+	}
 
 private: void find_xy_MouseDistance(System::Windows::Forms::MouseEventArgs *  e){
 			
