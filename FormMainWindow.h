@@ -159,6 +159,7 @@ namespace OCR
 			 bool imageSelection;
 			 bool TouchingCharIdentified;
 			 bool dragEnabled;
+	private: System::Drawing::Point m_PanStartPoint;
 				 
 
 
@@ -182,6 +183,7 @@ namespace OCR
 	private: System::Collections::ArrayList* alModelRec;			// for models that already recognized
 			 System::Collections::ArrayList *aakarList;
 			 System::Collections::ArrayList *rassoEEkarList;
+
 
 	
 	
@@ -2590,6 +2592,8 @@ private: System::Void pictureBox1_MouseDown(System::Object *  sender, System::Wi
 		 {
 			 //reset variables x2 and y2 
 			 //if already initialized
+			 m_PanStartPoint = System::Drawing::Point(e->X, e->Y);
+
 			 if(this->pointX1 && this->pointX2){
 				this->pointX2 = this->pointX1;
 				this->pointY2 = this->pointY1;
