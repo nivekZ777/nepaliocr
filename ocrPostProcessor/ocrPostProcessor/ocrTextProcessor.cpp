@@ -23,8 +23,7 @@ int main(array<System::String ^> ^args)
 		//Reading input file from argument 0
 		System::String ^tempStr;
 		System::IO::StreamReader ^sr = gcnew System::IO::StreamReader(inputFileName);
-		while(sr->Peek() >=0){
-			 tempStr = sr->ReadLine()->ToString();
+		 while(!System::String::IsNullOrEmpty(tempStr = sr->ReadLine())){
 			 inputText = inputText->Concat(inputText,tempStr,"\n"); 
 			 
 		 }
@@ -51,11 +50,8 @@ int main(array<System::String ^> ^args)
 	catch(System::Exception ^ioException1){
 
 		
-		swLog->Write("\n The following Error Has Occured : \n");
-		swLog->WriteLine("\t-----Start  of Error Log------");
-		swLog->WriteLine(ioException1->ToString());
+		swLog->Write("An Error Has Occured");
 		//swLog->WriteLine(ioException1->ToString());
-		swLog->WriteLine("\t-----End of Error Log------");
 		swLog->Close();
 		
 	}
@@ -67,42 +63,4 @@ int main(array<System::String ^> ^args)
 		 
 }
  
-
-/*while(argEnum->MoveNext()){
-		int i;
-			//if(i==0){
-			//	arg0 = argEnum->Current->ToString();
-			//}
-			if(i==0){
-				inputFileName = argEnum->Current->ToString();
-			}
-			//if(i<=1){
-			//	if(i==1){
-			//		outputFileName = argEnum->Current->ToString();
-			//	}
-			//	else{
-					//Process Even if no output file specified
-					outputFileName = "rawOutput.txt";
-			//	}
-			//}
-			i++;
-	}
-	if(!inputFileName || !outputFileName){
-		Console::WriteLine("=====================================");
-		if(!inputFileName){
-			inputFileName = "rawInput.txt";
-			Console::WriteLine("No input file specified");
-			 
-
-		}
-		if(!outputFileName){
-			outputFileName = "rawOutput.txt";
-			Console::WriteLine("No output file specified");
-			
-		}
-		
-		Console::WriteLine("=====================================");
-		Console::WriteLine("usage: ocrTextProcessor.exe inputfile.txt outputfile.txt");
-	}
-
-	*/
+ 
