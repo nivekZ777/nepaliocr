@@ -192,7 +192,7 @@ void FileManipulating::CreateHMMFile(System::String *exeFileDir, System::String 
 		sw->Write(tempStr);
 		sw->Close();
 		
-		System::Windows::Forms::MessageBox::Show("Create HMM File on Process","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+	//	System::Windows::Forms::MessageBox::Show("Create HMM File on Process","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 		// create a process and execute 
 		System::Diagnostics::Process *p = new System::Diagnostics::Process();
