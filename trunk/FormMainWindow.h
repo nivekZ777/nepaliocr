@@ -2553,10 +2553,37 @@ private: System::Void pictureBox1_MouseMove(System::Object *  sender, System::Wi
 			 this->pointX2 = e->X;
 			 this->pointY2 = e->Y;
 			 this->pictureBox1->Refresh();
-			 this->g->DrawRectangle(myPen_MouseMove, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+
+			 //point checker
+				//Graphics.DrawImage(newImage, destRect, srcRect, units);
+			 if(this->pointX1 < this->pointX2){ //Normal condition, drag from left to right (x1 <x2)
+				 if(this->pointY1 < this->pointY2){ //Normal Condition drag from top to bottom (y1 <y2)
+					 this->g->DrawRectangle(myPen_MouseMove, Rectangle(this->pointX1,this->pointY1,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));
+				 }
+				 else {	//drag from bottom to top (y1 > y2)
+                     this->g->DrawRectangle(myPen_MouseMove, Rectangle(this->pointX1,this->pointY2,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));	
+				 }
+				}
+			 else{	//drag from right to left i.e. (this->pointX1 > this->pointX2)
+				 if(this->pointY1 < this->pointY2){ //Normal Condition drag from top to bottom (y1 <y2)
+					 this->g->DrawRectangle(myPen_MouseMove, Rectangle(this->pointX2,this->pointY1,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));			 		 
+					 }
+				 else{//drag from bottom to top (y1 > y2)
+					 this->g->DrawRectangle(myPen_MouseMove, Rectangle(this->pointX2,this->pointY2,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));			 		 
+				 }
+				}
+
+			 //point checker ends
 			 }
-
-
+			////Debugging Codes :P
+			 //String *temp123 = "";
+			 //temp123= temp123->Concat(temp123," x1:",this->pointX1.ToString());
+			 //temp123= temp123->Concat(temp123," x2:",this->pointX2.ToString());
+			 //temp123= temp123->Concat(temp123," y1:",this->pointY1.ToString());			 
+			 //temp123= temp123->Concat(temp123," y2:",this->pointY2.ToString());
+			 //temp123= temp123->Concat(temp123," x2-x1:",(this->pointX2-this->pointX1).ToString());
+			 //temp123= temp123->Concat(temp123," y2-y1:",(this->pointY2-this->pointY1).ToString());
+			 //this->statusBar1->Text = temp123;
 		 }
 
 private: void drawMyMenu(System::Windows::Forms::MenuItem *abc, String *myMenuText){
@@ -2571,7 +2598,7 @@ private: void drawMyMenu(System::Windows::Forms::MenuItem *abc, String *myMenuTe
 		 }
 private: System::Void mnuVersionInfo_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 System::Windows::Forms::MessageBox::Show("Build: September 24 2008","Nepali OCR ");
+			 System::Windows::Forms::MessageBox::Show("Build: September 28 2008","Nepali OCR ");
 		 }
 
 		 
@@ -2591,7 +2618,7 @@ private: System::Void mnuVersionInfo_Click(System::Object *  sender, System::Eve
 		 
 			} // if(this->xMouseDistance < this->im->Width && this->yMouseDistance < this->im->Height)
 			else{
-				this->statusBar1->Text = "Image Cropped Must be Smaller than the original Image, Pls crop again";
+				this->statusBar1->Text = "Image Cropped Must be Smaller than the original Image, Please crop again";
 				return;
 				//MessageBox::Show("Image cropped must be smaller than the original image ","Crop Again");
 			}
