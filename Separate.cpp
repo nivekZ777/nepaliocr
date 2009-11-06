@@ -10,7 +10,6 @@ Separate::Separate(Bitmap* im,bool **B,Graphics* gr)
 	this->Horizontal=new int[ySize];
 	this->g=gr;
 	this->numberOfLines=0;
-	
 }
 
 void Separate::LineSeparate()
@@ -73,7 +72,12 @@ void Separate::LineSeparate()
 	g->DrawLine(p,0,s,this->xSize,s);
 	g->DrawLine(p,0,e,this->xSize,e);
 	}
-
+	this->HeadBottom=new int*[this->numberOfLines];
+	for(int i=0;i<this->numberOfLines;i++)
+	{
+		this->HeadBottom[i]=new int[2];
+	}
+ 
  
 	WordSeparate1(lineStart,lineEnd);
 }
@@ -427,10 +431,12 @@ void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd,ArrayList** w
 	lineStartEnumerator=lineStart->GetEnumerator();
 	lineEndEnumerator=lineEnd->GetEnumerator();
 
+
 	Pen* p=new Pen(Color::White,1);
  
 	//int cnt=0;
 	//drawHorizontalHist();
+	int linecount=0;
 
 	while(lineStartEnumerator->MoveNext() && lineEndEnumerator->MoveNext())
 	{
@@ -458,11 +464,9 @@ void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd,ArrayList** w
 				cntMattra++;
 			}
 		}
-
-
-
 		//g->DrawLine(p,0,maxIndex,this->xSize,maxIndex);
-		
+	
+		//Added Code By Sanjeev Maharjan
 		for(int j=0;j<this->xSize;j++)
 		{
 			for(int k=0;k<cntMattra;k++)
@@ -471,21 +475,71 @@ void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd,ArrayList** w
 				g->DrawLine(p,0,mIndex[k],this->xSize,mIndex[k]);
 			}
 		}
-		 
+		this->HeadBottom[linecount][0]=maxIndex-y1;
+		R2=new int[this->xSize];
+		for(int i=0;i<this->xSize;i++)
+		{
+			for(int j=maxIndex;j<y2;j++)
+			{
+				if(this->BinaryArray[j][i]==false && this->BinaryArray[j+1][i]==true)
+				{
+					R2[i]=j;
+				}
+			}
+		}
+		int maxR2=maxIndex;
+		for(int i=0;i<this->xSize;i++)
+		{
+			if(maxR2<R2[i])
+			{
+				maxR2=R2[i];
+			}
+		}
+		this->HeadBottom[linecount][1]=maxR2-y1;
 		
-		 
+		//Removing top Modifier
+			for(int k=0;k<this->xSize;k++)
+			{
+				for(int j=y1;j<=maxIndex;j++)
+				{	
+					this->BinaryArray[j][k]=true;
+				}
+			}
+		
+			for(int j=y1;j<=maxIndex;j++)
+			{
+				g->DrawLine(p,0,j,this->xSize,j);
+			}
+			//Removing Lower Modifier
+		//Removing Lower Modifier
+		for(int k=0;k<this->xSize;k++)
+		{
+			for(int j=maxR2;j<=y2;j++)
+			{	
+				this->BinaryArray[j][k]=true;
+			}
+		}
+		for(int j=maxR2;j<=y2;j++)
+		{
+			g->DrawLine(p,0,j,this->xSize,j);
+		}
 	
+	linecount++;
 	}
 
 	this->CharSeparate(lineStart,lineEnd,wordStart,wordEnd);
 		
 
 }
-
-
-
+int ** Separate::getHeadBottom()
+{
+	return (this->HeadBottom);
+}
 void Separate::CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wStart,ArrayList** wEnd)
 {
+ 
+	
+
 	int** VerticalC;
 	 
 	
@@ -714,6 +768,8 @@ void Separate::CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wStart,A
 					}
 
 					this->Lines[lineCount].Words[wordCount].setUnit(charCountInWord);
+
+				 
 					bool hasCharStarted=false;
 
 					int charCount=0;
@@ -755,7 +811,11 @@ void Separate::CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wStart,A
 
 		lineCount++;
 	}
-  
+ 
+
+
+
+	
 	
 }
 
@@ -773,18 +833,3 @@ Line* Separate::getLines()
 
 
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

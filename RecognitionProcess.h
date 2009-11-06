@@ -24,6 +24,10 @@ public:
 
 	System ::Collections::SortedList* slModel;		// list to store the model transcription database
 	System ::Collections::ArrayList* alModelTrans;
+ 
+	System::Collections::ArrayList *aakarsList;
+	System::Collections::ArrayList *rassoEEkarList;
+	//System::Collections::ArrayList *aaKarList;
 	System::String* dbFilePath;
 
 	// constructors
@@ -34,6 +38,7 @@ public:
 	/*Methods*/
 	// loading the transcription of the trained models
 	System::Collections::SortedList* LoadModelTranscriptions(System::String* dbFilePath);
+	 
 
 	// setting the image boundary
 	void ImageBoundarySet(int left_x, int right_x,int top_y, int bottom_y);
