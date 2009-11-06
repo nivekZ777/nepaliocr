@@ -486,9 +486,6 @@ void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd,ArrayList** w
 
 void Separate::CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wStart,ArrayList** wEnd)
 {
- 
-	
-
 	int** VerticalC;
 	 
 	
@@ -717,8 +714,6 @@ void Separate::CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wStart,A
 					}
 
 					this->Lines[lineCount].Words[wordCount].setUnit(charCountInWord);
-
-				 
 					bool hasCharStarted=false;
 
 					int charCount=0;
@@ -760,11 +755,7 @@ void Separate::CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wStart,A
 
 		lineCount++;
 	}
- 
-
-
-
-	
+  
 	
 }
 
@@ -782,3 +773,18 @@ Line* Separate::getLines()
 
 
 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

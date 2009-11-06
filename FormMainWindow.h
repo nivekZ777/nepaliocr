@@ -292,6 +292,7 @@ private: System::Windows::Forms::MenuItem *  mnuNoiseRemoval;
 			this->mnuMeanRemoval = new System::Windows::Forms::MenuItem();
 			this->mnuContrast = new System::Windows::Forms::MenuItem();
 			this->mnuContrastAndBinarize = new System::Windows::Forms::MenuItem();
+			this->mnuNoiseRemoval = new System::Windows::Forms::MenuItem();
 			this->mnuImage = new System::Windows::Forms::MenuItem();
 			this->mnuLoadImage = new System::Windows::Forms::MenuItem();
 			this->mnuDeskew = new System::Windows::Forms::MenuItem();
@@ -303,7 +304,6 @@ private: System::Windows::Forms::MenuItem *  mnuNoiseRemoval;
 			this->pbOCR = new System::Windows::Forms::ProgressBar();
 			this->panel1 = new System::Windows::Forms::Panel();
 			this->rtbOutput = new System::Windows::Forms::RichTextBox();
-			this->mnuNoiseRemoval = new System::Windows::Forms::MenuItem();
 			this->picture_panel->SuspendLayout();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
@@ -520,6 +520,12 @@ private: System::Windows::Forms::MenuItem *  mnuNoiseRemoval;
 			this->mnuContrastAndBinarize->Text = S"Contrast and Binarize";
 			this->mnuContrastAndBinarize->Click += new System::EventHandler(this, mnuContrastAndBinarize_Click);
 			// 
+			// mnuNoiseRemoval
+			// 
+			this->mnuNoiseRemoval->Index = 9;
+			this->mnuNoiseRemoval->Text = S"Noise Removal";
+			this->mnuNoiseRemoval->Click += new System::EventHandler(this, mnuNoiseRemoval_Click);
+			// 
 			// mnuImage
 			// 
 			this->mnuImage->Index = 3;
@@ -606,12 +612,6 @@ private: System::Windows::Forms::MenuItem *  mnuNoiseRemoval;
 			this->rtbOutput->TabIndex = 0;
 			this->rtbOutput->Text = S"";
 			// 
-			// mnuNoiseRemoval
-			// 
-			this->mnuNoiseRemoval->Index = 9;
-			this->mnuNoiseRemoval->Text = S"Noise Removal";
-			this->mnuNoiseRemoval->Click += new System::EventHandler(this, mnuNoiseRemoval_Click);
-			// 
 			// FormMainWindow
 			// 
 			this->AccessibleRole = System::Windows::Forms::AccessibleRole::Application;
@@ -625,10 +625,11 @@ private: System::Windows::Forms::MenuItem *  mnuNoiseRemoval;
 			this->Controls->Add(this->myInfo);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::Fixed3D;
 			this->Icon = (__try_cast<System::Drawing::Icon *  >(resources->GetObject(S"$this.Icon")));
-			this->MaximizeBox = false;
 			this->Menu = this->ocrMenu;
 			this->Name = S"FormMainWindow";
 			this->Text = S"Nepali OCR";
+			this->MaximizedBoundsChanged += new System::EventHandler(this, FormMainWindow_MaximizedBoundsChanged);
+			this->MaximumSizeChanged += new System::EventHandler(this, FormMainWindow_MaximumSizeChanged);
 			this->picture_panel->ResumeLayout(false);
 			this->panel1->ResumeLayout(false);
 			this->ResumeLayout(false);
@@ -1981,6 +1982,7 @@ private:	void setResetMenu(bool ImageLoaded, bool BinaryDone,bool SeparateDone){
 				this->mnuImage->Enabled = true;
 
 				 if(BinaryDone){
+					   this->mnuNoiseRemoval->Enabled = true;
 					   this->mnuBinarize->DefaultItem = false;
 					   this->mnuFastRecognize->DefaultItem = false;
 					   
@@ -2031,7 +2033,7 @@ private:	void setResetMenu(bool ImageLoaded, bool BinaryDone,bool SeparateDone){
 				//
 				
 				 
-
+				this->mnuNoiseRemoval->Enabled = false;
 				this->mnuBinarize->Enabled = false;
 				this->mnuContrast->Enabled = false;
 				this->mnuMeanRemoval->Enabled = false;
@@ -2185,6 +2187,17 @@ private: System::Void mnuNoiseRemoval_Click(System::Object *  sender, System::Ev
 			 this->im  = rN->GetClearImage();
 			 this->pictureBox1->Image = im;
 		 }
+private: System::Void FormMainWindow_MaximumSizeChanged(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 System::Windows::Forms::MessageBox::Show("maximized");
+		 }
+
+private: System::Void FormMainWindow_MaximizedBoundsChanged(System::Object *  sender, System::EventArgs *  e)
+		 {
+		System::Windows::Forms::MessageBox::Show("maximize bounds changed");
+
+		 }
+
 };
 
 
