@@ -497,6 +497,7 @@ namespace OCR
 			// mnuSave
 			// 
 			this->mnuSave->Index = 0;
+			this->mnuSave->Shortcut = System::Windows::Forms::Shortcut::CtrlS;
 			this->mnuSave->Text = S"Save";
 			this->mnuSave->Click += new System::EventHandler(this, mnuSave_Click);
 			// 
@@ -508,12 +509,14 @@ namespace OCR
 			// mnuSingleRecognize
 			// 
 			this->mnuSingleRecognize->Index = 2;
+			this->mnuSingleRecognize->Shortcut = System::Windows::Forms::Shortcut::CtrlR;
 			this->mnuSingleRecognize->Text = S"Recognize";
 			this->mnuSingleRecognize->Click += new System::EventHandler(this, mnuSingleRecognize_Click);
 			// 
 			// mnuRecognizeAll
 			// 
 			this->mnuRecognizeAll->Index = 3;
+			this->mnuRecognizeAll->Shortcut = System::Windows::Forms::Shortcut::CtrlO;
 			this->mnuRecognizeAll->Text = S"Recognize all";
 			this->mnuRecognizeAll->Click += new System::EventHandler(this, mnuRecognizeAll_Click);
 			// 
