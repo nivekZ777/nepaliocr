@@ -54,6 +54,7 @@ namespace OCR
 	private: System::Windows::Forms::PictureBox *  pictureBoxHelpRotateLeft;
 	private: System::Windows::Forms::PictureBox *  pictureBoxHelpImageRotateRight;
 	private: System::Windows::Forms::PictureBox *  pictureBoxHelpRotateUpright;
+	private: System::Windows::Forms::PictureBox *  pictureBoxHelpTrainWindow;
 
 
 
@@ -89,6 +90,7 @@ namespace OCR
 			this->pictureBoxHelpRotateLeft = new System::Windows::Forms::PictureBox();
 			this->pictureBoxHelpImageRotateRight = new System::Windows::Forms::PictureBox();
 			this->pictureBoxHelpRotateUpright = new System::Windows::Forms::PictureBox();
+			this->pictureBoxHelpTrainWindow = new System::Windows::Forms::PictureBox();
 			this->SuspendLayout();
 			// 
 			// btnClose
@@ -123,10 +125,11 @@ namespace OCR
 			// 
 			// pictureBox3
 			// 
+			this->pictureBox3->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
 			this->pictureBox3->Image = (__try_cast<System::Drawing::Image *  >(resources->GetObject(S"pictureBox3.Image")));
-			this->pictureBox3->Location = System::Drawing::Point(16, 64);
+			this->pictureBox3->Location = System::Drawing::Point(8, 16);
 			this->pictureBox3->Name = S"pictureBox3";
-			this->pictureBox3->Size = System::Drawing::Size(336, 192);
+			this->pictureBox3->Size = System::Drawing::Size(336, 200);
 			this->pictureBox3->TabIndex = 3;
 			this->pictureBox3->TabStop = false;
 			this->pictureBox3->Visible = false;
@@ -250,13 +253,24 @@ namespace OCR
 			this->pictureBoxHelpRotateUpright->TabStop = false;
 			this->pictureBoxHelpRotateUpright->Visible = false;
 			// 
+			// pictureBoxHelpTrainWindow
+			// 
+			this->pictureBoxHelpTrainWindow->Image = (__try_cast<System::Drawing::Image *  >(resources->GetObject(S"pictureBoxHelpTrainWindow.Image")));
+			this->pictureBoxHelpTrainWindow->Location = System::Drawing::Point(312, 40);
+			this->pictureBoxHelpTrainWindow->Name = S"pictureBoxHelpTrainWindow";
+			this->pictureBoxHelpTrainWindow->Size = System::Drawing::Size(528, 464);
+			this->pictureBoxHelpTrainWindow->TabIndex = 16;
+			this->pictureBoxHelpTrainWindow->TabStop = false;
+			this->pictureBoxHelpTrainWindow->Visible = false;
+			// 
 			// helpOCR
 			// 
 			this->AutoScale = false;
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
 			this->BackColor = System::Drawing::SystemColors::ControlLightLight;
-			this->ClientSize = System::Drawing::Size(296, 334);
+			this->ClientSize = System::Drawing::Size(896, 534);
 			this->ControlBox = false;
+			this->Controls->Add(this->pictureBox3);
 			this->Controls->Add(this->pictureBoxHelpRotateUpright);
 			this->Controls->Add(this->pictureBoxHelpImageRotateRight);
 			this->Controls->Add(this->pictureBoxHelpRotateLeft);
@@ -269,10 +283,10 @@ namespace OCR
 			this->Controls->Add(this->pictureBoxHelpBinarize);
 			this->Controls->Add(this->pictureBoxHelpRemoveNoise);
 			this->Controls->Add(this->pictureBoxDeskew);
-			this->Controls->Add(this->pictureBox3);
 			this->Controls->Add(this->pictureBoxHelpOCR2);
 			this->Controls->Add(this->pictureBoxHelpOCR);
 			this->Controls->Add(this->btnClose);
+			this->Controls->Add(this->pictureBoxHelpTrainWindow);
 			this->Icon = (__try_cast<System::Drawing::Icon *  >(resources->GetObject(S"$this.Icon")));
 			this->Name = S"helpOCR";
 			this->Text = S"Help";
@@ -291,7 +305,10 @@ namespace OCR
 			
 		public: void ShowHelpTrain(){
  
-				this->enableDisable(this->pictureBox3,System::Drawing::Size(400, 320)," Help : Training");
+				this->enableDisable(this->pictureBox3,System::Drawing::Size(912, 560)," Help : Training");
+				this->pictureBoxHelpTrainWindow->Visible = true;
+
+
 			}
 				
 			public: void ShowHelpDeskew(){
@@ -356,6 +373,7 @@ namespace OCR
 				this->pictureBoxHelpRotateLeft->Visible =false;
 				this->pictureBoxHelpImageRotateRight->Visible =false;
 				this->pictureBoxHelpRotateUpright->Visible =false;
+				this->pictureBoxHelpTrainWindow->Visible = false;
 
 				this->pictureBox3->Visible = false;
 				this->pictureBoxDeskew->Visible = false;

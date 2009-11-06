@@ -1931,10 +1931,8 @@ private: System::Void picture_panel_DragDrop(System::Object *  sender, System::W
 				 //  if( (ext != ".jpg")|| (ext != ".jpeg")|| (ext != ".gif")|| (ext != ".png")|| (ext != ".tif")|| (ext != ".tiff")|| (ext != ".bmp") ) allow = false;
 
 			// }
-			if(e->Data->GetDataPresent(DataFormats::FileDrop)){
+			 if(e->Data->GetDataPresent(DataFormats::FileDrop))
 							e->Effect = DragDropEffects::All;
-							System::Windows::Forms::MessageBox::Show("ok");
-			}
 			 else
 					e->Effect = DragDropEffects::None;
 

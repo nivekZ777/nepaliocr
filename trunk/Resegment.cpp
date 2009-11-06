@@ -22,9 +22,10 @@
  * Date 11-01-2008
  *
  * Credits : 
-  * Authors : 
-  * Rajesh Pandey ::  nepaliocr@gmail.com
-  * Sanjeev Maharjan
+ * Authors : 
+ * Sanjeev Maharjan : me.sanjabs@gmail.com
+ * Rajesh Pandey ::  nepaliocr@gmail.com
+ * 
  * 
  *
  *
