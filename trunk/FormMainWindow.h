@@ -1373,28 +1373,28 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			{	
 				int index = 0;
 				int ind = 0;
-				for (int i = 0; i < this->numberOfLines; i++  )
+				for (int i = 0; i < this->numberOfLines; i++  ) //Number of lines
 				{
-					for (int j = 0; j < this->Lines[i].getTotalWord(); j++)
+					for (int j = 0; j < this->Lines[i].getTotalWord(); j++) //number of words
 					{
-						for (int k = 0; k < this->Lines[i].Words[j].getTotalUnit(); k++)
+						for (int k = 0; k < this->Lines[i].Words[j].getTotalUnit(); k++) //number of units
 						{
-							if ( ind < this->alModelRec->Count)
+							if ( ind < this->alModelRec->Count)			// increment ind++ (till the alModelRec
 							{// Block Start
-								ucodeStr = "";									
-								System::Collections::IEnumerator* ENum;
-								ENum=this->alModelRec->GetEnumerator();
-								System::String* tempStr="";
+								ucodeStr = "";									//initially unicodestr = ""
+								System::Collections::IEnumerator* ENum;			//Enum a looper
+								ENum=this->alModelRec->GetEnumerator();			
+								System::String* tempStr="";						
 								System::String* tempStr1="";
-								int tempCount=0;
+								int tempCount=0;									//Counter (tempCount)
                					while(ENum->MoveNext())
 								{
 									if(ind==tempCount)
 									{
-									tempStr=ENum->Current->ToString();
+									tempStr=ENum->Current->ToString(); //keep the temporary value in tempStr
 									break;
 									}
-									tempCount++;									
+									tempCount++;			//find the tempCount						
 								}
 								 
 
@@ -1599,7 +1599,8 @@ private: void tryMagnify(){
 				mw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
 					//mw->MdiParent = this;
 					//mw->Show();
-				mw->ShowDialog();
+				//mw->ShowDialog();
+				mw->Show();
 			 	  }
 
 private: System::Void findMagnification_Click(System::Object *  sender, System::EventArgs *  e)
@@ -1917,7 +1918,7 @@ private: System::Void mnuTrain_Click(System::Object *  sender, System::EventArgs
 				 if(this->BinaryDone){
 						OCR::TrainingForm* tw=new OCR::TrainingForm();
 						tw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
-						tw->ShowDialog();
+						tw->Show();
 				 }
 					//If not binarized print an error message				
 				 else{
@@ -2398,8 +2399,11 @@ private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
 
 				}
 				
+ 
 
-				ocrCMenu->Show(this,System::Drawing::Point(e->X,e->Y));
+
+				 
+				ocrCMenu->Show(this,System::Drawing::Point(e->X%this->Width,e->Y%this->Height));
 			} // if(e->Button == MouseButtons::Left) 
 
 
@@ -2598,23 +2602,28 @@ private: void drawMyMenu(System::Windows::Forms::MenuItem *abc, String *myMenuTe
 		 }
 private: System::Void mnuVersionInfo_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 System::Windows::Forms::MessageBox::Show("Build: September 28 2008","Nepali OCR ");
+			 System::Windows::Forms::MessageBox::Show("Build: October 1 2008","Nepali OCR ");
 		 }
 
 		 
 		 private: System::Void mnuNewCrop_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
+			 this->statusBar1->Text = "";
 			 if(this->xMouseDistance < this->im->Width && this->yMouseDistance < this->im->Height){
 
 			   
 
-			
-			this->im = this->selectedImage;
-			this->pictureBox1->Image = im;
+				 try{
+					this->im = this->selectedImage;
+					this->pictureBox1->Image = im;
 
-			this->ImageLoaded = true;
-			this->BinaryDone = false;
-			this->SeparateDone = false;
+					this->ImageLoaded = true;
+					this->BinaryDone = false;
+					this->SeparateDone = false;
+				 }
+				 catch(System::Exception *CroppingException){
+					 this->statusBar1->Text = "TRY CROPPING AGAIN  ";
+				 }
 		 
 			} // if(this->xMouseDistance < this->im->Width && this->yMouseDistance < this->im->Height)
 			else{
@@ -2637,11 +2646,12 @@ private: void enableNewCropper(System::Windows::Forms::ContextMenu *ocrCMenu){
 			mnuNewCropper->Click+= new System::EventHandler(this,mnuNewCrop_Click);
 			ocrCMenu->MenuItems->Add(mnuNewCropper);
 			try{
+				
 				//System::Windows::Forms::MessageBox::Show(String::Format("Image Size : {0} {1} ",im->Width,im->Height));
-				selectedImage = new Bitmap((this->pointX2-this->pointX1),(this->pointY2-this->pointY1));
+				selectedImage = new Bitmap(Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1));
 				Graphics *gr2 = Graphics::FromImage(selectedImage);
 				//Graphics.DrawImage(newImage, destRect, srcRect, units);
-				gr2->DrawImage(im,(Rectangle(0,0,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1))),(Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1))),GraphicsUnit::Pixel);
+				gr2->DrawImage(im,(Rectangle(0,0,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1))),(Rectangle(this->pointX1,this->pointY1,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1))),GraphicsUnit::Pixel);
 				this->crobPictureBox->Visible = true;
 				this->crobPictureBox->BringToFront();
 				this->crobPictureBox->Image = selectedImage ;
@@ -2659,7 +2669,36 @@ private: void enableNewCropper(System::Windows::Forms::ContextMenu *ocrCMenu){
 			myCropPen->DashStyle = System::Drawing::Drawing2D::DashStyle::Dot;
 			
 			//this->g->DrawRectangle(Pens::Black, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
-			this->g->DrawRectangle(myCropPen, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+///////////////////			this->g->DrawRectangle(myCropPen, Rectangle(this->pointX1,this->pointY1,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));
+
+
+			 if(this->dragEnabled){
+			 //this->pointX2 = e->X;
+			 //this->pointY2 = e->Y;
+			 this->pictureBox1->Refresh();
+
+			 //point checker
+				//Graphics.DrawImage(newImage, destRect, srcRect, units);
+			 if(this->pointX1 < this->pointX2){ //Normal condition, drag from left to right (x1 <x2)
+				 if(this->pointY1 < this->pointY2){ //Normal Condition drag from top to bottom (y1 <y2)
+					 this->g->DrawRectangle(myCropPen, Rectangle(this->pointX1,this->pointY1,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));
+				 }
+				 else {	//drag from bottom to top (y1 > y2)
+                     this->g->DrawRectangle(myCropPen, Rectangle(this->pointX1,this->pointY2,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));	
+				 }
+				}
+			 else{	//drag from right to left i.e. (this->pointX1 > this->pointX2)
+				 if(this->pointY1 < this->pointY2){ //Normal Condition drag from top to bottom (y1 <y2)
+					 this->g->DrawRectangle(myCropPen, Rectangle(this->pointX2,this->pointY1,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));			 		 
+					 }
+				 else{//drag from bottom to top (y1 > y2)
+					 this->g->DrawRectangle(myCropPen, Rectangle(this->pointX2,this->pointY2,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));			 		 
+				 }
+				}
+
+			 //point checker ends
+			 }
+
 			this->imageSelection = true;
 			//delete myCropPen;
 					
