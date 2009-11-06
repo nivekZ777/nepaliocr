@@ -38,7 +38,8 @@
 #include "myWindow.h"
 #include "Resegment.h"
 #include "RemoveNoise.h"
-#include "PostProcessor.h"
+#include "externalPostProcessor.h"
+ 
  
 
 
@@ -73,7 +74,7 @@ namespace OCR
 		This program initiates the start dialog box. This class control other classes and initiates them.
  
 */
-
+//public: static System::IO::StreamWriter logFile;
 	public __gc class FormMainWindow : public System::Windows::Forms::Form
 	{	
 	public:
@@ -104,7 +105,11 @@ namespace OCR
 
 //			this->characterDBPath=this->characterDBPath->Concat(this->applicationPath ,"\\htk\\DataBaseFile\\characters.txt");	
 			//System::Windows::Forms::MessageBox::Show(this->characterDBPath,"Path of characterDB path");
-			
+
+			this->logFile->WriteLine("Log started ");
+			this->logFile->WriteLine("ApplicationPath: ");
+			this->logFile->WriteLine(Application::StartupPath->ToString());
+
 			this->modelTrainDBPath = this->modelTrainDBPath->Concat(this->applicationPath , "\\htk\\DataBaseFile\\modelTrainDataBase.txt");
 			
 			this->alModelRec = new System::Collections::ArrayList();
@@ -128,7 +133,7 @@ namespace OCR
 			__super::Dispose(disposing);
 		}
 
-
+	public: static System::IO::StreamWriter *logFile = new System::IO::StreamWriter("ocr.log");
 
 	//user variable start 
 	private: Bitmap *im,*backup;
@@ -154,7 +159,7 @@ namespace OCR
 			 bool imageSelection;
 			 bool TouchingCharIdentified;
 			 bool dragEnabled;
-			 
+				 
 
 
 
@@ -178,7 +183,7 @@ namespace OCR
 			 System::Collections::ArrayList *aakarList;
 			 System::Collections::ArrayList *rassoEEkarList;
 
-
+	
 	
 	
 			 
@@ -189,24 +194,15 @@ namespace OCR
 	
 	private: System::Windows::Forms::Panel *  picture_panel;
 	private: System::Windows::Forms::PictureBox *  pictureBox1;
-
-
 	private: System::Windows::Forms::OpenFileDialog *  openImageDialog;
-
 	private: System::Windows::Forms::SaveFileDialog *  saveImageDialog;
 
 
 
 
 
-
-
-	private: System::Windows::Forms::Label *  myInfo;
-	private: System::Windows::Forms::Label *  myInfo1;
-
-
-
-
+private: System::Windows::Forms::Label *  myInfo;
+private: System::Windows::Forms::Label *  myInfo1;
 private: System::Windows::Forms::MainMenu *  ocrMenu;
 private: System::Windows::Forms::MenuItem *  mnuStart;
 private: System::Windows::Forms::MenuItem *  mnuLoadImage2;
@@ -690,7 +686,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			this->IsMdiContainer = true;
 			this->Menu = this->ocrMenu;
 			this->Name = S"FormMainWindow";
-			this->Text = S"OCR (Sept)";
+			this->Text = S"OCR (November Built)";
 			this->WindowState = System::Windows::Forms::FormWindowState::Maximized;
 			this->Load += new System::EventHandler(this, FormMainWindow_Load);
 			this->picture_panel->ResumeLayout(false);
@@ -1313,6 +1309,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 					//	this->statusBar1->Text = "Output window closed";
 						this->pbOCR->Value = 100;
 						this->Cursor = System::Windows::Forms::Cursors::Default;
+						this->logFile->Close();
 		}
 
 
@@ -1478,14 +1475,23 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 				exit(0);
 			}
 		  
-			this->rtbMainOutput->Text = text;
-			this->createRTB();
 			
 			
-			System::String* notepadOutputFileName = notepadOutputFileName->Concat(this->applicationPath, "\\" ,"output.txt");
+			System::String* notepadOutputFileName = notepadOutputFileName->Concat(this->applicationPath, "\\" ,"rawInput.txt");
 			System::IO::StreamWriter* notepadOutSw = new System::IO::StreamWriter(notepadOutputFileName);
 			notepadOutSw->Write(text);
 			notepadOutSw->Close();
+			try{
+				this->callPostProcessor();
+			}
+			catch(System::Exception *ex){
+				System::Windows::Forms::MessageBox::Show("I am sorry, the PostProcessor failed, \nit seems like you don't have postprocessor or it cannot be run","Garbled Output");
+				this->statusBar1->Text = "PostProcessor Failed";
+				this->rtbMainOutput->Text = text;
+			}
+			
+			//this->rtbMainOutput->Text = text;
+			this->createRTB();
 			 
 		//	PostProcessor *pp = new PostProcessor(text);
 			//OCR::RecognitionForm* rw=new OCR::RecognitionForm();
@@ -1504,13 +1510,68 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			/*this->createRTB();*/
 			this->pbOCR->Value = 100;
 			this->statusBar1->Text = "Recognition Complete";
+			this->Cursor  = System::Windows::Forms::Cursors::Default;
 			
 			/*this->rtbOutput->Text = text;*/
 		 }
 
+
+private: void callPostProcessor(){
+			 String *finalOutputFileName =  String::Concat(Application::StartupPath->ToString(),"\\","rawOutput.txt");
+				//Delete previous file
+				if(System::IO::File::Exists(finalOutputFileName)){
+					try{
+						this->logFile->WriteLine("Cleaning old files ....");
+						System::IO::File::Delete(finalOutputFileName);
+						this->logFile->WriteLine("Succes cleaning old temporary files");
+					}
+					catch(System::Exception *ex){
+						this->logFile->WriteLine(String::Concat("Could not delete the files created by the previous OCR process \n\n Error Details : \n ---------------------\n ",ex->ToString()));
+
+						System::Windows::Forms::MessageBox::Show(String::Concat("Could not delete the files created by the previous OCR process \n\n Error Details : \n ---------------------\n ",ex->ToString()),"Cleaning Error");
+					}
+				}
+
+				//Run the Post Processor Application
+				this->logFile->WriteLine(" Going to Run postprocessor  ....");
+				externalPostProcessor *extPP = new externalPostProcessor(Application::StartupPath->ToString(),"ocrTextProcessor.exe");
+				this->logFile->WriteLine(" Postprocessor Success.");
+
+				if(System::IO::File::Exists(finalOutputFileName)){
+					this->logFile->WriteLine(" Output File exists  ....");
+					//System::Windows::Forms::MessageBox::Show("File Exists");					
+					System::IO::StreamReader *sr1 = new System::IO::StreamReader(finalOutputFileName);
+					this->logFile->WriteLine(" Read output file  ....");
+
+					String* tempStr;
+					while(sr1->Peek() >=0){
+						tempStr = String::Concat(tempStr,sr1->ReadLine());
+					}
+					
+					///FINAL OUTPUT HERE 
+					//Show The final output in Main window 
+					this->rtbMainOutput->Text = tempStr;
+
+
+					//TEST RECOGNITIONWINDOW
+					 //RecognitionForm *rw = new RecognitionForm();
+					 //rw->showText(tempStr);
+					 //rw->ShowDialog();
+					 
+				}
+				else{
+					this->logFile->WriteLine("The output file could not be found"); 
+					System::Windows::Forms::MessageBox::Show("Still not complete");
+				}
+		 }
+
+
+
+
 private: System::Void close_button_Click_1(System::Object *  sender, System::EventArgs *  e)
 			 {
 				//this->Dispose(true);
+				
 				this->makeBinary();
 			
 					
@@ -1519,6 +1580,7 @@ private: System::Void close_button_Click_1(System::Object *  sender, System::Eve
 
 private: System::Void openImage_Click(System::Object *  sender, System::EventArgs *  e)
 			{
+				
 				this->openImageFile();
 				
 				

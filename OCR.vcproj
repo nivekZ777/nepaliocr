@@ -125,6 +125,9 @@
 				RelativePath=".\Deskew.cpp">
 			</File>
 			<File
+				RelativePath=".\externalPostProcessor.cpp">
+			</File>
+			<File
 				RelativePath=".\FileManipulating.cpp">
 			</File>
 			<File
@@ -138,9 +141,6 @@
 			</File>
 			<File
 				RelativePath=".\OCR.cpp">
-			</File>
-			<File
-				RelativePath=".\PostProcessor.cpp">
 			</File>
 			<File
 				RelativePath=".\RecognitionForm.cpp">
@@ -176,6 +176,9 @@
 			</File>
 			<File
 				RelativePath=".\Deskew.h">
+			</File>
+			<File
+				RelativePath=".\externalPostProcessor.h">
 			</File>
 			<File
 				RelativePath=".\FileManipulating.h">
@@ -226,9 +229,6 @@
 							ResourceFileName="$(IntDir)/OCR.myWindow.resources"/>
 					</FileConfiguration>
 				</File>
-			</File>
-			<File
-				RelativePath=".\PostProcessor.h">
 			</File>
 			<File
 				RelativePath=".\RecognitionForm.h"
