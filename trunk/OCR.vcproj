@@ -119,6 +119,9 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
+				RelativePath=".\croper.cpp">
+			</File>
+			<File
 				RelativePath=".\Deskew.cpp">
 			</File>
 			<File
@@ -164,6 +167,25 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
 				RelativePath=".\Convolution.h">
+			</File>
+			<File
+				RelativePath=".\croper.h"
+				FileType="3">
+				<File
+					RelativePath=".\croper.resX">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCManagedResourceCompilerTool"
+							ResourceFileName="$(IntDir)/OCR.croper.resources"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCManagedResourceCompilerTool"
+							ResourceFileName="$(IntDir)/OCR.croper.resources"/>
+					</FileConfiguration>
+				</File>
 			</File>
 			<File
 				RelativePath=".\Deskew.h">
