@@ -25,8 +25,8 @@ public:
 	System ::Collections::SortedList* slModel;		// list to store the model transcription database
 	System ::Collections::ArrayList* alModelTrans;
  
-	System::Collections::ArrayList *aakarsList;
-	System::Collections::ArrayList *rassoEEkarList;
+	//System::Collections::ArrayList *aakarsList;
+	//System::Collections::ArrayList *rassoEEkarList;
 	//System::Collections::ArrayList *aaKarList;
 	System::String* dbFilePath;
 

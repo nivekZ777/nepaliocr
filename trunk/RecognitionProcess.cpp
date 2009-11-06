@@ -29,8 +29,8 @@ RecognitionProcess::RecognitionProcess(System::String* path,int **imgArray)
 	this->dictFilePath = this->dictFilePath->Concat(path ,"\\htk\\files\\def\\dict.txt");
 	this->wordNetFilePath = this->wordNetFilePath->Concat(path ,"\\htk\\files\\def\\net.slf");
 	this->recognitionTempFileDir = this->recognitionTempFileDir->Concat(path ,"\\htk\\recognizer\\");
-	this->aakarsList = new System::Collections::ArrayList();
-	this->rassoEEkarList = new System::Collections::ArrayList();
+	//this->aakarsList = new System::Collections::ArrayList();
+	//this->rassoEEkarList = new System::Collections::ArrayList();
 
 }
 
@@ -81,14 +81,14 @@ System::Collections::SortedList* RecognitionProcess::LoadModelTranscriptions(Sys
 					alModelTrans->Add(tempStr);
 	//PostProcessing Details Here
 					 //ArrayList aakarList contains list of model names
-					if(tempStr->Equals("093E")){
-						this->aakarsList->Add(key);
-	//PostProcessing Details here
-						
-					}
-					if(tempStr->Equals("093F")){
-						this->rassoEEkarList->Add(key);
-					}
+	//				if(tempStr->Equals("093E")){
+	//					this->aakarsList->Add(key);
+	////PostProcessing Details here
+					//	
+					//}
+					//if(tempStr->Equals("093F")){
+					//	this->rassoEEkarList->Add(key);
+					//}
 				}
 			}
 			//if(tempStr->Equals("093E")){

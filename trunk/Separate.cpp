@@ -2,8 +2,17 @@
 #include "Separate.h"
 
 
+//This is the constructor for the class Separate
 Separate::Separate(Bitmap* im,bool **B,Graphics* gr)
 {
+//Takes input : Bitmap image							: Bitmap* im
+// the binarised image in the form of boolean array		: bool **B
+//The graphics of image									: Graphics* gr
+
+	//referencing										:xSize <= Width of image
+	//													:ySize <= Height of Image
+	//													:BinaryArray <= B , Graphics g <= gr, 
+	//A new array of size ySize is created				:Horizontal[height of image] 
 	this->xSize=im->Width;
 	this->ySize=im->Height;
 	this->BinaryArray=B;
@@ -12,6 +21,7 @@ Separate::Separate(Bitmap* im,bool **B,Graphics* gr)
 	this->numberOfLines=0;
 }
 
+//This is a function which separates lines
 void Separate::LineSeparate()
 {
 	ArrayList* lineStart=new ArrayList();
@@ -19,7 +29,7 @@ void Separate::LineSeparate()
 //	vector <int> lineStart;
 //	vector <int> lineEnd;
 
-	/////
+/////
 	IEnumerator* startEnumerator;
 	IEnumerator* endEnumerator;
 	 
@@ -63,6 +73,7 @@ void Separate::LineSeparate()
 	startEnumerator =  lineStart->GetEnumerator();
 	endEnumerator = lineEnd->GetEnumerator();
 	
+	//Red Pen are used to draw lines when they are separated
 	Pen* p=new Pen(Color::Red,1);
 	while (startEnumerator->MoveNext() &&  endEnumerator->MoveNext())
 	{
@@ -82,6 +93,7 @@ void Separate::LineSeparate()
 	WordSeparate1(lineStart,lineEnd);
 }
 
+//WordSeparate is used to separate words 
 void Separate::WordSeparate(ArrayList* start,ArrayList* end)
 {
 	//System::Windows::Forms::MessageBox::Show(numberOfLines.ToString(),"Total Number Of Lines");
@@ -198,6 +210,7 @@ while(startEnumerator->MoveNext() && endEnumerator->MoveNext())
 	 
 
 }
+//Draws horizontal histogram
 void Separate::drawHorizontalHist()
 {
 	Pen* p=new Pen(Color::Red,1);
@@ -208,7 +221,7 @@ void Separate::drawHorizontalHist()
 	}
 }
 
-
+//Word separate
 void Separate::WordSeparate1(ArrayList* start,ArrayList* end)
 {
 	ArrayList** wordStart=new ArrayList*();
@@ -421,7 +434,7 @@ CheckMattra(start,end,wordStart1,wordEnd1);
 
 
 
-
+//Checks Mattra
 void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd,ArrayList** wordStart,ArrayList** wordEnd)
 {
 	 
@@ -818,12 +831,13 @@ void Separate::CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wStart,A
 	
 	
 }
-
+//returns number of lines from the class Separate
 int Separate::getNumberOfLines()
 {
 	return this->numberOfLines;
 }
 
+//returns Lines from this class
 Line* Separate::getLines()
 {
 	return this->Lines;

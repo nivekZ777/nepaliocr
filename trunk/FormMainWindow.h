@@ -181,8 +181,8 @@ namespace OCR
 	private: System::Collections::SortedList* slForCharacters;
 	private: System::Collections::SortedList* slModelTranscription;	// for storing the model transcriptions
 	private: System::Collections::ArrayList* alModelRec;			// for models that already recognized
-			 System::Collections::ArrayList *aakarList;
-			 System::Collections::ArrayList *rassoEEkarList;
+			 //System::Collections::ArrayList *aakarList;
+			 //System::Collections::ArrayList *rassoEEkarList;
 
 
 	
@@ -1213,19 +1213,34 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 		{
 /*
 		This method is used to recognize the text in the image.
+		First It loads the trained Data into Memory (Text)
+		
+		Secondly It loads the separated lines, words and characters in the Memory (Images )
+		
+		Performance Due to Trained Data(Text):
+		The overall performance of the OCR is affected by the Training data. 
+		For greater accuracy We train more but all those trained data has to be loaded. 
+		Finally due to this, It seems as if OCR is running slowly.
+
+		Performance due to Separated Words (Images)
+		The Performance also depends upon the separated characters. 
+		If the characters cannot be separated, its hard to recognize.
+
 
 */	 
 						this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
+						//Setting the cursor to wait because we will have a long process in the background
 						RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImgArray);
+						//Calling the recognition Process
 						// load the transcription of the models
 						this->statusBar1->Text = "Loading Models ....";
 
 						//aakarList added 
-						aakarList = new System::Collections::ArrayList();
+						//aakarList = new System::Collections::ArrayList();
 						this->slModelTranscription = rp->LoadModelTranscriptions(this->modelTrainDBPath);
 
-						this->aakarList =  rp->aakarsList;
-						this->rassoEEkarList = rp->rassoEEkarList;
+						//this->aakarList =  rp->aakarsList;
+						//this->rassoEEkarList = rp->rassoEEkarList;
 						
 						
 						int lineCount = this->numberOfLines;
@@ -1361,10 +1376,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			System::Collections::ArrayList* tempAl;	// temporary working array list
 			System::String* ucodeStr;	
 
-			System::Collections::IEnumerator *AakarEnum =   aakarList->GetEnumerator();
-			System::Collections::IEnumerator *rassoEEkarEnum = rassoEEkarList->GetEnumerator();
-			
-			//System::Collections::IEnumerator *ehhEEkarEnum = 
+ 
 			bool aaKarFound = false;
 			bool rassoEEkarFound = false;
 			int aaKarCounter = 0;
@@ -1415,52 +1427,13 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 									ucodeStr = ucodeStr->Concat(ucodeStr,slForCharacters->GetKey(slForCharacters->IndexOfValue(tempStr)));
 
 									tcount++; //multifactorial added
-								}
-								//Normal Processing Complete here 
-								//tempStr contains the model name
-								//ucodeStr contains the Unicode value
-								//Just append 
-								/*
-									//Original before multifactorial :- 
-									text = text->Concat(text,ucodeStr);
-								*/
-				
-//Sanjeev's Post Processing Codes for extra aakar 
-							 
-							bool aakarNew = false;
-							while(AakarEnum->MoveNext()){
-								//String *abc = ehh->Current->ToString();
-								if(tempStr1->Equals(AakarEnum->Current->ToString())){
-									aakarNew = true;
-								}
-																
-							}
-							if(aakarNew) {
-								aaKarCounter++;
-							}
-							else{
-								aaKarCounter = 0;
-							}
-
-							while(rassoEEkarEnum->MoveNext()){
-								if(tempStr->Equals(rassoEEkarEnum->Current->ToString())){
-									rassoEEkarFound = true;
-								}
-
-							}
-							//aaKarFound
-
-			
-								//multifactorial added
-								if(aaKarCounter<=1) //multifactorial added
-								{
-										//multifactorial added
-										text = text->Concat(text,ucodeStr);			//multifactorial added
+								}							 
+ 
+								text = text->Concat(text,ucodeStr);			//multifactorial added
 									  
-								}	//endif multifact								//multifactorial added
+ 					 
 								tempcount=tcount;
-								if(aakarNew) {aaKarFound = true;}
-								else { aaKarFound = false; }
+ 
 																
 							} //end if
 
@@ -1545,14 +1518,22 @@ private: void callPostProcessor(){
 					System::IO::StreamReader *sr1 = new System::IO::StreamReader(finalOutputFileName);
 					this->logFile->WriteLine(" Read output file  ....");
 
-					String* tempStr;
+					///FINAL OUTPUT HERE 
+					//Show The final output in Main window 
+
+					 
+					this->rtbMainOutput->Text = "";
 					while(sr1->Peek() >=0){
-						tempStr = String::Concat(tempStr,sr1->ReadLine());
+						this->rtbMainOutput->AppendText(sr1->ReadLine()->ToString());
+						this->rtbMainOutput->AppendText("\n");
+
+						 
 					}
 					
 					///FINAL OUTPUT HERE 
 					//Show The final output in Main window 
-					this->rtbMainOutput->Text = tempStr;
+					
+					//this->rtbMainOutput->Text = tempStr;
 
 
 					//TEST RECOGNITIONWINDOW
@@ -1992,6 +1973,7 @@ private: System::Void mnuTrain_Click(System::Object *  sender, System::EventArgs
 				 }
 					//If not binarized print an error message				
 				 else{
+					 this->logFile->WriteLine("Trainer Returned: Attempted to perform operation without binarizing");
 					 System::Windows::Forms::MessageBox::Show("Image is not Binarized","Please Binarize first");
 				 }
 				
@@ -1999,6 +1981,8 @@ private: System::Void mnuTrain_Click(System::Object *  sender, System::EventArgs
 			 //If an Image is not loaded, Print an error message to load the image.
 			 else{
 				 //Please Browse for image and Load the image
+				 this->logFile->WriteLine("Trainer Returned: Attempted to perform operation without loading the Image");
+				 this->statusBar1->Text = "Image not loaded, Please Browse for image and load image first";
 				 System::Windows::Forms::MessageBox::Show("Image not loaded, Please Browse for image and load image first ","Image Not loaded");
 			 }
 			 
