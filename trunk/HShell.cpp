@@ -33,7 +33,7 @@
 /* ----------------------------------------------------------- */
 #include "stdafx.h"
 char *hshell_version = "!HVER!HShell:   3.2.1 [CUED 15/10/03]";
-char *hshell_vc_id = "$Id: HShell.cpp,v 1.1 2008-07-09 15:08:36 rajesh Exp $";
+char *hshell_vc_id = "$Id: HShell.c,v 1.14 2003/10/15 08:10:13 ge204 Exp $";
 
 #include "HShell.h"
 //#include <iostream.h>
