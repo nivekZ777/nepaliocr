@@ -42,6 +42,8 @@ public:
 			{
 				System::Drawing::Color clr = this->rgbImage->GetPixel(i,j);
 				int pixel = clr.ToArgb();				
+
+				//int alpha = (pixel >> 24) & 0xff;// no need here
 				int red = (pixel >> 16) & 0xff;
 				int green = (pixel >>  8) & 0xff;
 				int blue = (pixel      ) & 0xff;
@@ -49,10 +51,12 @@ public:
 				int grayC = int(coef01*red + coef02*green + coef03*blue);
 
 				GrayArray[i][j] = grayC;
-			}
+			}// inner for*/
 		}
+
 		return grayImage;
 	}
+
 	System::Drawing::Bitmap* GetBinaryImage()
 	{
 		return this->bainaryImage;
