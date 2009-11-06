@@ -128,7 +128,7 @@ void Separate::LineSeparate()
 		this->HeadBottom[i]=new int[2];
 	}
  
- 
+	//System::Windows::Forms::MessageBox::Show("ok");
 	WordSeparate1(lineStart,lineEnd);
 }
 
