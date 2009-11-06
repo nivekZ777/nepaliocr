@@ -1,3 +1,32 @@
+
+/**
+ *   OCR
+ *
+ *
+ * Requirements:
+ *  
+ * win2k or later\n
+ * .NET FrameWork 1.1 or later 
+ *
+ * Version 1.0
+ * first version
+ *
+ * Date 07-01-2008
+ *
+ * Author Rajesh Pandey
+ *
+ * license
+ * This code is absolutely free to use and modify. The code is provided "as is" with
+ * no expressed or implied warranty. The author accepts no liability if it causes
+ * any damage to your computer, causes your pet to fall ill, increases baldness
+ * or makes your car start emitting strange noises when you start it up.
+ * This code has no bugs, just undocumented features!
+ * 
+ *  
+ *
+ *  
+ *
+ */
 #include "TrainingForm.h"
 #include "RecognitionForm.h"
 #include "RecognitionProcess.h"
@@ -7,6 +36,7 @@
 #include "Convolution.h"
 #include "Deskew.h"
 #include "myWindow.h"
+#include "Resegment.h"
 
 
 #pragma once
@@ -145,7 +175,7 @@ namespace OCR
 	private: System::Windows::Forms::Label *  myInfo1;
 	private: System::Windows::Forms::Button *  findMagnification;
 	private: System::Windows::Forms::Button *  cb;
-private: System::Windows::Forms::Button *  btnRotate_right;
+	private: System::Windows::Forms::Button *  btnRotate_right;
 
 
 
@@ -360,6 +390,7 @@ private: System::Windows::Forms::Button *  btnRotate_right;
 			// FormMainWindow
 			// 
 			this->AccessibleRole = System::Windows::Forms::AccessibleRole::Application;
+			this->AllowDrop = true;
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
 			this->AutoScroll = true;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
@@ -385,6 +416,7 @@ private: System::Windows::Forms::Button *  btnRotate_right;
 			this->MaximizeBox = false;
 			this->Name = S"FormMainWindow";
 			this->Text = S"Nepali OCR";
+			this->Load += new System::EventHandler(this, FormMainWindow_Load);
 			this->picture_panel->ResumeLayout(false);
 			this->ResumeLayout(false);
 
@@ -785,7 +817,8 @@ private: System::Windows::Forms::Button *  btnRotate_right;
 							{
 								this->separateChar();			//separate Characters
 							}
-
+							Resegment* rsg=new Resegment(im,BinaryDone,ImageLoaded,SeparateDone,BArray,this->numberOfLines,this->Lines,g);
+							rsg->Do_Segmentation();
 							 
 						}
 					 
@@ -1254,28 +1287,40 @@ private: System::Void cb_Click(System::Object *  sender, System::EventArgs *  e)
 
 private: System::Void picture_panel_DragDrop(System::Object *  sender, System::Windows::Forms::DragEventArgs *  e)
 		 {
+			 bool allowFlag = true;
+			 String* fileName[];
+			  
+			fileName = (String *[]) e->Data->GetData(DataFormats::FileDrop, false);
+			  
+			
+			// for(int a=0;a<fileName->Length;a++){
+//				 String *ext = Path::GetExtension(fileName)::tolower();
+				 //  if( (ext != ".jpg")|| (ext != ".jpeg")|| (ext != ".gif")|| (ext != ".png")|| (ext != ".tif")|| (ext != ".tiff")|| (ext != ".bmp") ) allow = false;
+
+			// }
 			 if(e->Data->GetDataPresent(DataFormats::FileDrop))
 							e->Effect = DragDropEffects::All;
 			 else
 					e->Effect = DragDropEffects::None;
 
-			  String* fileName[];
+			 
 			   
-			   int a;
+			   
 			  fileName = (String *[]) e->Data->GetData(DataFormats::FileDrop, false);
-			  for(a=0;a<fileName->Length;a++){
-				  this->ImageLoaded = true;
-					
-			this->BinaryDone=false;
-			this->SeparateDone=false;
-			this->ContrastDone=false;
-			this->meanDone=false;
-			this->deskewDone=false;
-			im = new Bitmap(fileName[a]);
-			this->pictureBox1->Image = im;
-			g=this->pictureBox1->CreateGraphics();
-			myInfo->Text="";
-			myInfo1->Text="";
+			  
+			  for(int a=0;a<fileName->Length;a++){
+				  
+				this->ImageLoaded = true;
+				this->BinaryDone=false;
+				this->SeparateDone=false;
+				this->ContrastDone=false;
+				this->meanDone=false;
+				this->deskewDone=false;
+				im = new Bitmap(fileName[a]);
+				this->pictureBox1->Image = im;
+				g=this->pictureBox1->CreateGraphics();
+				myInfo->Text="";
+				myInfo1->Text="";
 			  
 			 }
   		 
@@ -1296,6 +1341,10 @@ private: System::Void btnRotate_right_Click(System::Object *  sender, System::Ev
  
 			 im->RotateFlip(RotateFlipType::Rotate90FlipNone);
 			 this->pictureBox1->Image = im;
+		 }
+
+private: System::Void FormMainWindow_Load(System::Object *  sender, System::EventArgs *  e)
+		 {
 		 }
 
 };
