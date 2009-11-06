@@ -115,7 +115,7 @@ void Separate::LineSeparate()
 	//Red Pen are used to draw lines when they are separated
 	Pen* p=new Pen(Color::Red,1);
 	while (startEnumerator->MoveNext() &&  endEnumerator->MoveNext())
-	{
+	{ //possible error because startenumerator and endenumerator might not be same.
     int s = *dynamic_cast<__box int*>(startEnumerator->Current);
     int e = *dynamic_cast<__box int*>(endEnumerator->Current);
 	numberOfLines++;
@@ -262,14 +262,14 @@ void Separate::drawHorizontalHist()
 
 //Word separate
 void Separate::WordSeparate1(ArrayList* start,ArrayList* end)
-{
+{ 
 	ArrayList** wordStart=new ArrayList*();
 	ArrayList** wordEnd=new ArrayList*();
 	IEnumerator *wordStartEnumerator,*wordEndEnumerator;
 	ArrayList** wordStart1=new ArrayList*();
 	ArrayList** wordEnd1=new ArrayList*();
 	//IEnumerator *wordStartEnumerator1,*wordEndEnumerator1;
-
+	//This Function Needs to be upgraded
 	
 	IEnumerator *startEnumerator;
 	IEnumerator *endEnumerator;
@@ -280,8 +280,8 @@ void Separate::WordSeparate1(ArrayList* start,ArrayList* end)
 	int _number_of_gaps=0;
 
 
-	startEnumerator=start->GetEnumerator();
-	endEnumerator=end->GetEnumerator();
+	startEnumerator=start->GetEnumerator(); //linestart (from Separate )
+	endEnumerator=end->GetEnumerator(); // lineEnd (from Separate)
 	
 	Vertical=new int*[numberOfLines];
 	
