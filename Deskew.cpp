@@ -273,3 +273,4 @@ HoughLine* Deskew::GetTop(int count)[]
 	return h1;
 
 }
+
