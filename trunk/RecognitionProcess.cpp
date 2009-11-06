@@ -46,6 +46,9 @@ System::Collections::SortedList* RecognitionProcess::LoadModelTranscriptions(Sys
 	// load the model transcription database
 	 System::IO::StreamReader* sr = System::IO::StreamReader::Null;
 	 slModel = new System ::Collections::SortedList();
+	 
+	 System::Collections::SortedList *aakars = new System ::Collections::SortedList();
+
 	 System::String* key;
 	 System::String* tempStr;
 	 int count=0;
@@ -74,9 +77,18 @@ System::Collections::SortedList* RecognitionProcess::LoadModelTranscriptions(Sys
 				else
 				{
 					alModelTrans->Add(tempStr);
+					//if(tempStr->Equals("093E")){
+					//	System::String *a;
+					//	a = alModelTrans[alModelTrans->Count -1];
+					//slForCharacters->GetKey(slForCharacters->IndexOfValue(tempStr)
+
+					//}
+					
 				}
 			}
-			
+			//if(tempStr->Equals("093E")){
+			//	System::Windows::Forms::MessageBox::Show("Found");
+			//}
 		}
 		sr->Close();
 
@@ -114,6 +126,7 @@ System::Collections::ArrayList* RecognitionProcess::RecognizeByHTK()
 	fm->RecognizeByHMM(this->recognitionTempFileDir,this->exeFileDir,this->mmfFilePath,this->mlfFilePath,this->wordNetFilePath,this->dictFilePath,this->HMMListFilePath, this->scriptFilePath); 
 	
 	System::Collections::ArrayList* al = fm->FetchOutputModels(this->mlfFilePath);
+	
 
 	return al;
 }
