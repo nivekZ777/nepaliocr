@@ -18,13 +18,11 @@ private:
 	int xSize;
 	int ySize;
 	int *Horizontal;
-	int *R2;
 	int **Vertical;
 	//int **VerticalC;
 	int numberOfLines;
 	static int thresh_char_gap=2;
 	int T;
-	int **HeadBottom;
 	Graphics* g;
 	System::Drawing::Bitmap* tempoImage;
 
@@ -42,7 +40,6 @@ public:
 	void CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wordStart,ArrayList** wordEnd);
 	int getNumberOfLines();
 	Line* getLines();
-	int** getHeadBottom();
 
 };
 

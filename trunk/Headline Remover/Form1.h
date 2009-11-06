@@ -45,16 +45,13 @@ namespace Headliner_ver_103
 		}
 
 	private: Bitmap* im;
-			 Bitmap* im2;
 	private: Bitmap* BinaryImage;
-			 Bitmap* cropImage;
-			 Bitmap* FinalImage;
+			 Bitmap* cropImage; //new Crop Image
+			 Bitmap* FinalImage; //New Final Image
 	private: Graphics* g;
     private: int intLevel,ImHeight,ImWidth;
 	private: int **ImgArray;
-			 int *WStore;
-			 int *Horizontal;
-			 int **HeadBottom;
+			 int *WStore; //new
 
 	private: bool **BArray;
 			 bool **tmpBArray;
@@ -67,7 +64,7 @@ namespace Headliner_ver_103
 			 int totalunits;
 	private: Line* Lines; 
 			 	 Line* LineInfo;
-int linecount;
+	int linecount;
 			static int lineno=0;
 			static int charno=0;
 			static int wordno=0;
@@ -98,8 +95,6 @@ int linecount;
 	private: System::Windows::Forms::Label *  label3;
 	private: System::Windows::Forms::Panel *  panel5;
 	private: System::Windows::Forms::PictureBox *  FinalResult;
-	private: System::Windows::Forms::Button *  button1;
-	private: System::Windows::Forms::RichTextBox *  richTextBox1;
 
 
 
@@ -141,8 +136,6 @@ int linecount;
 			this->label3 = new System::Windows::Forms::Label();
 			this->panel5 = new System::Windows::Forms::Panel();
 			this->FinalResult = new System::Windows::Forms::PictureBox();
-			this->button1 = new System::Windows::Forms::Button();
-			this->richTextBox1 = new System::Windows::Forms::RichTextBox();
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
 			this->panel3->SuspendLayout();
@@ -325,29 +318,10 @@ int linecount;
 			this->FinalResult->TabIndex = 0;
 			this->FinalResult->TabStop = false;
 			// 
-			// button1
-			// 
-			this->button1->Location = System::Drawing::Point(400, 288);
-			this->button1->Name = S"button1";
-			this->button1->Size = System::Drawing::Size(136, 23);
-			this->button1->TabIndex = 14;
-			this->button1->Text = S"Fast Segment";
-			this->button1->Click += new System::EventHandler(this, button1_Click_1);
-			// 
-			// richTextBox1
-			// 
-			this->richTextBox1->Location = System::Drawing::Point(864, 32);
-			this->richTextBox1->Name = S"richTextBox1";
-			this->richTextBox1->Size = System::Drawing::Size(160, 376);
-			this->richTextBox1->TabIndex = 15;
-			this->richTextBox1->Text = S"";
-			// 
 			// Form1
 			// 
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
-			this->ClientSize = System::Drawing::Size(1028, 462);
-			this->Controls->Add(this->richTextBox1);
-			this->Controls->Add(this->button1);
+			this->ClientSize = System::Drawing::Size(856, 462);
 			this->Controls->Add(this->panel5);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label1);
@@ -366,7 +340,7 @@ int linecount;
 			this->Icon = (__try_cast<System::Drawing::Icon *  >(resources->GetObject(S"$this.Icon")));
 			this->Name = S"Form1";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = S"MyVersion";
+			this->Text = S"Headliner Ver 1.03";
 			this->Load += new System::EventHandler(this, Form1_Load);
 			this->panel1->ResumeLayout(false);
 			this->panel2->ResumeLayout(false);
@@ -399,7 +373,6 @@ private: void OpenImage(void)
 					// creating a bitmap
 					im = new Bitmap(this->myDialog->OpenFile());
 					this->pictureBox1->Image = im;
-					im2=im;
 					g=this->pictureBox1->CreateGraphics();
 					this->ImHeight=im->Height;
 					this->ImWidth=im->Width;
@@ -499,8 +472,7 @@ private: void DoSeparate()
 							sp->LineSeparate();						//Separate Lines from the image
 
 							this->numberOfLines=sp->getNumberOfLines(); //Get Number of Lines
-							this->Lines=sp->getLines();
-							this->HeadBottom=sp->getHeadBottom();
+							this->Lines=sp->getLines();			//Get Lines
 							this->SeparateDone=true;
 							this->separateChar();	
 							this->pictureBox1->Image=sp->output;//separate Characters					
@@ -582,179 +554,15 @@ private: System::Void btnSave_Click(System::Object *  sender, System::EventArgs 
 private: System::Void panel1_Paint(System::Object *  sender, System::Windows::Forms::PaintEventArgs *  e)
 		 {
 		 }
-
-private: int MultiFactorialAnalysis(Bitmap *connected,int Headline_Pos,int Bottom_Pos)
+private: int MultiFactorialAnalysis(Bitmap *connected)
 		 {
-			/*int i,j;
-			ThresholedValue* ts = new ThresholedValue(this->cropImage);
-			float fLevel;
-			fLevel= ts->GetThresholed();
-			int levl;
-			levl = int(fLevel*255);
-			rgbConvert* rgbC = new rgbConvert(this->cropImage);
-			int **BinArray;
-			int height;
-			bool **tempArray;
-			tempArray=rgbC->GetBinaryArray(levl);
-			BinArray= rgbC->GetImageArray();;
-	
-			bool flag=false;
-			int width;
-			width=this->cropImage->Width;
-			int *top;
-			int *bottom;
-			int down,up;
-			int count=0;
-			bool temp,temp1;
-			float *Fic,*Fmt,*Fdm,*Fdmc,*Summation;;
-
-			top=new int[width];
-			bottom=new int[width];
-			Fic=new float[width];
-			Fmt=new float[width];
-			Summation=new float[width];
-			Fdm=new float[width];
-			Fdmc=new float[width];
-	/*		
-			System::Windows::Forms::MessageBox::Show(Headline_Pos.ToString(),"HeadLine");
-			System::Windows::Forms::MessageBox::Show(Bottom_Pos.ToString(),"BottomLine");*//*
-			for(i=0;i<=this->cropImage->Width-1;i++)
-			{
-				flag=false;
-				top[i]=0;
-				bottom[i]=0;
-				Fic[i]=0;
-				Fmt[i]=0;
-				Summation[i]=0;
-				Fdm[i]=0;
-				Fdmc[i]=0;
-				for(j=0;j<this->cropImage->Height;j++)
-				{
-					if(BinArray[j][i]==0)
-					{
-						if(flag==false)
-						{
-							top[i]=j;
-							//	System::Windows::Forms::MessageBox::Show(top[i].ToString(),"Top Value");
-							flag=true;
-						}
-						else
-						{
-							bottom[i]=j;
-						}
-					}
-				}
-			}
-		
-			up=minimum(top,width);
-			down=maximum(bottom,width);
-			height=down-up;		
-	//		height=Bottom_Pos-Headline_Pos;
-		
-			for(j=0;j<width;j++)
-			{
-				count=0;
-				for(i=0;i<height;i++)
-				{
-					temp=tempArray[i][j];
-					temp1=tempArray[i+1][j];
-					if(temp!=temp1)
-					{
-						count++;
-					}
-				}
-				if(count!=0)
-				{
-					Fic[j]=(float)1/(float)count;
-				}
-				else
-				{
-					Fic[j]=-1;
-				}
-			}
-			
-			float inccount;
-			
-			for(i=0;i<width;i++)
-			{
-				inccount=0;
-				for(j=0;j<height;j++)
-				{
-					if(BinArray[j][i]==false)
-					{
-						inccount++;
-					}
-				}
-			//	System::Windows::Forms::MessageBox::Show(inccount.ToString(),"blob size");
-			//	System::Windows::Forms::MessageBox::Show(height.ToString(),"Bigger T");
-				Fmt[i]=1-inccount/(float)height;
-			}
-			int Left_Pos=0;
-			int Right_Pos=width;
-			
-			for(i=0;i<width;i++)
-			{
-				int l1=top[i]-Headline_Pos;
-				int l2=Bottom_Pos-bottom[i];
-				int mn,mx;
-				if(l1>=l2)
-				{
-					mn=l2;
-					mx=l1;
-				}
-				else
-				{
-					mn=l1;
-					mx=l2;
-				}
-				if(mx==0)
-				{
-					Fdm[i]=-10;
-				}	
-				else
-				{
-					Fdm[i]=(float)mn/(float)mx;
-				}
-				int ll1=i;
-				int ll2=width-i-2;
-				int mmn,mmx;
-				if(ll1>=ll2)
-				{
-					mmn=ll2;
-					mmx=ll1;
-				}
-				else
-				{
-					mmn=ll1;
-					mmx=ll2;
-				}
-				if(mmx==0)
-				{
-					Fdmc[i]=-10;
-				}
-				else
-				{
-					Fdmc[i]=(float)mmn/(float)mmx;
-				}
-			}
-		
-			for(i=0;i<width;i++)
-			{
-				float sum=0.0;
-				sum=Fic[i]+Fmt[i]+Fdm[i]+Fdmc[i];
-			//	System::Windows::Forms::MessageBox::Show(sum.ToString(),"Sum");
-				Summation[i]=sum/4;
-			}
-				
-			int cutcolumn=maximum(Summation,width);
-			return cutcolumn;*/
 			int i,j;
-			ThresholedValue* ts = new ThresholedValue(this->cropImage);
+			ThresholedValue* ts = new ThresholedValue(connected);
 			float fLevel;
 			fLevel= ts->GetThresholed();
 			int levl;
 			levl = int(fLevel*255);
-			rgbConvert* rgbC = new rgbConvert(this->cropImage);
+			rgbConvert* rgbC = new rgbConvert(connected);
 			int **BinArray;
 			int height;
 			bool **tempArray;
@@ -762,7 +570,7 @@ private: int MultiFactorialAnalysis(Bitmap *connected,int Headline_Pos,int Botto
 			BinArray= rgbC->GetImageArray();
 			bool flag=false;
 			int width;
-			width=this->cropImage->Width;
+			width=connected->Width;
 			int *top;
 			int *bottom;
 			int down,up;
@@ -778,9 +586,8 @@ private: int MultiFactorialAnalysis(Bitmap *connected,int Headline_Pos,int Botto
 			Fdm=new float[width];
 			Fdmc=new float[width];
 
-			for(i=0;i<=this->cropImage->Width-1;i++)
+			for(i=0;i<=connected->Width-1;i++)
 			{
-				flag=false;
 				top[i]=0;
 				bottom[i]=0;
 				Fic[i]=0;
@@ -788,14 +595,18 @@ private: int MultiFactorialAnalysis(Bitmap *connected,int Headline_Pos,int Botto
 				Summation[i]=0;
 				Fdm[i]=0;
 				Fdmc[i]=0;
-				for(j=0;j<this->cropImage->Height;j++)
+			}
+			for(i=0;i<=connected->Width-1;i++)
+			{
+				flag=false;
+				for(j=0;j<=connected->Height-1;j++)
 				{
 					if(BinArray[j][i]==0)
 					{
 						if(flag==false)
 						{
 							top[i]=j;
-							//	System::Windows::Forms::MessageBox::Show(top[i].ToString(),"Top Value");
+						//	System::Windows::Forms::MessageBox::Show(top[i].ToString(),"Top Value");
 							flag=true;
 						}
 						else
@@ -809,12 +620,9 @@ private: int MultiFactorialAnalysis(Bitmap *connected,int Headline_Pos,int Botto
 			up=minimum(top,width);
 			down=maximum(bottom,width);
 			height=down-up;
-		/*	height=Bottom_Pos-Headline_Pos;
-			System::Windows::Forms::MessageBox::Show(Headline_Pos.ToString(),"HeadLine");
-			System::Windows::Forms::MessageBox::Show(Bottom_Pos.ToString(),"BottomLine");
 			System::Windows::Forms::MessageBox::Show(up.ToString(),"Up");
 			System::Windows::Forms::MessageBox::Show(down.ToString(),"Down");
-			System::Windows::Forms::MessageBox::Show(height.ToString(),"Height");*/
+			System::Windows::Forms::MessageBox::Show(height.ToString(),"Height");
 
 			for(j=0;j<width;j++)
 			{
@@ -857,8 +665,8 @@ private: int MultiFactorialAnalysis(Bitmap *connected,int Headline_Pos,int Botto
 
 			for(i=0;i<width;i++)
 			{
-				int l1=top[i]-Headline_Pos;
-				int l2=Bottom_Pos-bottom[i];
+				int l1=top[i]-up;
+				int l2=down-bottom[i];
 				int mn,mx;
 				if(l1>=l2)
 				{
@@ -905,12 +713,12 @@ private: int MultiFactorialAnalysis(Bitmap *connected,int Headline_Pos,int Botto
 			{
 				float sum=0.0;
 				sum=Fic[i]+Fmt[i]+Fdm[i]+Fdmc[i];
-				//System::Windows::Forms::MessageBox::Show(sum.ToString(),"Sum");
+				System::Windows::Forms::MessageBox::Show(sum.ToString(),"Sum");
 				Summation[i]=sum/4;
 			}
 			
 			int cutcolumn=maximum(Summation,width);
-			return cutcolumn-1;
+			return cutcolumn;
 		 }
 
 private: int minimum(int *num,int width)
@@ -1001,119 +809,6 @@ private: void sortWidth()
 				}
 			}
 		 }
-private: int ThresholdSize()
-		 {
-			this->sortWidth();
-			int sz;
-			sz=(this->totalunits+1)/2;
-			int val;
-			val= this->WStore[sz];
-			val=3*val/2;
-			return val;
-		 }
-private: void Crop_Image(int lineno,int wordno,int charno)
-		 {
-			int x1,x2,y1,y2;
-
-			x1=this->LineInfo[lineno].Words[wordno].Units[charno].getStartColumn(); //Equivalent to :: left_x
-			x2=this->LineInfo[lineno].Words[wordno].Units[charno].getEndColumn();	//Equivalent to :: right_x
-			y1=this->LineInfo[lineno].getStartRow();		//Equivalent to :: top_y
-			y2=this->LineInfo[lineno].getEndRow();			 //Equivalent to :: bottom_y
-			
-			int xsize=x2-x1+1;
-			int ysize=y2-y1+1;
-			int val=this->ThresholdSize();
-		//	System::Windows::Forms::MessageBox::Show(val.ToString(),"Threshold Size");
-			this->WidthLabel->Text=xsize.ToString();
-			this->cropImage=new Bitmap(xsize,ysize,Imaging::PixelFormat::Format24bppRgb);
-			for(int i=y1;i<=y2;i++)//traverse throughy
-			{
-				for(int j=x1;j<=x2;j++)//traverse through x
-				{
-					if(this->BArray[i][j])
-					{
-						this->cropImage->SetPixel(j-x1,i-y1,Color::White);
-					}
-					else
-					{
-						this->cropImage->SetPixel(j-x1,i-y1,Color::Black);
-					}
-				}
-			}
-		 }
-private: void ReSegment(int lineno,int wordno,int charno)
-		 {
-			int x1,x2,y1,y2;
-
-			x1=this->LineInfo[lineno].Words[wordno].Units[charno].getStartColumn(); //Equivalent to :: left_x
-			x2=this->LineInfo[lineno].Words[wordno].Units[charno].getEndColumn();	//Equivalent to :: right_x
-			y1=this->LineInfo[lineno].getStartRow();		//Equivalent to :: top_y
-			y2=this->LineInfo[lineno].getEndRow();
-
-			int xsize=x2-x1+1;
-			int ysize=y2-y1+1;
-
-			this->Crop_Image(lineno,wordno,charno);
-			int col=this->MultiFactorialAnalysis(cropImage,this->HeadBottom[lineno][0],this->HeadBottom[lineno][1]);
-			this->richTextBox1->AppendText(col.ToString());
-			this->richTextBox1->AppendText("Cut column ");
-			int units=this->LineInfo[lineno].Words[wordno].getTotalUnit();
-			int *start,*end;
-			start= new int[units+1];
-			end=new int[units+1];
-			this->richTextBox1->AppendText("\n units  ");
-			this->richTextBox1->AppendText(units.ToString());
-			this->richTextBox1->AppendText("\n");
-			this->richTextBox1->AppendText("\n char no  ");
-			this->richTextBox1->AppendText(charno.ToString());
-			this->richTextBox1->AppendText("\n");
-	
-			for(int i=0;i<units;i++)
-			{
-				int sc=this->LineInfo[lineno].Words[wordno].Units[i].getStartColumn();
-				this->richTextBox1->AppendText("\n Original Start  ");
-				this->richTextBox1->AppendText(sc.ToString());
-				this->richTextBox1->AppendText("\n");
-			}
-
-
-			for(int i=0;i<=units;i++)
-			{
-				int sc=this->LineInfo[lineno].Words[wordno].Units[i].getStartColumn();
-				int ed=this->LineInfo[lineno].Words[wordno].Units[i].getEndColumn();
-				if(i<charno)
-				{
-					start[i]=sc;
-					end[i]=ed;
-				}
-				else if(i>(charno+1))
-				{
-					start[i]=this->LineInfo[lineno].Words[wordno].Units[i-1].getStartColumn();
-					end[i]=this->LineInfo[lineno].Words[wordno].Units[i-1].getEndColumn();
-				}
-				else if(i==charno)
-				{
-					start[i]=sc;
-					end[i]=sc+col;
-				}
-				else if(i==(charno+1))
-				{
-					start[i]=end[i-1]+1;
-					end[i]=this->LineInfo[lineno].Words[wordno].Units[i-1].getEndColumn();;
-				}
-			}
-			//new unit size and setting the start and end columns for each unit
-			this->LineInfo[lineno].Words[wordno].setUnit(units+1);
-			for(int i=0;i<=units;i++)
-			{
-				this->LineInfo[lineno].Words[wordno].Units[i].set(start[i],end[i]);
-				//System::Windows::Forms::MessageBox::Show(start[i].ToString(),"Start column");
-				this->richTextBox1->AppendText("\nStart ");
-				this->richTextBox1->AppendText(start[i].ToString());
-				this->richTextBox1->AppendText("\n");
-            }
-			display(lineno,wordno,charno);
-		 }
 private: void display(int lineno,int wordno,int charno)
 		{
 			int x1,x2,y1,y2;
@@ -1123,10 +818,15 @@ private: void display(int lineno,int wordno,int charno)
 			y1=this->LineInfo[lineno].getStartRow();		//Equivalent to :: top_y
 			y2=this->LineInfo[lineno].getEndRow();			 //Equivalent to :: bottom_y
 			
+			this->sortWidth();
+			int sz;
+			sz=(this->totalunits+1)/2;
+			int val;
+			val= this->WStore[sz];
 			int xsize=x2-x1+1;
 			int ysize=y2-y1+1;
-			int val=this->ThresholdSize();
-		//	System::Windows::Forms::MessageBox::Show(val.ToString(),"Threshold Size");
+			val=3*val/2 +1;
+			System::Windows::Forms::MessageBox::Show(val.ToString(),"Threshold Size");
 			this->WidthLabel->Text=xsize.ToString();
 			this->cropImage=new Bitmap(xsize,ysize,Imaging::PixelFormat::Format24bppRgb);
 				for(int i=y1;i<=y2;i++)//traverse throughy
@@ -1150,7 +850,7 @@ private: void display(int lineno,int wordno,int charno)
 			else
 			{
 				Bitmap *cutImage1,*cutImage2;
-				int col=this->MultiFactorialAnalysis(cropImage,this->HeadBottom[lineno][0],this->HeadBottom[lineno][1]);
+				int col=this->MultiFactorialAnalysis(cropImage);
 				cutImage1=new Bitmap(col+1,ysize,Imaging::PixelFormat::Format24bppRgb);
 				cutImage2=new Bitmap(xsize-col-1,ysize,Imaging::PixelFormat::Format24bppRgb);
 
@@ -1214,7 +914,7 @@ private: System::Void button1_Click(System::Object *  sender, System::EventArgs 
 			 if(this->ImageLoaded && this->BinaryDone)
 			 {
 				this->widthStore();
-				//System::Windows::Forms::MessageBox::Show(this->totalunits.ToString(),"Total Units Without |");
+				System::Windows::Forms::MessageBox::Show(this->totalunits.ToString(),"Total Units Without |");
 				linecount=this->numberOfLines;
 				LineInfo=Lines;
 				if(charno<this->LineInfo[lineno].Words[wordno].getTotalUnit()-1)
@@ -1264,40 +964,6 @@ private: System::Void pictureBox2_Click_1(System::Object *  sender, System::Even
 
 
  
-private: System::Void button1_Click_1(System::Object *  sender, System::EventArgs *  e)
-		{
-	/*	this->im=new Bitmap(this->pictureBox1->Image);
-		this->DoBinary();
-		this->DoSeparate();
-*/
-		if(this->ImageLoaded && this->BinaryDone)
-			{
-				this->widthStore();
-				for(int i=0;i<this->numberOfLines;i++)
-				{
-					for(int j=0;j<this->Lines[i].getTotalWord();j++)
-					{
-						for(int k=0;k<this->Lines[i].Words[j].getTotalUnit();k++)
-						{
-							int x1=this->Lines[i].Words[j].Units[k].getStartColumn();
-							int x2=this->Lines[i].Words[j].Units[k].getEndColumn();
-							int y1=this->Lines[i].getStartRow();
-							int y2=this->Lines[i].getEndRow();
-							
-							int wchar=x2-x1+1;
-
-							int val=this->ThresholdSize();
-							
-							if(val<wchar)
-							{
-								this->ReSegment(i,j,k);
-							}
-						}
-					}
-				}
-			}
-		}
-
 };
 }
 
