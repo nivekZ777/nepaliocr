@@ -159,24 +159,70 @@ namespace OCR
 	
 	private: System::Windows::Forms::Panel *  picture_panel;
 	private: System::Windows::Forms::PictureBox *  pictureBox1;
-	private: System::Windows::Forms::Button *  convertToBinary_button;
-	private: System::Windows::Forms::Button *  openImage;
+
+
 	private: System::Windows::Forms::OpenFileDialog *  openImageDialog;
-	private: System::Windows::Forms::Button *  separate_button;
+
 	private: System::Windows::Forms::SaveFileDialog *  saveImageDialog;
-	private: System::Windows::Forms::Button *  saveImage;
-	private: System::Windows::Forms::Button *  imContrast;
-	private: System::Windows::Forms::Button *  meanRemoval;
-	private: System::Windows::Forms::Button *  deSkew;
-	private: System::Windows::Forms::Button *  train;
-	private: System::Windows::Forms::Button *  recognize;
-	private: System::Windows::Forms::Button *  fastRecognizeButton;
+
+
+
+
+
+
+
 	private: System::Windows::Forms::Label *  myInfo;
 	private: System::Windows::Forms::Label *  myInfo1;
-	private: System::Windows::Forms::Button *  findMagnification;
-	private: System::Windows::Forms::Button *  cb;
-private: System::Windows::Forms::Button *  btnRotate_right;
-private: System::Windows::Forms::Button *  btnCrop;
+
+
+
+
+private: System::Windows::Forms::MainMenu *  ocrMenu;
+private: System::Windows::Forms::MenuItem *  menuItem1;
+private: System::Windows::Forms::MenuItem *  mnuLoadImage;
+private: System::Windows::Forms::MenuItem *  mnuFastRecognize;
+private: System::Windows::Forms::MenuItem *  mnuOCR;
+private: System::Windows::Forms::MenuItem *  mnuBinarize;
+private: System::Windows::Forms::MenuItem *  mnuSeparate;
+private: System::Windows::Forms::MenuItem *  mnuRecognize;
+private: System::Windows::Forms::MenuItem *  mnuAdvanced;
+private: System::Windows::Forms::MenuItem *  mnuTrain;
+private: System::Windows::Forms::MenuItem *  menuItem2;
+
+
+private: System::Windows::Forms::MenuItem *  mnuSaveImage;
+private: System::Windows::Forms::MenuItem *  mnuDeskew;
+private: System::Windows::Forms::MenuItem *  menuItem3;
+
+
+private: System::Windows::Forms::Splitter *  splitter1;
+private: System::Windows::Forms::MenuItem *  mnuContrastAndBinarize;
+private: System::Windows::Forms::MenuItem *  mnuContrast;
+private: System::Windows::Forms::MenuItem *  mnuMeanRemoval;
+private: System::Windows::Forms::MenuItem *  mnuMagnification;
+private: System::Windows::Forms::MenuItem *  mnuRotate;
+private: System::Windows::Forms::MenuItem *  mnuRecognize2;
+private: System::Windows::Forms::MenuItem *  mnuCropper;
+private: System::Windows::Forms::StatusBar *  statusBar1;
+private: System::Windows::Forms::MenuItem *  mnuFastRecognize2;
+private: System::Windows::Forms::MenuItem *  menuItem5;
+private: System::Windows::Forms::ContextMenu *  ocrCntMenu;
+private: System::Windows::Forms::MenuItem *  cMenuLoadImage;
+private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -196,38 +242,42 @@ private: System::Windows::Forms::Button *  btnCrop;
 		void InitializeComponent(void)
 		{
 			System::Resources::ResourceManager *  resources = new System::Resources::ResourceManager(__typeof(OCR::FormMainWindow));
-			this->convertToBinary_button = new System::Windows::Forms::Button();
 			this->picture_panel = new System::Windows::Forms::Panel();
+			this->statusBar1 = new System::Windows::Forms::StatusBar();
 			this->pictureBox1 = new System::Windows::Forms::PictureBox();
-			this->openImage = new System::Windows::Forms::Button();
 			this->openImageDialog = new System::Windows::Forms::OpenFileDialog();
-			this->separate_button = new System::Windows::Forms::Button();
 			this->saveImageDialog = new System::Windows::Forms::SaveFileDialog();
-			this->saveImage = new System::Windows::Forms::Button();
-			this->imContrast = new System::Windows::Forms::Button();
-			this->meanRemoval = new System::Windows::Forms::Button();
-			this->deSkew = new System::Windows::Forms::Button();
-			this->train = new System::Windows::Forms::Button();
-			this->recognize = new System::Windows::Forms::Button();
-			this->fastRecognizeButton = new System::Windows::Forms::Button();
 			this->myInfo = new System::Windows::Forms::Label();
 			this->myInfo1 = new System::Windows::Forms::Label();
-			this->findMagnification = new System::Windows::Forms::Button();
-			this->cb = new System::Windows::Forms::Button();
-			this->btnRotate_right = new System::Windows::Forms::Button();
-			this->btnCrop = new System::Windows::Forms::Button();
+			this->ocrMenu = new System::Windows::Forms::MainMenu();
+			this->menuItem1 = new System::Windows::Forms::MenuItem();
+			this->mnuLoadImage = new System::Windows::Forms::MenuItem();
+			this->mnuFastRecognize = new System::Windows::Forms::MenuItem();
+			this->mnuMagnification = new System::Windows::Forms::MenuItem();
+			this->mnuOCR = new System::Windows::Forms::MenuItem();
+			this->mnuFastRecognize2 = new System::Windows::Forms::MenuItem();
+			this->menuItem5 = new System::Windows::Forms::MenuItem();
+			this->mnuBinarize = new System::Windows::Forms::MenuItem();
+			this->mnuSeparate = new System::Windows::Forms::MenuItem();
+			this->mnuRecognize = new System::Windows::Forms::MenuItem();
+			this->menuItem3 = new System::Windows::Forms::MenuItem();
+			this->mnuContrastAndBinarize = new System::Windows::Forms::MenuItem();
+			this->mnuContrast = new System::Windows::Forms::MenuItem();
+			this->mnuMeanRemoval = new System::Windows::Forms::MenuItem();
+			this->mnuAdvanced = new System::Windows::Forms::MenuItem();
+			this->mnuTrain = new System::Windows::Forms::MenuItem();
+			this->mnuRecognize2 = new System::Windows::Forms::MenuItem();
+			this->menuItem2 = new System::Windows::Forms::MenuItem();
+			this->mnuSaveImage = new System::Windows::Forms::MenuItem();
+			this->mnuDeskew = new System::Windows::Forms::MenuItem();
+			this->mnuRotate = new System::Windows::Forms::MenuItem();
+			this->mnuCropper = new System::Windows::Forms::MenuItem();
+			this->splitter1 = new System::Windows::Forms::Splitter();
+			this->ocrCntMenu = new System::Windows::Forms::ContextMenu();
+			this->cMenuLoadImage = new System::Windows::Forms::MenuItem();
+			this->cMenuFastRecognize = new System::Windows::Forms::MenuItem();
 			this->picture_panel->SuspendLayout();
 			this->SuspendLayout();
-			// 
-			// convertToBinary_button
-			// 
-			this->convertToBinary_button->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->convertToBinary_button->Location = System::Drawing::Point(232, 96);
-			this->convertToBinary_button->Name = S"convertToBinary_button";
-			this->convertToBinary_button->Size = System::Drawing::Size(72, 24);
-			this->convertToBinary_button->TabIndex = 5;
-			this->convertToBinary_button->Text = S"BINARY";
-			this->convertToBinary_button->Click += new System::EventHandler(this, close_button_Click_1);
 			// 
 			// picture_panel
 			// 
@@ -235,13 +285,24 @@ private: System::Windows::Forms::Button *  btnCrop;
 			this->picture_panel->AutoScroll = true;
 			this->picture_panel->BackColor = System::Drawing::Color::AliceBlue;
 			this->picture_panel->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
+			this->picture_panel->Controls->Add(this->statusBar1);
 			this->picture_panel->Controls->Add(this->pictureBox1);
-			this->picture_panel->Location = System::Drawing::Point(8, 128);
+			this->picture_panel->Location = System::Drawing::Point(8, 32);
 			this->picture_panel->Name = S"picture_panel";
-			this->picture_panel->Size = System::Drawing::Size(776, 384);
+			this->picture_panel->Size = System::Drawing::Size(776, 464);
 			this->picture_panel->TabIndex = 1;
+			this->picture_panel->Click += new System::EventHandler(this, picture_panel_Click);
 			this->picture_panel->DragEnter += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragEnter);
+			this->picture_panel->MouseUp += new System::Windows::Forms::MouseEventHandler(this, picture_panel_MouseUp);
 			this->picture_panel->DragDrop += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragDrop);
+			this->picture_panel->DoubleClick += new System::EventHandler(this, picture_panel_DoubleClick);
+			// 
+			// statusBar1
+			// 
+			this->statusBar1->Location = System::Drawing::Point(0, 444);
+			this->statusBar1->Name = S"statusBar1";
+			this->statusBar1->Size = System::Drawing::Size(772, 16);
+			this->statusBar1->TabIndex = 1;
 			// 
 			// pictureBox1
 			// 
@@ -251,151 +312,217 @@ private: System::Windows::Forms::Button *  btnCrop;
 			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
 			this->pictureBox1->TabIndex = 0;
 			this->pictureBox1->TabStop = false;
-			// 
-			// openImage
-			// 
-			this->openImage->BackColor = System::Drawing::Color::Transparent;
-			this->openImage->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->openImage->Location = System::Drawing::Point(24, 16);
-			this->openImage->Name = S"openImage";
-			this->openImage->Size = System::Drawing::Size(112, 48);
-			this->openImage->TabIndex = 1;
-			this->openImage->Text = S"OPEN IMAGE";
-			this->openImage->Click += new System::EventHandler(this, openImage_Click);
+			this->pictureBox1->MouseUp += new System::Windows::Forms::MouseEventHandler(this, pictureBox1_MouseUp);
 			// 
 			// openImageDialog
 			// 
 			this->openImageDialog->Filter = S"Image Files(*.BMP;*.JPG;*.GIF;*.png)|*.BMP;*.JPG;*.GIF;*.PNG|All files (*.*)|*.*";
 			// 
-			// separate_button
-			// 
-			this->separate_button->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->separate_button->Location = System::Drawing::Point(416, 96);
-			this->separate_button->Name = S"separate_button";
-			this->separate_button->TabIndex = 6;
-			this->separate_button->Text = S"SEPARATE";
-			this->separate_button->Click += new System::EventHandler(this, separate_button_Click);
-			// 
 			// saveImageDialog
 			// 
 			this->saveImageDialog->DefaultExt = S"*.jpg";
 			// 
-			// saveImage
-			// 
-			this->saveImage->BackColor = System::Drawing::Color::WhiteSmoke;
-			this->saveImage->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->saveImage->Location = System::Drawing::Point(264, 8);
-			this->saveImage->Name = S"saveImage";
-			this->saveImage->Size = System::Drawing::Size(112, 48);
-			this->saveImage->TabIndex = 2;
-			this->saveImage->Text = S"SAVE IMAGE";
-			this->saveImage->Click += new System::EventHandler(this, saveImage_Click);
-			// 
-			// imContrast
-			// 
-			this->imContrast->BackColor = System::Drawing::Color::Transparent;
-			this->imContrast->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->imContrast->Location = System::Drawing::Point(232, 64);
-			this->imContrast->Name = S"imContrast";
-			this->imContrast->TabIndex = 3;
-			this->imContrast->Text = S"CONTRAST";
-			this->imContrast->Click += new System::EventHandler(this, imContrast_Click);
-			// 
-			// meanRemoval
-			// 
-			this->meanRemoval->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->meanRemoval->Location = System::Drawing::Point(312, 64);
-			this->meanRemoval->Name = S"meanRemoval";
-			this->meanRemoval->TabIndex = 4;
-			this->meanRemoval->Text = S"MEAN";
-			this->meanRemoval->Click += new System::EventHandler(this, meanRemoval_Click);
-			// 
-			// deSkew
-			// 
-			this->deSkew->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->deSkew->Location = System::Drawing::Point(32, 80);
-			this->deSkew->Name = S"deSkew";
-			this->deSkew->TabIndex = 7;
-			this->deSkew->Text = S"DE-SKEW";
-			this->deSkew->Click += new System::EventHandler(this, deSkew_Click);
-			// 
-			// train
-			// 
-			this->train->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->train->Location = System::Drawing::Point(600, 88);
-			this->train->Name = S"train";
-			this->train->TabIndex = 8;
-			this->train->Text = S"TRAIN";
-			this->train->Click += new System::EventHandler(this, train_Click);
-			// 
-			// recognize
-			// 
-			this->recognize->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->recognize->Location = System::Drawing::Point(688, 88);
-			this->recognize->Name = S"recognize";
-			this->recognize->Size = System::Drawing::Size(88, 23);
-			this->recognize->TabIndex = 9;
-			this->recognize->Text = S"RECOGNIZE";
-			this->recognize->Click += new System::EventHandler(this, recognize_Click);
-			// 
-			// fastRecognizeButton
-			// 
-			this->fastRecognizeButton->Location = System::Drawing::Point(160, 8);
-			this->fastRecognizeButton->Name = S"fastRecognizeButton";
-			this->fastRecognizeButton->Size = System::Drawing::Size(88, 48);
-			this->fastRecognizeButton->TabIndex = 10;
-			this->fastRecognizeButton->Text = S"Fast Recognize";
-			this->fastRecognizeButton->Click += new System::EventHandler(this, fastRecognizeButton_Click);
-			// 
 			// myInfo
 			// 
-			this->myInfo->Location = System::Drawing::Point(520, 16);
+			this->myInfo->Location = System::Drawing::Point(520, 8);
 			this->myInfo->Name = S"myInfo";
 			this->myInfo->Size = System::Drawing::Size(264, 24);
 			this->myInfo->TabIndex = 11;
 			// 
 			// myInfo1
 			// 
-			this->myInfo1->Location = System::Drawing::Point(440, 16);
+			this->myInfo1->Location = System::Drawing::Point(440, 8);
 			this->myInfo1->Name = S"myInfo1";
 			this->myInfo1->Size = System::Drawing::Size(72, 24);
 			this->myInfo1->TabIndex = 12;
 			// 
-			// findMagnification
+			// ocrMenu
 			// 
-			this->findMagnification->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->findMagnification->Location = System::Drawing::Point(400, 56);
-			this->findMagnification->Name = S"findMagnification";
-			this->findMagnification->Size = System::Drawing::Size(88, 24);
-			this->findMagnification->TabIndex = 13;
-			this->findMagnification->Text = S"Magnification";
-			this->findMagnification->Click += new System::EventHandler(this, findMagnification_Click);
+			System::Windows::Forms::MenuItem* __mcTemp__1[] = new System::Windows::Forms::MenuItem*[4];
+			__mcTemp__1[0] = this->menuItem1;
+			__mcTemp__1[1] = this->mnuOCR;
+			__mcTemp__1[2] = this->mnuAdvanced;
+			__mcTemp__1[3] = this->menuItem2;
+			this->ocrMenu->MenuItems->AddRange(__mcTemp__1);
 			// 
-			// cb
+			// menuItem1
 			// 
-			this->cb->Location = System::Drawing::Point(136, 96);
-			this->cb->Name = S"cb";
-			this->cb->Size = System::Drawing::Size(88, 24);
-			this->cb->TabIndex = 14;
-			this->cb->Text = S"C and B";
-			this->cb->Click += new System::EventHandler(this, cb_Click);
+			this->menuItem1->Index = 0;
+			System::Windows::Forms::MenuItem* __mcTemp__2[] = new System::Windows::Forms::MenuItem*[3];
+			__mcTemp__2[0] = this->mnuLoadImage;
+			__mcTemp__2[1] = this->mnuFastRecognize;
+			__mcTemp__2[2] = this->mnuMagnification;
+			this->menuItem1->MenuItems->AddRange(__mcTemp__2);
+			this->menuItem1->Text = S"Start";
 			// 
-			// btnRotate_right
+			// mnuLoadImage
 			// 
-			this->btnRotate_right->Location = System::Drawing::Point(312, 96);
-			this->btnRotate_right->Name = S"btnRotate_right";
-			this->btnRotate_right->Size = System::Drawing::Size(88, 24);
-			this->btnRotate_right->TabIndex = 15;
-			this->btnRotate_right->Text = S"Rotate";
-			this->btnRotate_right->Click += new System::EventHandler(this, btnRotate_right_Click);
+			this->mnuLoadImage->Index = 0;
+			this->mnuLoadImage->Text = S"Load Image";
+			this->mnuLoadImage->Click += new System::EventHandler(this, mnuLoadImage_Click);
 			// 
-			// btnCrop
+			// mnuFastRecognize
 			// 
-			this->btnCrop->Location = System::Drawing::Point(504, 72);
-			this->btnCrop->Name = S"btnCrop";
-			this->btnCrop->TabIndex = 16;
-			this->btnCrop->Text = S"crop";
-			this->btnCrop->Click += new System::EventHandler(this, btnCrop_Click);
+			this->mnuFastRecognize->Index = 1;
+			this->mnuFastRecognize->Text = S"Fast Recognize";
+			this->mnuFastRecognize->Click += new System::EventHandler(this, mnuFastRecognize_Click);
+			// 
+			// mnuMagnification
+			// 
+			this->mnuMagnification->Index = 2;
+			this->mnuMagnification->Text = S"Magnification";
+			this->mnuMagnification->Click += new System::EventHandler(this, mnuMagnification_Click);
+			// 
+			// mnuOCR
+			// 
+			this->mnuOCR->Index = 1;
+			System::Windows::Forms::MenuItem* __mcTemp__3[] = new System::Windows::Forms::MenuItem*[9];
+			__mcTemp__3[0] = this->mnuFastRecognize2;
+			__mcTemp__3[1] = this->menuItem5;
+			__mcTemp__3[2] = this->mnuBinarize;
+			__mcTemp__3[3] = this->mnuSeparate;
+			__mcTemp__3[4] = this->mnuRecognize;
+			__mcTemp__3[5] = this->menuItem3;
+			__mcTemp__3[6] = this->mnuContrastAndBinarize;
+			__mcTemp__3[7] = this->mnuContrast;
+			__mcTemp__3[8] = this->mnuMeanRemoval;
+			this->mnuOCR->MenuItems->AddRange(__mcTemp__3);
+			this->mnuOCR->Text = S"OCR";
+			// 
+			// mnuFastRecognize2
+			// 
+			this->mnuFastRecognize2->Index = 0;
+			this->mnuFastRecognize2->Text = S"Fast Recognize";
+			this->mnuFastRecognize2->Click += new System::EventHandler(this, mnuFastRecognize2_Click);
+			// 
+			// menuItem5
+			// 
+			this->menuItem5->Index = 1;
+			this->menuItem5->Text = S"-";
+			// 
+			// mnuBinarize
+			// 
+			this->mnuBinarize->Index = 2;
+			this->mnuBinarize->Text = S"Binarize";
+			this->mnuBinarize->Click += new System::EventHandler(this, mnuBinarize_Click);
+			// 
+			// mnuSeparate
+			// 
+			this->mnuSeparate->Index = 3;
+			this->mnuSeparate->Text = S"Separate";
+			this->mnuSeparate->Click += new System::EventHandler(this, mnuSeparate_Click);
+			// 
+			// mnuRecognize
+			// 
+			this->mnuRecognize->Index = 4;
+			this->mnuRecognize->Text = S"Recognize";
+			this->mnuRecognize->Click += new System::EventHandler(this, mnuRecognize_Click);
+			// 
+			// menuItem3
+			// 
+			this->menuItem3->Index = 5;
+			this->menuItem3->Text = S"-";
+			// 
+			// mnuContrastAndBinarize
+			// 
+			this->mnuContrastAndBinarize->Index = 6;
+			this->mnuContrastAndBinarize->Text = S"Contrast and Binarize";
+			this->mnuContrastAndBinarize->Click += new System::EventHandler(this, mnuContrastAndBinarize_Click);
+			// 
+			// mnuContrast
+			// 
+			this->mnuContrast->Index = 7;
+			this->mnuContrast->Text = S"Contrast Only";
+			this->mnuContrast->Click += new System::EventHandler(this, mnuContrast_Click);
+			// 
+			// mnuMeanRemoval
+			// 
+			this->mnuMeanRemoval->Index = 8;
+			this->mnuMeanRemoval->Text = S"Mean Removal";
+			this->mnuMeanRemoval->Click += new System::EventHandler(this, mnuMeanRemoval_Click);
+			// 
+			// mnuAdvanced
+			// 
+			this->mnuAdvanced->Index = 2;
+			System::Windows::Forms::MenuItem* __mcTemp__4[] = new System::Windows::Forms::MenuItem*[2];
+			__mcTemp__4[0] = this->mnuTrain;
+			__mcTemp__4[1] = this->mnuRecognize2;
+			this->mnuAdvanced->MenuItems->AddRange(__mcTemp__4);
+			this->mnuAdvanced->Text = S"Advanced";
+			// 
+			// mnuTrain
+			// 
+			this->mnuTrain->Index = 0;
+			this->mnuTrain->Text = S"Train";
+			this->mnuTrain->Click += new System::EventHandler(this, mnuTrain_Click);
+			// 
+			// mnuRecognize2
+			// 
+			this->mnuRecognize2->Index = 1;
+			this->mnuRecognize2->Text = S"Recognize";
+			this->mnuRecognize2->Click += new System::EventHandler(this, mnuRecognize2_Click);
+			// 
+			// menuItem2
+			// 
+			this->menuItem2->Index = 3;
+			System::Windows::Forms::MenuItem* __mcTemp__5[] = new System::Windows::Forms::MenuItem*[4];
+			__mcTemp__5[0] = this->mnuSaveImage;
+			__mcTemp__5[1] = this->mnuDeskew;
+			__mcTemp__5[2] = this->mnuRotate;
+			__mcTemp__5[3] = this->mnuCropper;
+			this->menuItem2->MenuItems->AddRange(__mcTemp__5);
+			this->menuItem2->Text = S"Image";
+			// 
+			// mnuSaveImage
+			// 
+			this->mnuSaveImage->Index = 0;
+			this->mnuSaveImage->Text = S"Save Imae";
+			this->mnuSaveImage->Click += new System::EventHandler(this, mnuSaveImage_Click);
+			// 
+			// mnuDeskew
+			// 
+			this->mnuDeskew->Index = 1;
+			this->mnuDeskew->Text = S"Deskew";
+			this->mnuDeskew->Click += new System::EventHandler(this, mnuDeskew_Click);
+			// 
+			// mnuRotate
+			// 
+			this->mnuRotate->Index = 2;
+			this->mnuRotate->Text = S"Rotate Right";
+			this->mnuRotate->Click += new System::EventHandler(this, mnuRotate_Click);
+			// 
+			// mnuCropper
+			// 
+			this->mnuCropper->Index = 3;
+			this->mnuCropper->Text = S"Image Cropper";
+			this->mnuCropper->Click += new System::EventHandler(this, mnuCropper_Click);
+			// 
+			// splitter1
+			// 
+			this->splitter1->Location = System::Drawing::Point(0, 0);
+			this->splitter1->Name = S"splitter1";
+			this->splitter1->Size = System::Drawing::Size(3, 503);
+			this->splitter1->TabIndex = 17;
+			this->splitter1->TabStop = false;
+			// 
+			// ocrCntMenu
+			// 
+			System::Windows::Forms::MenuItem* __mcTemp__6[] = new System::Windows::Forms::MenuItem*[2];
+			__mcTemp__6[0] = this->cMenuLoadImage;
+			__mcTemp__6[1] = this->cMenuFastRecognize;
+			this->ocrCntMenu->MenuItems->AddRange(__mcTemp__6);
+			// 
+			// cMenuLoadImage
+			// 
+			this->cMenuLoadImage->Index = 0;
+			this->cMenuLoadImage->Text = S"Load Image";
+			this->cMenuLoadImage->Click += new System::EventHandler(this, cMenuLoadImage_Click);
+			// 
+			// cMenuFastRecognize
+			// 
+			this->cMenuFastRecognize->Index = 1;
+			this->cMenuFastRecognize->Text = S"Fast Recognize";
+			this->cMenuFastRecognize->Click += new System::EventHandler(this, cMenuFastRecognize_Click);
 			// 
 			// FormMainWindow
 			// 
@@ -404,27 +531,15 @@ private: System::Windows::Forms::Button *  btnCrop;
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
 			this->AutoScroll = true;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
-			this->ClientSize = System::Drawing::Size(794, 518);
-			this->Controls->Add(this->btnCrop);
-			this->Controls->Add(this->btnRotate_right);
-			this->Controls->Add(this->cb);
-			this->Controls->Add(this->findMagnification);
+			this->ClientSize = System::Drawing::Size(798, 503);
+			this->Controls->Add(this->splitter1);
 			this->Controls->Add(this->myInfo1);
 			this->Controls->Add(this->myInfo);
-			this->Controls->Add(this->fastRecognizeButton);
-			this->Controls->Add(this->recognize);
-			this->Controls->Add(this->train);
-			this->Controls->Add(this->meanRemoval);
-			this->Controls->Add(this->imContrast);
-			this->Controls->Add(this->saveImage);
-			this->Controls->Add(this->separate_button);
-			this->Controls->Add(this->openImage);
 			this->Controls->Add(this->picture_panel);
-			this->Controls->Add(this->convertToBinary_button);
-			this->Controls->Add(this->deSkew);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::Fixed3D;
 			this->Icon = (__try_cast<System::Drawing::Icon *  >(resources->GetObject(S"$this.Icon")));
 			this->MaximizeBox = false;
+			this->Menu = this->ocrMenu;
 			this->Name = S"FormMainWindow";
 			this->Text = S"Nepali OCR";
 			this->picture_panel->ResumeLayout(false);
@@ -1354,7 +1469,7 @@ private: System::Void btnRotate_right_Click(System::Object *  sender, System::Ev
 			 this->pictureBox1->Image = im;
 		 }
 
-private: void tryImageLoad(){
+private: void tryImageCropperLoad(){
 			 if(this->BinaryDone ==false) 
 						this->makeBinary(); //binarize before cropping
 
@@ -1370,8 +1485,346 @@ private: void tryImageLoad(){
 		 }
 private: System::Void btnCrop_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 this->tryImageLoad();
+			 this->tryImageCropperLoad();
 			 
+		 }
+
+private: System::Void mnuFastRecognize_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 
+			 if(this->ImageLoaded==true){
+				 
+				//contrast
+				this->Contrast(10);
+				this->ContrastDone=true;
+				this->Update();
+				
+				//mean removal
+				this->MeanRemoval(9);
+				this->meanDone= true;
+				this->Update();
+
+				//Binarization
+				this->makeBinary();
+				
+				//separation
+				this->separate();
+
+				//Recognition
+				 this->Recognize();
+
+
+			 }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
+
+			 }
+
+		
+		 }
+
+private: System::Void mnuLoadImage_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 this->openImageFile();
+
+		 }
+
+private: System::Void mnuSaveImage_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 this->saveImageFile();
+		 }
+
+private: System::Void mnuDeskew_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 if(this->ImageLoaded==true){
+			 this->doDeSkew();
+			  }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Please Load the image first","Image not loaded");
+			 }
+			 
+		 }
+
+private: System::Void mnuContrastAndBinarize_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 if(this->ImageLoaded==true){
+			this->Contrast(10);
+			this->ContrastDone=true;
+			this->makeBinary();
+			this->Update();
+			 }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
+			 }
+		 }
+
+private: System::Void mnuContrast_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 if(this->ImageLoaded==true){
+			this->Contrast(10);
+			this->ContrastDone=true;
+			this->Update();
+			 }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
+			 }
+		 }
+
+private: System::Void mnuMeanRemoval_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 
+			 if( (this->ImageLoaded==true) ){
+				this->MeanRemoval(9);
+				this->meanDone= true;
+				this->Update();
+				
+			 }
+		 }
+
+private: System::Void mnuMagnification_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 if(this->ImageLoaded){ 
+			tryMagnify();		
+			
+			 }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
+			 }
+		 }
+
+private: System::Void mnuBinarize_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 this->makeBinary();
+
+		 }
+
+private: System::Void mnuRotate_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 
+			 //Function to rotate clockwise direction by 90 degrees
+			 //Button_rotate_right : click event
+ 
+			 im->RotateFlip(RotateFlipType::Rotate90FlipNone);
+			 this->pictureBox1->Image = im;
+
+		 }
+
+private: System::Void mnuSeparate_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 if( (this->ImageLoaded==true  ) && (this->BinaryDone==true) )
+			 {
+				this->separate();
+			 }
+			 else if( (this->ImageLoaded==false  ) )
+			 {
+				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
+			 }
+			 else if(this->BinaryDone==false)
+					 {
+						 //System::Windows::Forms::Show("Please binarize the image before separating","Binarization not done");
+						 System::Windows::Forms::MessageBox::Show("Please binarize the image first","Binarization not done");
+
+				}
+		 }
+
+private: System::Void mnuTrain_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 //Check If the image is loaded or not.
+			 if(this->ImageLoaded){
+			
+				 //Check If the image is binarized first or not.
+
+				 if(this->BinaryDone){
+						OCR::TrainingForm* tw=new OCR::TrainingForm();
+						tw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
+						tw->ShowDialog();
+				 }
+					//If not binarized print an error message				
+				 else{
+					 System::Windows::Forms::MessageBox::Show("Image is not Binarized","Please Binarize first");
+				 }
+				
+				}
+			 //If an Image is not loaded, Print an error message to load the image.
+			 else{
+				 //Please Browse for image and Load the image
+				 System::Windows::Forms::MessageBox::Show("Image not loaded, Please Browse for image and load image first ","Image Not loaded");
+			 }
+			 
+		 }
+
+private: System::Void mnuRecognize2_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			if(this->ImageLoaded){
+				 if(this->SeparateDone){
+					 //if the image is loaded and words are separated.. recognition process is started
+						this->Recognize();
+
+				 }
+				 else{
+					 System::Windows::Forms::MessageBox::Show("First Complete the preprocessing steps, words are not separated","Preprocessing steps not complete");
+				 }
+			 }
+			 else{
+				 //Image is not loaded
+				 System::Windows::Forms::MessageBox::Show("Image not loaded, Please load the image first","Image not loaded");
+			 }
+			 //OCR::RecognitionForm* rw=new OCR::RecognitionForm();
+			 //rw->ShowDialog();
+		 }
+
+
+
+private: System::Void mnuCropper_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 this->tryImageCropperLoad();
+
+		 }
+
+
+
+private: System::Void picture_panel_DoubleClick(System::Object *  sender, System::EventArgs *  e)
+		 {
+			this->openImageFile();
+		 }
+
+private: System::Void mnuRecognize_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 if(this->ImageLoaded){
+				 if(this->SeparateDone){
+					 //if the image is loaded and words are separated.. recognition process is started
+						this->Recognize();
+
+				 }
+				 else{
+					 System::Windows::Forms::MessageBox::Show("First Complete the preprocessing steps, words are not separated","Preprocessing steps not complete");
+				 }
+			 }
+			 else{
+				 //Image is not loaded
+				 System::Windows::Forms::MessageBox::Show("Image not loaded, Please load the image first","Image not loaded");
+			 }
+			 //OCR::RecognitionForm* rw=new OCR::RecognitionForm();
+			 //rw->ShowDialog();
+		 }
+
+private: System::Void mnuFastRecognize2_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 {
+			 if(this->ImageLoaded==true){
+				 
+				//contrast
+				this->Contrast(10);
+				this->ContrastDone=true;
+				this->Update();
+				
+				//mean removal
+				this->MeanRemoval(9);
+				this->meanDone= true;
+				this->Update();
+
+				//Binarization
+				this->makeBinary();
+				
+				//separation
+				this->separate();
+
+				//Recognition
+				 this->Recognize();
+
+
+			 }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
+
+			 }
+
+		 }
+		 }
+
+private: System::Void cMenuLoadImage_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 this->openImageFile();
+			 //this->cMenuLoadImage->Enabled = false;
+		 }
+
+private: System::Void picture_panel_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 
+			 
+		 }
+
+private: System::Void picture_panel_MouseUp(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
+		 {
+			 if(e->Button == MouseButtons::Left){
+				 if(this->ImageLoaded == false){
+					 this->cMenuLoadImage->Enabled = true;
+					 this->cMenuFastRecognize->Enabled = false;
+				 this->ocrCntMenu->Show(this,System::Drawing::Point(e->X,e->Y));
+				 }
+				 if(this->ImageLoaded==true){
+					  this->cMenuLoadImage->Enabled = false;
+					  this->cMenuFastRecognize->Enabled = true;
+					this->ocrCntMenu->Show(this,System::Drawing::Point(e->X,e->Y));
+				 }
+
+
+			 }
+		 }
+
+private: System::Void cMenuFastRecognize_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 
+			 
+			 if(this->ImageLoaded==true){
+				 
+				//contrast
+				this->Contrast(10);
+				this->ContrastDone=true;
+				this->Update();
+				
+				//mean removal
+				this->MeanRemoval(9);
+				this->meanDone= true;
+				this->Update();
+
+				//Binarization
+				this->makeBinary();
+				
+				//separation
+				this->separate();
+
+				//Recognition
+				 this->Recognize();
+
+
+			 }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
+
+			 }
+
+		
+		  
+
+		 }
+
+private: System::Void pictureBox1_MouseUp(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
+		 {
+			 if(e->Button == MouseButtons::Left){
+				 if(this->ImageLoaded == false){
+					 this->cMenuLoadImage->Enabled = true;
+					 this->cMenuFastRecognize->Enabled = false;
+				 this->ocrCntMenu->Show(this,System::Drawing::Point(e->X,e->Y));
+				 }
+				 if(this->ImageLoaded==true){
+					  this->cMenuLoadImage->Enabled = false;
+					  this->cMenuFastRecognize->Enabled = true;
+					this->ocrCntMenu->Show(this,System::Drawing::Point(e->X,e->Y));
+				 }
+
+
+			 }
 		 }
 
 };
