@@ -137,6 +137,7 @@ namespace OCR
 			 bool meanDone;
 			 bool deskewDone;
 			 bool rtbOutputShowing;
+			 bool imageSelection;
 
 
 	private: int numberOfLines;
@@ -204,12 +205,12 @@ private: System::Windows::Forms::MenuItem *  mnuMagnification;
 private: System::Windows::Forms::MenuItem *  mnuRotate;
 private: System::Windows::Forms::MenuItem *  mnuRecognize2;
 private: System::Windows::Forms::MenuItem *  mnuCropper;
-private: System::Windows::Forms::StatusBar *  statusBar1;
+
 private: System::Windows::Forms::MenuItem *  mnuFastRecognize2;
 
-private: System::Windows::Forms::ContextMenu *  ocrCntMenu;
-private: System::Windows::Forms::MenuItem *  cMenuLoadImage;
-private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
+
+
+//Working progressbar and menus
 private: System::Windows::Forms::ProgressBar *  pbOCR;
 private: System::Windows::Forms::MenuItem *  mnuStart;
 private: System::Windows::Forms::MenuItem *  mnuImage;
@@ -219,6 +220,11 @@ private: System::Windows::Forms::MenuItem *  mnuExit;
 private: System::Windows::Forms::Panel *  panel1;
 //private: System::Windows::Forms::RichTextBox *  rtbOutput;
 System::Windows::Forms::RichTextBox *rtbOutput;
+//Working Copy
+
+private: int pointX1,pointX2,pointY1,pointY2,xMouseDistance,yMouseDistance; //for capturing the points
+private: System::Windows::Forms::StatusBar *  statusBar1;
+
 
 
 
@@ -258,7 +264,6 @@ System::Windows::Forms::RichTextBox *rtbOutput;
 		{
 			System::Resources::ResourceManager *  resources = new System::Resources::ResourceManager(__typeof(OCR::FormMainWindow));
 			this->picture_panel = new System::Windows::Forms::Panel();
-			this->statusBar1 = new System::Windows::Forms::StatusBar();
 			this->pictureBox1 = new System::Windows::Forms::PictureBox();
 			this->openImageDialog = new System::Windows::Forms::OpenFileDialog();
 			this->saveImageDialog = new System::Windows::Forms::SaveFileDialog();
@@ -266,35 +271,33 @@ System::Windows::Forms::RichTextBox *rtbOutput;
 			this->myInfo1 = new System::Windows::Forms::Label();
 			this->ocrMenu = new System::Windows::Forms::MainMenu();
 			this->mnuStart = new System::Windows::Forms::MenuItem();
-			this->mnuLoadImage = new System::Windows::Forms::MenuItem();
+			this->mnuLoadImage2 = new System::Windows::Forms::MenuItem();
+			this->mnuSaveImage = new System::Windows::Forms::MenuItem();
 			this->mnuFastRecognize = new System::Windows::Forms::MenuItem();
-			this->mnuMagnification = new System::Windows::Forms::MenuItem();
 			this->mnuExit = new System::Windows::Forms::MenuItem();
 			this->mnuOCR = new System::Windows::Forms::MenuItem();
 			this->mnuFastRecognize2 = new System::Windows::Forms::MenuItem();
-			this->mnuBinarize = new System::Windows::Forms::MenuItem();
-			this->mnuSeparate = new System::Windows::Forms::MenuItem();
 			this->mnuRecognize = new System::Windows::Forms::MenuItem();
-			this->mnuContrastAndBinarize = new System::Windows::Forms::MenuItem();
-			this->mnuContrast = new System::Windows::Forms::MenuItem();
-			this->mnuMeanRemoval = new System::Windows::Forms::MenuItem();
 			this->mnuAdvanced = new System::Windows::Forms::MenuItem();
+			this->mnuSeparate = new System::Windows::Forms::MenuItem();
+			this->mnuBinarize = new System::Windows::Forms::MenuItem();
 			this->mnuTrain = new System::Windows::Forms::MenuItem();
 			this->mnuRecognize2 = new System::Windows::Forms::MenuItem();
+			this->mnuMeanRemoval = new System::Windows::Forms::MenuItem();
+			this->mnuContrast = new System::Windows::Forms::MenuItem();
+			this->mnuContrastAndBinarize = new System::Windows::Forms::MenuItem();
 			this->mnuImage = new System::Windows::Forms::MenuItem();
-			this->mnuSaveImage = new System::Windows::Forms::MenuItem();
+			this->mnuLoadImage = new System::Windows::Forms::MenuItem();
 			this->mnuDeskew = new System::Windows::Forms::MenuItem();
 			this->mnuRotate = new System::Windows::Forms::MenuItem();
 			this->mnuCropper = new System::Windows::Forms::MenuItem();
 			this->menuItem1 = new System::Windows::Forms::MenuItem();
-			this->mnuLoadImage2 = new System::Windows::Forms::MenuItem();
+			this->mnuMagnification = new System::Windows::Forms::MenuItem();
 			this->splitter1 = new System::Windows::Forms::Splitter();
-			this->ocrCntMenu = new System::Windows::Forms::ContextMenu();
-			this->cMenuLoadImage = new System::Windows::Forms::MenuItem();
-			this->cMenuFastRecognize = new System::Windows::Forms::MenuItem();
 			this->pbOCR = new System::Windows::Forms::ProgressBar();
 			this->panel1 = new System::Windows::Forms::Panel();
 			this->rtbOutput = new System::Windows::Forms::RichTextBox();
+			this->statusBar1 = new System::Windows::Forms::StatusBar();
 			this->picture_panel->SuspendLayout();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
@@ -315,13 +318,6 @@ System::Windows::Forms::RichTextBox *rtbOutput;
 			this->picture_panel->MouseUp += new System::Windows::Forms::MouseEventHandler(this, picture_panel_MouseUp);
 			this->picture_panel->DragDrop += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragDrop);
 			// 
-			// statusBar1
-			// 
-			this->statusBar1->Location = System::Drawing::Point(0, 332);
-			this->statusBar1->Name = S"statusBar1";
-			this->statusBar1->Size = System::Drawing::Size(588, 16);
-			this->statusBar1->TabIndex = 1;
-			// 
 			// pictureBox1
 			// 
 			this->pictureBox1->Location = System::Drawing::Point(5, 12);
@@ -331,6 +327,7 @@ System::Windows::Forms::RichTextBox *rtbOutput;
 			this->pictureBox1->TabIndex = 0;
 			this->pictureBox1->TabStop = false;
 			this->pictureBox1->MouseUp += new System::Windows::Forms::MouseEventHandler(this, pictureBox1_MouseUp);
+			this->pictureBox1->MouseDown += new System::Windows::Forms::MouseEventHandler(this, pictureBox1_MouseDown);
 			// 
 			// openImageDialog
 			// 
@@ -367,33 +364,34 @@ System::Windows::Forms::RichTextBox *rtbOutput;
 			// 
 			this->mnuStart->Index = 0;
 			System::Windows::Forms::MenuItem* __mcTemp__2[] = new System::Windows::Forms::MenuItem*[4];
-			__mcTemp__2[0] = this->mnuLoadImage;
-			__mcTemp__2[1] = this->mnuFastRecognize;
-			__mcTemp__2[2] = this->mnuMagnification;
+			__mcTemp__2[0] = this->mnuLoadImage2;
+			__mcTemp__2[1] = this->mnuSaveImage;
+			__mcTemp__2[2] = this->mnuFastRecognize;
 			__mcTemp__2[3] = this->mnuExit;
 			this->mnuStart->MenuItems->AddRange(__mcTemp__2);
-			this->mnuStart->Text = S"Start";
+			this->mnuStart->Text = S"File";
 			// 
-			// mnuLoadImage
+			// mnuLoadImage2
 			// 
-			this->mnuLoadImage->Index = 0;
-			this->mnuLoadImage->Shortcut = System::Windows::Forms::Shortcut::CtrlN;
-			this->mnuLoadImage->Text = S"Load Image";
-			this->mnuLoadImage->Click += new System::EventHandler(this, mnuLoadImage_Click);
+			this->mnuLoadImage2->Index = 0;
+			this->mnuLoadImage2->Shortcut = System::Windows::Forms::Shortcut::CtrlN;
+			this->mnuLoadImage2->Text = S"New Image";
+			this->mnuLoadImage2->Click += new System::EventHandler(this, mnuLoadImage2_Click);
+			// 
+			// mnuSaveImage
+			// 
+			this->mnuSaveImage->Enabled = false;
+			this->mnuSaveImage->Index = 1;
+			this->mnuSaveImage->Shortcut = System::Windows::Forms::Shortcut::CtrlS;
+			this->mnuSaveImage->Text = S"Save Image";
+			this->mnuSaveImage->Click += new System::EventHandler(this, mnuSaveImage_Click);
 			// 
 			// mnuFastRecognize
 			// 
 			this->mnuFastRecognize->Enabled = false;
-			this->mnuFastRecognize->Index = 1;
+			this->mnuFastRecognize->Index = 2;
 			this->mnuFastRecognize->Text = S"Fast Recognize";
 			this->mnuFastRecognize->Click += new System::EventHandler(this, mnuFastRecognize_Click);
-			// 
-			// mnuMagnification
-			// 
-			this->mnuMagnification->Enabled = false;
-			this->mnuMagnification->Index = 2;
-			this->mnuMagnification->Text = S"Magnification";
-			this->mnuMagnification->Click += new System::EventHandler(this, mnuMagnification_Click);
 			// 
 			// mnuExit
 			// 
@@ -406,55 +404,80 @@ System::Windows::Forms::RichTextBox *rtbOutput;
 			// 
 			this->mnuOCR->Enabled = false;
 			this->mnuOCR->Index = 1;
-			System::Windows::Forms::MenuItem* __mcTemp__3[] = new System::Windows::Forms::MenuItem*[7];
+			System::Windows::Forms::MenuItem* __mcTemp__3[] = new System::Windows::Forms::MenuItem*[2];
 			__mcTemp__3[0] = this->mnuFastRecognize2;
-			__mcTemp__3[1] = this->mnuBinarize;
-			__mcTemp__3[2] = this->mnuSeparate;
-			__mcTemp__3[3] = this->mnuRecognize;
-			__mcTemp__3[4] = this->mnuContrastAndBinarize;
-			__mcTemp__3[5] = this->mnuContrast;
-			__mcTemp__3[6] = this->mnuMeanRemoval;
+			__mcTemp__3[1] = this->mnuRecognize;
 			this->mnuOCR->MenuItems->AddRange(__mcTemp__3);
 			this->mnuOCR->Text = S"OCR";
 			// 
 			// mnuFastRecognize2
 			// 
+			this->mnuFastRecognize2->Checked = true;
 			this->mnuFastRecognize2->Enabled = false;
 			this->mnuFastRecognize2->Index = 0;
 			this->mnuFastRecognize2->Shortcut = System::Windows::Forms::Shortcut::CtrlO;
 			this->mnuFastRecognize2->Text = S"OCR";
 			this->mnuFastRecognize2->Click += new System::EventHandler(this, mnuFastRecognize2_Click);
 			// 
+			// mnuRecognize
+			// 
+			this->mnuRecognize->Enabled = false;
+			this->mnuRecognize->Index = 1;
+			this->mnuRecognize->Text = S"Recognize";
+			this->mnuRecognize->Click += new System::EventHandler(this, mnuRecognize_Click);
+			// 
+			// mnuAdvanced
+			// 
+			this->mnuAdvanced->Enabled = false;
+			this->mnuAdvanced->Index = 2;
+			System::Windows::Forms::MenuItem* __mcTemp__4[] = new System::Windows::Forms::MenuItem*[7];
+			__mcTemp__4[0] = this->mnuSeparate;
+			__mcTemp__4[1] = this->mnuBinarize;
+			__mcTemp__4[2] = this->mnuTrain;
+			__mcTemp__4[3] = this->mnuRecognize2;
+			__mcTemp__4[4] = this->mnuMeanRemoval;
+			__mcTemp__4[5] = this->mnuContrast;
+			__mcTemp__4[6] = this->mnuContrastAndBinarize;
+			this->mnuAdvanced->MenuItems->AddRange(__mcTemp__4);
+			this->mnuAdvanced->Text = S"Advanced";
+			// 
+			// mnuSeparate
+			// 
+			this->mnuSeparate->Enabled = false;
+			this->mnuSeparate->Index = 0;
+			this->mnuSeparate->Text = S"Separate";
+			this->mnuSeparate->Click += new System::EventHandler(this, mnuSeparate_Click);
+			// 
 			// mnuBinarize
 			// 
-			this->mnuBinarize->Checked = true;
 			this->mnuBinarize->Enabled = false;
 			this->mnuBinarize->Index = 1;
 			this->mnuBinarize->Shortcut = System::Windows::Forms::Shortcut::CtrlB;
 			this->mnuBinarize->Text = S"Binarize";
 			this->mnuBinarize->Click += new System::EventHandler(this, mnuBinarize_Click);
 			// 
-			// mnuSeparate
+			// mnuTrain
 			// 
-			this->mnuSeparate->Enabled = false;
-			this->mnuSeparate->Index = 2;
-			this->mnuSeparate->Text = S"Separate";
-			this->mnuSeparate->Click += new System::EventHandler(this, mnuSeparate_Click);
+			this->mnuTrain->Enabled = false;
+			this->mnuTrain->Index = 2;
+			this->mnuTrain->Shortcut = System::Windows::Forms::Shortcut::CtrlT;
+			this->mnuTrain->Text = S"Train";
+			this->mnuTrain->Click += new System::EventHandler(this, mnuTrain_Click);
 			// 
-			// mnuRecognize
+			// mnuRecognize2
 			// 
-			this->mnuRecognize->Checked = true;
-			this->mnuRecognize->Enabled = false;
-			this->mnuRecognize->Index = 3;
-			this->mnuRecognize->Text = S"Recognize";
-			this->mnuRecognize->Click += new System::EventHandler(this, mnuRecognize_Click);
+			this->mnuRecognize2->Enabled = false;
+			this->mnuRecognize2->Index = 3;
+			this->mnuRecognize2->Shortcut = System::Windows::Forms::Shortcut::CtrlE;
+			this->mnuRecognize2->Text = S"Recognize";
+			this->mnuRecognize2->Click += new System::EventHandler(this, mnuRecognize2_Click);
 			// 
-			// mnuContrastAndBinarize
+			// mnuMeanRemoval
 			// 
-			this->mnuContrastAndBinarize->Enabled = false;
-			this->mnuContrastAndBinarize->Index = 4;
-			this->mnuContrastAndBinarize->Text = S"Contrast and Binarize";
-			this->mnuContrastAndBinarize->Click += new System::EventHandler(this, mnuContrastAndBinarize_Click);
+			this->mnuMeanRemoval->Enabled = false;
+			this->mnuMeanRemoval->Index = 4;
+			this->mnuMeanRemoval->Text = S"Mean Removal";
+			this->mnuMeanRemoval->Click += new System::EventHandler(this, mnuMeanRemoval_Click);
 			// 
 			// mnuContrast
 			// 
@@ -463,59 +486,32 @@ System::Windows::Forms::RichTextBox *rtbOutput;
 			this->mnuContrast->Text = S"Contrast Only";
 			this->mnuContrast->Click += new System::EventHandler(this, mnuContrast_Click);
 			// 
-			// mnuMeanRemoval
+			// mnuContrastAndBinarize
 			// 
-			this->mnuMeanRemoval->Enabled = false;
-			this->mnuMeanRemoval->Index = 6;
-			this->mnuMeanRemoval->Text = S"Mean Removal";
-			this->mnuMeanRemoval->Click += new System::EventHandler(this, mnuMeanRemoval_Click);
-			// 
-			// mnuAdvanced
-			// 
-			this->mnuAdvanced->Enabled = false;
-			this->mnuAdvanced->Index = 2;
-			System::Windows::Forms::MenuItem* __mcTemp__4[] = new System::Windows::Forms::MenuItem*[2];
-			__mcTemp__4[0] = this->mnuTrain;
-			__mcTemp__4[1] = this->mnuRecognize2;
-			this->mnuAdvanced->MenuItems->AddRange(__mcTemp__4);
-			this->mnuAdvanced->Text = S"Advanced";
-			// 
-			// mnuTrain
-			// 
-			this->mnuTrain->Enabled = false;
-			this->mnuTrain->Index = 0;
-			this->mnuTrain->Shortcut = System::Windows::Forms::Shortcut::CtrlT;
-			this->mnuTrain->Text = S"Train";
-			this->mnuTrain->Click += new System::EventHandler(this, mnuTrain_Click);
-			// 
-			// mnuRecognize2
-			// 
-			this->mnuRecognize2->Enabled = false;
-			this->mnuRecognize2->Index = 1;
-			this->mnuRecognize2->Shortcut = System::Windows::Forms::Shortcut::CtrlO;
-			this->mnuRecognize2->Text = S"Recognize";
-			this->mnuRecognize2->Click += new System::EventHandler(this, mnuRecognize2_Click);
+			this->mnuContrastAndBinarize->Enabled = false;
+			this->mnuContrastAndBinarize->Index = 6;
+			this->mnuContrastAndBinarize->Text = S"Contrast and Binarize";
+			this->mnuContrastAndBinarize->Click += new System::EventHandler(this, mnuContrastAndBinarize_Click);
 			// 
 			// mnuImage
 			// 
 			this->mnuImage->Index = 3;
 			System::Windows::Forms::MenuItem* __mcTemp__5[] = new System::Windows::Forms::MenuItem*[6];
-			__mcTemp__5[0] = this->mnuSaveImage;
+			__mcTemp__5[0] = this->mnuLoadImage;
 			__mcTemp__5[1] = this->mnuDeskew;
 			__mcTemp__5[2] = this->mnuRotate;
 			__mcTemp__5[3] = this->mnuCropper;
 			__mcTemp__5[4] = this->menuItem1;
-			__mcTemp__5[5] = this->mnuLoadImage2;
+			__mcTemp__5[5] = this->mnuMagnification;
 			this->mnuImage->MenuItems->AddRange(__mcTemp__5);
 			this->mnuImage->Text = S"Image";
 			// 
-			// mnuSaveImage
+			// mnuLoadImage
 			// 
-			this->mnuSaveImage->Enabled = false;
-			this->mnuSaveImage->Index = 0;
-			this->mnuSaveImage->Shortcut = System::Windows::Forms::Shortcut::CtrlS;
-			this->mnuSaveImage->Text = S"Save Image";
-			this->mnuSaveImage->Click += new System::EventHandler(this, mnuSaveImage_Click);
+			this->mnuLoadImage->Index = 0;
+			this->mnuLoadImage->Shortcut = System::Windows::Forms::Shortcut::CtrlN;
+			this->mnuLoadImage->Text = S"Load Image";
+			this->mnuLoadImage->Click += new System::EventHandler(this, mnuLoadImage_Click);
 			// 
 			// mnuDeskew
 			// 
@@ -544,39 +540,20 @@ System::Windows::Forms::RichTextBox *rtbOutput;
 			this->menuItem1->Index = 4;
 			this->menuItem1->Text = S"-";
 			// 
-			// mnuLoadImage2
+			// mnuMagnification
 			// 
-			this->mnuLoadImage2->Index = 5;
-			this->mnuLoadImage2->Shortcut = System::Windows::Forms::Shortcut::CtrlN;
-			this->mnuLoadImage2->Text = S"New Image";
-			this->mnuLoadImage2->Click += new System::EventHandler(this, mnuLoadImage2_Click);
+			this->mnuMagnification->Enabled = false;
+			this->mnuMagnification->Index = 5;
+			this->mnuMagnification->Text = S"Magnification";
+			this->mnuMagnification->Click += new System::EventHandler(this, mnuMagnification_Click);
 			// 
 			// splitter1
 			// 
 			this->splitter1->Location = System::Drawing::Point(0, 0);
 			this->splitter1->Name = S"splitter1";
-			this->splitter1->Size = System::Drawing::Size(3, 415);
+			this->splitter1->Size = System::Drawing::Size(3, 488);
 			this->splitter1->TabIndex = 17;
 			this->splitter1->TabStop = false;
-			// 
-			// ocrCntMenu
-			// 
-			System::Windows::Forms::MenuItem* __mcTemp__6[] = new System::Windows::Forms::MenuItem*[2];
-			__mcTemp__6[0] = this->cMenuLoadImage;
-			__mcTemp__6[1] = this->cMenuFastRecognize;
-			this->ocrCntMenu->MenuItems->AddRange(__mcTemp__6);
-			// 
-			// cMenuLoadImage
-			// 
-			this->cMenuLoadImage->Index = 0;
-			this->cMenuLoadImage->Text = S"Load Image";
-			this->cMenuLoadImage->Click += new System::EventHandler(this, cMenuLoadImage_Click);
-			// 
-			// cMenuFastRecognize
-			// 
-			this->cMenuFastRecognize->Index = 1;
-			this->cMenuFastRecognize->Text = S"Fast Recognize";
-			this->cMenuFastRecognize->Click += new System::EventHandler(this, cMenuFastRecognize_Click);
 			// 
 			// pbOCR
 			// 
@@ -601,6 +578,13 @@ System::Windows::Forms::RichTextBox *rtbOutput;
 			this->rtbOutput->Name = S"rtbOutput";
 			this->rtbOutput->TabIndex = 0;
 			this->rtbOutput->Text = S"";
+			// 
+			// statusBar1
+			// 
+			this->statusBar1->Location = System::Drawing::Point(0, 315);
+			this->statusBar1->Name = S"statusBar1";
+			this->statusBar1->Size = System::Drawing::Size(592, 16);
+			this->statusBar1->TabIndex = 1;
 			// 
 			// FormMainWindow
 			// 
@@ -1770,6 +1754,9 @@ private: System::Void cMenuLoadImage_Click(System::Object *  sender, System::Eve
 
 private: System::Void picture_panel_MouseUp(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
 		 {
+			 this->pointX2 = e->X;
+			 this->pointY2 = e->Y;
+
 			 this->drawContextMenu(e);
 		 }
 
@@ -1810,7 +1797,21 @@ private: System::Void cMenuFastRecognize_Click(System::Object *  sender, System:
 
 private: System::Void pictureBox1_MouseUp(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
 		 {
-				 this->drawContextMenu(e);
+			 this->pointX2 = e->X;
+			 this->pointY2 = e->Y;
+
+			this->drawContextMenu(e);
+			
+		 }
+
+ private: System::Void pictureBox1_MouseDown(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
+		 {
+			 //reset variables x2 and y2
+			 this->pointX2 = this->pointX1;
+			 this->pointY2 = this->pointY1;
+			 //
+			 this->pointX1 = e->X;
+			 this->pointY1 = e->Y;
 		 }
 
 private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
@@ -1820,7 +1821,7 @@ private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
 			 if(e->Button == MouseButtons::Left){ //Left Click
 					System::Windows::Forms::ContextMenu *ocrCMenu = new System::Windows::Forms::ContextMenu();
 					
-					//this->mnuStart->MenuItems->Add(this->mnuLoadImage);
+					
 
 				if(this->ImageLoaded ==false){//Left Click, If image not loaded, load image
 					
@@ -1844,11 +1845,24 @@ private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
 
 						this->mnuSeparate->Enabled = false;
 						this->mnuRecognize->Enabled= false;
+						//this->mnuRecognize2->DefaultItem = true;
 						this->mnuTrain->Enabled = false;
 						//ENd set reset menus
 						
 					}
 					if(this->ImageLoaded ==true && this->BinaryDone==true){ //Left click, if image loaded, and Binarized, separate it
+
+						//this->mnuStart->MenuItems->Add(this->mnuLoadImage);
+					 // Todo: add condition for checking this->xMouseDistance, this->yMouseDistance
+					//	MessageBox::Show("ok");
+					//	find_xy_MouseDistance
+						if(this->pointX1!=this->pointX2){
+							this->find_xy_MouseDistance(e);	
+							this->enableCropper(ocrCMenu);
+						}
+					
+
+				     // if((this->BinaryDone == true) && (this->xMouseDistance >0) )
 						ocrCMenu->MenuItems->Add(this->mnuSeparate);
 						ocrCMenu->MenuItems->Add(this->mnuFastRecognize);
 						
@@ -1871,6 +1885,7 @@ private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
 
 
 				}
+				
 
 				ocrCMenu->Show(this,System::Drawing::Point(e->X,e->Y));
 			} // if(e->Button == MouseButtons::Left) 
@@ -1909,12 +1924,13 @@ private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
 
 private: System::Void mnuLoadImage2_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
+			 //Load image
 			  this->openImageFile();
 			  
 		 }
 
 private:	void setResetMenu(bool ImageLoaded, bool BinaryDone,bool SeparateDone){
-			 //set reset menus
+			 //set reset menus depending upon the flags
 					 
 						
 			 if(ImageLoaded){
@@ -1967,6 +1983,7 @@ private:	void setResetMenu(bool ImageLoaded, bool BinaryDone,bool SeparateDone){
 							
 							this->mnuRecognize->Enabled = true;
 							this->mnuRecognize->DefaultItem = true;
+							this->mnuRecognize2->DefaultItem = true;
 
 							this->mnuTrain->Enabled = true;
 						
@@ -2034,6 +2051,7 @@ private: System::Void mnuExit_Click(System::Object *  sender, System::EventArgs 
 			 Application::Exit();
 		 }
  private: void createRTB(){
+			  //this function is used to create the richtextbox used producing output after recognition
 
 			  if(this->rtbOutputShowing == false){
 
@@ -2057,7 +2075,7 @@ private: System::Void mnuExit_Click(System::Object *  sender, System::EventArgs 
 			  }
 		  }
   private: void delRTB(){
-		    
+		    //this function is used to remove the unnecessary richtextbox, which was used for producing output after recognition
 			this->Size = System::Drawing::Size(this->Width-344,this->Height);
 			this->panel1->Size = System::Drawing::Size((this->panel1->Width-344),(this->panel1->Height));
 			this->pbOCR->Size = System::Drawing::Size(this->pbOCR->Width - this->rtbOutput->Width,this->pbOCR->Height);
@@ -2069,6 +2087,81 @@ private: System::Void mnuExit_Click(System::Object *  sender, System::EventArgs 
 			
 		   }
 
+private: void enableCropper(System::Windows::Forms::ContextMenu *ocrCMenu){
+			
+			System::Windows::Forms::MenuItem *mnuCropSelected = new System::Windows::Forms::MenuItem();
+			mnuCropSelected->Text = "Crop Selected";
+			mnuCropSelected->Click+= new System::EventHandler(this,mnuCropSelected_Click);
+			ocrCMenu->MenuItems->Add(mnuCropSelected);
+			this->g->DrawRectangle(Pens::Blue, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+			this->imageSelection = true;
+}
+
+		 public: void mnuCropSelected_Click(System::Object *  sender, System::EventArgs *  e){
+
+			 //int mouse_dragged_Image_width = System::Math::Abs(this->x2 - this->x1) ;
+			//this->xMouseDistance = (this->pointX2 - this->pointX1) ;
+			//int mouse_dragged_Image_height = System::Math::Abs(this->y2 - this->y1);
+			//this->yMouseDistance = (this->pointY2 - this->pointY1);
+			
+			
+			Bitmap *cropImage1 = new Bitmap( this->xMouseDistance+1,this->yMouseDistance+1,Imaging::PixelFormat::Format24bppRgb);
+		 for(int cropRow=0;  cropRow<(cropImage1->Height); cropRow++){
+			 for(int cropColumn=0;cropColumn<(cropImage1->Width) ;cropColumn++){
+				cropImage1->SetPixel(cropColumn,cropRow,System::Drawing::Color::White);
+				} // for(int cropRow=0;  cropRow<(cropImage->Height); cropRow++){for(int cropColumn=0;cropColumn<(cropImage->Width) ;cropColumn++)
+          } // for(int cropRow=0;  cropRow<(cropImage->Height); cropRow++)
+
+		 for(int i=this->pointY1, int cropRow=0;  i<this->pointY2,cropRow<(cropImage1->Height)-1; i++,cropRow++){
+			 for(int cropColumn=0,j=this->pointX1; j<this->pointX2,cropColumn<(cropImage1->Width)-1 ; j++,cropColumn++){
+				 
+				 if(this->BArray[i][j]==true)
+					 cropImage1->SetPixel(cropColumn,cropRow,System::Drawing::Color::White);
+				 else
+					 cropImage1->SetPixel(cropColumn,cropRow,System::Drawing::Color::Black);
+				 
+			 } // for(int i=0;i<cropImage->Height;i++){for(int j=0;j<cropImage->Width;j++)
+		 } // for(int i=0;i<cropImage->Height;i++)
+		 this->pictureBox1->Image = cropImage1;
+		 this->im = cropImage1;
+		 this->ImageLoaded = true;
+		 this->makeBinary();
+		 
+		 }
+
+private: void find_xy_MouseDistance(System::Windows::Forms::MouseEventArgs *  e){
+			
+			 //end preserving
+
+			 this->pointX2 = e->X;
+			 this->pointY2 = e->Y;
+			 int temp;
+
+
+			 if(this->pointX1 != this->pointX2 && this->pointY1 != this->pointY2)
+			 {
+				if(this->pointX1>this->pointX2)
+				{
+					temp=this->pointX1;
+					this->pointX1=this->pointX2;
+					this->pointX2=temp;
+				} // if(this->x1>this->x2)
+                
+				if(this->pointX1>this->pointY2)
+				{
+					temp=this->pointY1;
+					this->pointY1=this->pointY2;
+					this->pointY2=temp;
+				} // if(this->pointY1>this->pointY2) 
+                
+			 } // if(this->x1 != this->x2 && this->y1 != this->y2)
+			 else{
+				 this->statusBar1->Text = "Unable to crop";
+			 }
+
+			 this->xMouseDistance = System::Math::Abs(this->pointX2 - this->pointX1);
+			 this->yMouseDistance = System::Math::Abs(this->pointY2 - this->pointY1);
+		 }
 };
 
 

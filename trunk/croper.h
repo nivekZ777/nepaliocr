@@ -54,7 +54,7 @@ namespace OCR
 
 	private: System::Windows::Forms::Panel *  panel2;
 	private: System::Windows::Forms::PictureBox *  pictureBox2;
-	private: int x1,x2,y1,y2;
+	private: int x1,x2,y1,y2,xMouseDistance,yMouseDistance;
 			 Graphics *g;
 
 	
@@ -174,45 +174,8 @@ namespace OCR
 
 private: System::Void pictureBox1_MouseUp(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
 		 {
-			 //preserving x1,x2,y1,y2 by copying before swapping 
-			 int a1,a2,b1,b2;
-
-			 a1 = this->x1;
-			 a2 = this->x2;
-			 b1 = this->y1; 
-			 b2 = this->y2;
-			
-			 //end preserving
-
-			 this->x2 = e->X;
-			 this->y2 = e->Y;
-			 int temp;
-
-
-			 if(this->x1 != this->x2 && this->y1 != this->y2)
-			 {
-				if(this->x1>this->x2)
-				{
-					temp=this->x1;
-					this->x1=this->x2;
-					this->x2=temp;
-				} // if(this->x1>this->x2)
-                
-				if(this->y1>this->y2)
-				{
-					temp=this->y1;
-					this->y1=this->y2;
-					this->y2=temp;
-				} // if(this->y1>this->y2) 
-                
-			 } // if(this->x1 != this->x2 && this->y1 != this->y2)
-			 else{
-				 MessageBox::Show("Unable to crop");
-			 }
-
-			 
-
-            			 
+			 this->find_xy_MouseDistance(e);
+		    			 
 		//int mouse_dragged_Image_width = System::Math::Abs(this->x2 - this->x1) ;
 			int mouse_dragged_Image_width = (this->x2 - this->x1) ;
 		//int mouse_dragged_Image_height = System::Math::Abs(this->y2 - this->y1);
@@ -251,7 +214,36 @@ private: System::Void pictureBox1_Paint(System::Object *  sender, System::Window
 			 e->Graphics->DrawRectangle(Pens::Blue, Rectangle(this->x1,this->y1,(this->x2-this->x1),(this->y2-this->y1)));
 		 }
 
+private: void find_xy_MouseDistance(System::Windows::Forms::MouseEventArgs *  e){
+			
+			 //end preserving
 
+			 this->x2 = e->X;
+			 this->y2 = e->Y;
+			 int temp;
+
+
+			 if(this->x1 != this->x2 && this->y1 != this->y2)
+			 {
+				if(this->x1>this->x2)
+				{
+					temp=this->x1;
+					this->x1=this->x2;
+					this->x2=temp;
+				} // if(this->x1>this->x2)
+                
+				if(this->y1>this->y2)
+				{
+					temp=this->y1;
+					this->y1=this->y2;
+					this->y2=temp;
+				} // if(this->y1>this->y2) 
+                
+			 } // if(this->x1 != this->x2 && this->y1 != this->y2)
+			 else{
+				 MessageBox::Show("Unable to crop");
+			 }
+		 }
 };
 }
 
