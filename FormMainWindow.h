@@ -1052,7 +1052,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 
 				//if(this->BinaryDone)
 				//{	
-					saveImageDialog->Filter= "PNG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
+					saveImageDialog->Filter= "JPG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
 					saveImageDialog->FilterIndex = 1 ;
 					saveImageDialog->RestoreDirectory = true ;
 
@@ -1370,7 +1370,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 				errorString1 = ex->Message->ToString();
 				errorString1 = errorString1->Concat("Database file access error \n\nThe system generated the following error:\n",errorString1);
 				System::Windows::Forms::MessageBox::Show( errorString1,"Error");
-				this->logFile->Close();
+				
 				exit(0);
 			}
 		 }
