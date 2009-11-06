@@ -21,7 +21,24 @@ FileManipulating::FileManipulating(void)
 		dctArr[i] = new float[FRAME_WD];
 	}
 }
+/*
+System::String* string_handling(System::String *temp1,System::String *temp2,System::String *temp3)
+{
+temp2->Concat(temp3);
+temp1->Concat(temp2);
+return(temp1);
 
+}
+
+System::String* string_handling(System::String *temp1,System::String *temp2)
+{
+
+//tempo2->Concat(tempo3);
+temp1->Concat(temp2);
+return(temp1);
+}
+
+*/
 System::String* FileManipulating::GetModelName(System::String* filePath)
 {
 
@@ -96,8 +113,38 @@ void FileManipulating::CreatePrototypeFile(System::String* fromFile, System::Str
 			sw->Flush();
 		}
 
+		/*
+		tempStr= sr->ReadToEnd();
+	
+		mytmp=mytmp->Concat("~h \"",modelName,"\"");
+		sw->WriteLine(mytmp);
+		sw->WriteLine(tempStr);
+        // while (!System::String::IsNullOrEmpty((tempStr = sr->ReadLine())))
+        
+		/*
+		tempStr=sr->ReadLine();
+		while(tempStr->Length!=0)
+		{
+			//
+			
+            if (firstLine)
+            {
+				// just change the first line according to the appropriate model name
+                mytmp=mytmp->Concat("~h \"",modelName,"\"");
+				sw->WriteLine(mytmp);
+				//sw->WriteLine("~h \"" + modelName + "\"");
+                firstLine = false;
+            }
+            else
+            {
+				tempStr="";
+				tempStr= sr->ReadLine();
+				sw->WriteLine(tempStr);
+            }
+			
+        }
+*/
 		
-		//System::Windows::Forms::MessageBox::Show("ya looks gud","Prototype file creation success!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 
 		sr->Close();
@@ -145,11 +192,13 @@ void FileManipulating::CreateHMMFile(System::String *exeFileDir, System::String 
 		sw->Write(tempStr);
 		sw->Close();
 		
-	//	System::Windows::Forms::MessageBox::Show("Create HMM File on Process","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+	
 		
 		// create a process and execute 
 		System::Diagnostics::Process *p = new System::Diagnostics::Process();
 		p->StartInfo->FileName = batchFileName;
+		p->StartInfo->CreateNoWindow = true;
+		p->StartInfo->UseShellExecute = false;
 		p->Start();
 		p->WaitForExit();
 	}
@@ -169,9 +218,7 @@ void FileManipulating::AddModelDefToMasterModelFile(System::String *mmfFilePath,
 		System::IO::StreamWriter* sw = System::IO::StreamWriter::Null;
 		System::String* tempStr;
 		int lineNum = 0;
-		//System::Windows::Forms::MessageBox::Show(mmfFilePath,"MMF FilePath: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-		//System::Windows::Forms::MessageBox::Show(fromHmmFile,"HMM File: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-		
+	 
 		// if the file does not exist then directly copy the entire content of the prototype file
 		if(!System::IO::File::Exists(mmfFilePath))
 		{
@@ -186,11 +233,25 @@ void FileManipulating::AddModelDefToMasterModelFile(System::String *mmfFilePath,
 			//while (!System::String::IsNullOrEmpty((tempStr = sr->ReadLine())))
 			tempStr= sr->ReadLine();
 
-			//System::Windows::Forms::MessageBox::Show("working gud till here!","HMM File: ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-       // while (!System::String::IsNullOrEmpty((tempStr = sr->ReadLine())))
+			
+
         
 			
-		
+		/*while(tempStr->Length!=0)
+		{
+			//tempStr= sr->ReadLine();
+			
+				lineNum++;
+				if (lineNum<4)
+				{
+				}
+				else
+				{
+					sw->WriteLine(tempStr);
+				}
+				tempStr= sr->ReadLine();
+				
+		}*/
 
 		while(sr->Peek()>=0)
 		{
@@ -307,7 +368,7 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 			sw->Write(text);
 			sw->Close();
 		}
-//		System::Windows::Forms::MessageBox::Show("Building Network working gud till here!","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		
 		// add model name to the dictionary file
 		
 		sw = System::IO::File::AppendText(dictFile);
@@ -332,7 +393,13 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 		text = text->Concat(text,invComma,gramFile,invComma,(String*)" ");
 		text = text->Concat(text,invComma,wdnetFileDir,(String*)"net.slf",invComma);
 
-		 
+		/*text=text->Concat(text,"\"",execpath,"HPARSE","\""," ");
+		text=text->Concat(text,"\"",gramFile,"\""," ");
+		text=text->Concat(text,"\"",wdnetFileDir);
+		text=text->Concat(text,"net.slf","\"");
+		/*text = "\"" + execpath + "HParse" + "\"" + " ";
+		text += "\"" + gramFile + "\"" + " ";
+		text += "\"" + wdnetFileDir + "net.slf" + "\"";*/
 		sw->Write(text);
 		sw->Close();
 		
@@ -347,7 +414,11 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 		text = text->Concat(text,invComma,wdnetFileDir,(String*)"net.slf",invComma,(String*)" ");
 		text = text->Concat(text,invComma,dictFile,invComma);
 
-		 
+		/*text->Concat("\"" , execpath , "HSGen");
+		text->Concat("\"" , " ","\"");
+		text->Concat(wdnetFileDir , "net.slf" , "\"" , " ");
+		text->Concat("\"", dictFile, "\"");
+*/
 		sw->Write(text);
 		sw->Close();
 
@@ -355,15 +426,20 @@ void FileManipulating::BuildWordNetwork(System::String *gramFile, System::String
 		System::Diagnostics::Process* p = new System::Diagnostics::Process();
 		// execute _HParse.bat
 		p->StartInfo->FileName = parseFile;
+		p->StartInfo->CreateNoWindow = true;
+		p->StartInfo->UseShellExecute = false;
 		p->Start();
 		p->WaitForExit();
 
 		// execute _HSGen.bat
 		p->StartInfo->FileName = genFile;
+		p->StartInfo->CreateNoWindow = true;
+		p->StartInfo->UseShellExecute = false;
 		p->Start();
 		p->WaitForExit();
 
-//		System::Windows::Forms::MessageBox::Show("Building Network success!","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+
+		
 
 	}
 	catch(System::Exception* ex)
@@ -400,18 +476,24 @@ void FileManipulating::RecognizeByHMM(System::String* recDir, System::String* ex
 		tempStr = tempStr->Concat(tempStr,invComma,hmmListFile,invComma);
 		tempStr = tempStr->Concat(tempStr," -S ");
 		tempStr = tempStr->Concat(tempStr,invComma,scriptFile,invComma);
- 
+
+		/*tempStr->Concat("\"" , execFile , "HVite" , "\"");
+		tempStr->Concat(" -H ","\"" , mmfFile , "\"");
+		tempStr->Concat(" -i ","\"" , mlfFile , "\"");
+		tempStr->Concat(" -w ","\"" , wdNetFile , "\"");
+		tempStr->Concat(" ","\"" , dictFile , "\"");
+		tempStr->Concat(" ","\"" , hmmListFile , "\"");
+		tempStr->Concat(" -S ","\"" , scriptFile ,"\"");
+*/
 		
 		sw->Write(tempStr);
 		sw->Close();
 
 		// create a process and execute 
 		System::Diagnostics::Process* p = new System::Diagnostics::Process();
-		
 		p->StartInfo->FileName = batchFileName;
 		p->StartInfo->CreateNoWindow = true;
 		p->StartInfo->UseShellExecute = false;
-		
 		p->Start();
 		p->WaitForExit();
 	}
@@ -446,7 +528,7 @@ System::Collections::ArrayList* FileManipulating::FetchOutputModels(System::Stri
 		while (sr->Peek()>=0)
 		{
 			tempStr=sr->ReadLine();
-			
+		//	System::Windows::Forms::MessageBox::Show(tempStr,"Temp String");
 			lineNo++;
 			if(lineNo==3)
 			{
@@ -638,7 +720,7 @@ void FileManipulating::PrepareData(System::String* dataFileName, int **imageArr,
 		
 
 		file = FOpen(userFile, filter, &flag);
-		//System::Windows::Forms::MessageBox::Show("ya u r rocking till 1!","yup u got it !!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		
 
 		//file = FOpen(userFile, filter, 0);
 		WriteInt(file, Header1, 2 , TRUE); 

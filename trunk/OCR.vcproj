@@ -119,6 +119,9 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
+				RelativePath=".\aakarChecker.cpp">
+			</File>
+			<File
 				RelativePath=".\Deskew.cpp">
 			</File>
 			<File
@@ -143,10 +146,10 @@
 				RelativePath=".\RecognitionProcess.cpp">
 			</File>
 			<File
-				RelativePath=".\Separate.cpp">
+				RelativePath=".\Resegment.cpp">
 			</File>
 			<File
-				RelativePath=".\stdafx.cpp">
+				RelativePath=".\Separate.cpp">
 			</File>
 			<File
 				RelativePath=".\ThresholedValue.cpp">
@@ -163,10 +166,16 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
+				RelativePath=".\aakarChecker.h">
+			</File>
+			<File
 				RelativePath=".\Convolution.h">
 			</File>
 			<File
 				RelativePath=".\Deskew.h">
+			</File>
+			<File
+				RelativePath=".\FileManipulating.h">
 			</File>
 			<File
 				RelativePath=".\FormMainWindow.h"
@@ -235,6 +244,15 @@
 				</File>
 			</File>
 			<File
+				RelativePath=".\RecognitionProcess.h">
+			</File>
+			<File
+				RelativePath=".\removeNoise.h">
+			</File>
+			<File
+				RelativePath=".\Resegment.h">
+			</File>
+			<File
 				RelativePath=".\resource.h">
 			</File>
 			<File
@@ -242,6 +260,9 @@
 			</File>
 			<File
 				RelativePath=".\Separate.h">
+			</File>
+			<File
+				RelativePath=".\stdafx.cpp">
 			</File>
 			<File
 				RelativePath=".\stdafx.h">
@@ -287,9 +308,6 @@
 			</File>
 			<File
 				RelativePath=".\BloodHound.ico">
-			</File>
-			<File
-				RelativePath=".\deskew.txt">
 			</File>
 			<File
 				RelativePath=".\icon3.ico">

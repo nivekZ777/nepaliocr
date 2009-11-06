@@ -1,32 +1,3 @@
-
-/**
- *   OCR
- * FileName: myWindow.h
- *
- * Requirements:
- *  
- * win2k or later
- * .NET FrameWork 1.1 or later 
- *
- * Version 1.0
- * first version
- *
- * Date 07-01-2008
- *
- * Author Rajesh Pandey
- *
- * license
- * This code is absolutely free to use and modify. The code is provided "as is" with
- * no expressed or implied warranty. The author accepts no liability if it causes
- * any damage to your computer, causes your pet to fall ill, increases baldness
- * or makes your car start emitting strange noises when you start it up.
- * This code has no bugs, just undocumented features!
- * 
- *  
- *
- *  
- *
- */
 #include "Separate.h"
 #include "Line.h"
 #include "ThresholedValue.h"
@@ -80,9 +51,8 @@ namespace OCR
 						String* characterDBPath,
 						System::Collections::SortedList* slForCharacters,
 						System::Collections::SortedList* slModelTranscription,	// for storing the model transcriptions
-						System::Collections::ArrayList* alModelRec
-						
-	){
+						System::Collections::ArrayList* alModelRec)
+		{
 
 			InitializeComponent();
 			this->im = im;
@@ -110,6 +80,7 @@ namespace OCR
 			this->pictureBox_myWindow->Image = this->im;
 			this->bigHeightLabel->Text = this->im->Height.ToString();
 			this->bigWidthLabel->Text = this->im->Width.ToString();
+			//this->TouchingCharIdentified=TouchingCharIdentified;
 			
 
 
@@ -144,27 +115,24 @@ namespace OCR
 		}
 	private: System::Windows::Forms::Panel *  panel1;
 	private: System::Windows::Forms::MainMenu *  myWindowMenu;
-	private: System::Windows::Forms::RichTextBox *  rtbRecognize;
-	private: System::Windows::Forms::Button *  btnSingleRecognize;
-
-
-	private: System::Windows::Forms::MenuItem *  mnuSingleRecognize;
-	private: System::Windows::Forms::MenuItem *  mnuRecognizeAll;
-	private: System::Windows::Forms::MenuItem *  menuItem1;
-
-
+	private: System::Windows::Forms::MenuItem *  mnuLogs;
+	private: System::Windows::Forms::MenuItem *  mnuLogs_Show;
+	private: System::Windows::Forms::MenuItem *  mnuLogs_Hide;
 	private: System::Windows::Forms::MenuItem *  mnuImage;
 	private: System::Windows::Forms::MenuItem *  mnuSave;
-
+	private: System::Windows::Forms::MenuItem *  menuItem1;
+	private: System::Windows::Forms::MenuItem *  mnuSingleRecognize;
+	private: System::Windows::Forms::MenuItem *  mnuRecognizeAll;
+	private: System::Windows::Forms::RichTextBox *  rtbOutput;
 	private: System::Windows::Forms::SaveFileDialog *  saveFileDialog_Image_Viewer;
-
-
+	private: System::Windows::Forms::Button *  saveButton_ImageViewer_Form;
+	private: System::Windows::Forms::Button *  singleRecog;
 	private: System::Windows::Forms::GroupBox *  groupBox1;
 	private: System::Windows::Forms::GroupBox *  groupBox2;
 	private: System::Windows::Forms::GroupBox *  groupBox3;
 	private: System::Windows::Forms::PictureBox *  pictureBox_myWindow;
-
-
+	private: System::Windows::Forms::Button *  myWindowRecognizeButton;
+	private: System::Windows::Forms::Button *  myWindowSeparateButton;
 	private: System::Windows::Forms::RichTextBox *  myRTB;
 	private: System::Windows::Forms::PictureBox *  pictureBoxSmall;
 	private: System::Windows::Forms::Label *  label1;
@@ -201,6 +169,7 @@ namespace OCR
 			 bool ContrastDone;
 			 bool meanDone;
 			 bool deskewDone;
+			 bool TouchingCharIdentified;
 
 
 	private: int numberOfLines;
@@ -246,8 +215,11 @@ namespace OCR
 			this->bigHeightLabel = new System::Windows::Forms::Label();
 			this->label1 = new System::Windows::Forms::Label();
 			this->groupBox2 = new System::Windows::Forms::GroupBox();
-			this->rtbRecognize = new System::Windows::Forms::RichTextBox();
-			this->btnSingleRecognize = new System::Windows::Forms::Button();
+			this->rtbOutput = new System::Windows::Forms::RichTextBox();
+			this->saveButton_ImageViewer_Form = new System::Windows::Forms::Button();
+			this->singleRecog = new System::Windows::Forms::Button();
+			this->myWindowRecognizeButton = new System::Windows::Forms::Button();
+			this->myWindowSeparateButton = new System::Windows::Forms::Button();
 			this->avgHeightLabel = new System::Windows::Forms::Label();
 			this->label6 = new System::Windows::Forms::Label();
 			this->avgWidthLabel = new System::Windows::Forms::Label();
@@ -268,6 +240,9 @@ namespace OCR
 			this->menuItem1 = new System::Windows::Forms::MenuItem();
 			this->mnuSingleRecognize = new System::Windows::Forms::MenuItem();
 			this->mnuRecognizeAll = new System::Windows::Forms::MenuItem();
+			this->mnuLogs = new System::Windows::Forms::MenuItem();
+			this->mnuLogs_Show = new System::Windows::Forms::MenuItem();
+			this->mnuLogs_Hide = new System::Windows::Forms::MenuItem();
 			this->panel1->SuspendLayout();
 			this->groupBox1->SuspendLayout();
 			this->groupBox2->SuspendLayout();
@@ -337,8 +312,11 @@ namespace OCR
 			// 
 			// groupBox2
 			// 
-			this->groupBox2->Controls->Add(this->rtbRecognize);
-			this->groupBox2->Controls->Add(this->btnSingleRecognize);
+			this->groupBox2->Controls->Add(this->rtbOutput);
+			this->groupBox2->Controls->Add(this->saveButton_ImageViewer_Form);
+			this->groupBox2->Controls->Add(this->singleRecog);
+			this->groupBox2->Controls->Add(this->myWindowRecognizeButton);
+			this->groupBox2->Controls->Add(this->myWindowSeparateButton);
 			this->groupBox2->Controls->Add(this->avgHeightLabel);
 			this->groupBox2->Controls->Add(this->label6);
 			this->groupBox2->Controls->Add(this->avgWidthLabel);
@@ -350,29 +328,56 @@ namespace OCR
 			this->groupBox2->Controls->Add(this->smallHeightLabel);
 			this->groupBox2->Controls->Add(this->label4);
 			this->groupBox2->Controls->Add(this->pictureBoxSmall);
-			this->groupBox2->Location = System::Drawing::Point(368, 0);
+			this->groupBox2->Location = System::Drawing::Point(368, 32);
 			this->groupBox2->Name = S"groupBox2";
-			this->groupBox2->Size = System::Drawing::Size(280, 480);
+			this->groupBox2->Size = System::Drawing::Size(280, 448);
 			this->groupBox2->TabIndex = 1;
 			this->groupBox2->TabStop = false;
 			this->groupBox2->Text = S"Sliced Single Image";
 			// 
-			// rtbRecognize
+			// rtbOutput
 			// 
-			this->rtbRecognize->Location = System::Drawing::Point(120, 160);
-			this->rtbRecognize->Name = S"rtbRecognize";
-			this->rtbRecognize->Size = System::Drawing::Size(120, 72);
-			this->rtbRecognize->TabIndex = 12;
-			this->rtbRecognize->Text = S"";
+			this->rtbOutput->Location = System::Drawing::Point(24, 152);
+			this->rtbOutput->Name = S"rtbOutput";
+			this->rtbOutput->Size = System::Drawing::Size(208, 64);
+			this->rtbOutput->TabIndex = 15;
+			this->rtbOutput->Text = S"";
 			// 
-			// btnSingleRecognize
+			// saveButton_ImageViewer_Form
 			// 
-			this->btnSingleRecognize->Location = System::Drawing::Point(24, 184);
-			this->btnSingleRecognize->Name = S"btnSingleRecognize";
-			this->btnSingleRecognize->Size = System::Drawing::Size(80, 24);
-			this->btnSingleRecognize->TabIndex = 11;
-			this->btnSingleRecognize->Text = S"Recognize";
-			this->btnSingleRecognize->Click += new System::EventHandler(this, btnSingleRecognize_Click);
+			this->saveButton_ImageViewer_Form->Location = System::Drawing::Point(32, 312);
+			this->saveButton_ImageViewer_Form->Name = S"saveButton_ImageViewer_Form";
+			this->saveButton_ImageViewer_Form->Size = System::Drawing::Size(72, 24);
+			this->saveButton_ImageViewer_Form->TabIndex = 14;
+			this->saveButton_ImageViewer_Form->Text = S"Save";
+			this->saveButton_ImageViewer_Form->Click += new System::EventHandler(this, saveButton_ImageViewer_Form_Click);
+			// 
+			// singleRecog
+			// 
+			this->singleRecog->Location = System::Drawing::Point(176, 344);
+			this->singleRecog->Name = S"singleRecog";
+			this->singleRecog->Size = System::Drawing::Size(88, 24);
+			this->singleRecog->TabIndex = 13;
+			this->singleRecog->Text = S"Single Recog";
+			this->singleRecog->Click += new System::EventHandler(this, singleRecog_Click);
+			// 
+			// myWindowRecognizeButton
+			// 
+			this->myWindowRecognizeButton->Location = System::Drawing::Point(184, 312);
+			this->myWindowRecognizeButton->Name = S"myWindowRecognizeButton";
+			this->myWindowRecognizeButton->Size = System::Drawing::Size(80, 24);
+			this->myWindowRecognizeButton->TabIndex = 12;
+			this->myWindowRecognizeButton->Text = S"RecognizeAll";
+			this->myWindowRecognizeButton->Click += new System::EventHandler(this, myWindowRecognizeButton_Click);
+			// 
+			// myWindowSeparateButton
+			// 
+			this->myWindowSeparateButton->Location = System::Drawing::Point(32, 344);
+			this->myWindowSeparateButton->Name = S"myWindowSeparateButton";
+			this->myWindowSeparateButton->Size = System::Drawing::Size(80, 40);
+			this->myWindowSeparateButton->TabIndex = 11;
+			this->myWindowSeparateButton->Text = S"Separate";
+			this->myWindowSeparateButton->Click += new System::EventHandler(this, myWindowSeparateButton_Click);
 			// 
 			// avgHeightLabel
 			// 
@@ -383,7 +388,7 @@ namespace OCR
 			// 
 			// label6
 			// 
-			this->label6->Location = System::Drawing::Point(8, 96);
+			this->label6->Location = System::Drawing::Point(17, 96);
 			this->label6->Name = S"label6";
 			this->label6->Size = System::Drawing::Size(88, 24);
 			this->label6->TabIndex = 9;
@@ -391,14 +396,14 @@ namespace OCR
 			// 
 			// avgWidthLabel
 			// 
-			this->avgWidthLabel->Location = System::Drawing::Point(120, 64);
+			this->avgWidthLabel->Location = System::Drawing::Point(120, 72);
 			this->avgWidthLabel->Name = S"avgWidthLabel";
 			this->avgWidthLabel->Size = System::Drawing::Size(128, 24);
 			this->avgWidthLabel->TabIndex = 8;
 			// 
 			// label5
 			// 
-			this->label5->Location = System::Drawing::Point(8, 64);
+			this->label5->Location = System::Drawing::Point(16, 72);
 			this->label5->Name = S"label5";
 			this->label5->Size = System::Drawing::Size(80, 24);
 			this->label5->TabIndex = 7;
@@ -406,25 +411,25 @@ namespace OCR
 			// 
 			// exitButton
 			// 
-			this->exitButton->Location = System::Drawing::Point(96, 328);
+			this->exitButton->Location = System::Drawing::Point(168, 384);
 			this->exitButton->Name = S"exitButton";
-			this->exitButton->Size = System::Drawing::Size(104, 56);
+			this->exitButton->Size = System::Drawing::Size(96, 48);
 			this->exitButton->TabIndex = 6;
 			this->exitButton->Text = S"Exit";
 			this->exitButton->Click += new System::EventHandler(this, exitButton_Click);
 			// 
 			// nextButton
 			// 
-			this->nextButton->Location = System::Drawing::Point(32, 264);
+			this->nextButton->Location = System::Drawing::Point(96, 392);
 			this->nextButton->Name = S"nextButton";
-			this->nextButton->Size = System::Drawing::Size(40, 24);
+			this->nextButton->Size = System::Drawing::Size(64, 40);
 			this->nextButton->TabIndex = 5;
 			this->nextButton->Text = S"Next";
 			this->nextButton->Click += new System::EventHandler(this, nextButton_Click);
 			// 
 			// label3
 			// 
-			this->label3->Location = System::Drawing::Point(24, 40);
+			this->label3->Location = System::Drawing::Point(34, 48);
 			this->label3->Name = S"label3";
 			this->label3->Size = System::Drawing::Size(56, 16);
 			this->label3->TabIndex = 4;
@@ -432,21 +437,21 @@ namespace OCR
 			// 
 			// smallWidthLabel
 			// 
-			this->smallWidthLabel->Location = System::Drawing::Point(120, 40);
+			this->smallWidthLabel->Location = System::Drawing::Point(120, 48);
 			this->smallWidthLabel->Name = S"smallWidthLabel";
 			this->smallWidthLabel->Size = System::Drawing::Size(128, 16);
 			this->smallWidthLabel->TabIndex = 3;
 			// 
 			// smallHeightLabel
 			// 
-			this->smallHeightLabel->Location = System::Drawing::Point(120, 16);
+			this->smallHeightLabel->Location = System::Drawing::Point(120, 24);
 			this->smallHeightLabel->Name = S"smallHeightLabel";
 			this->smallHeightLabel->Size = System::Drawing::Size(120, 16);
 			this->smallHeightLabel->TabIndex = 2;
 			// 
 			// label4
 			// 
-			this->label4->Location = System::Drawing::Point(24, 16);
+			this->label4->Location = System::Drawing::Point(32, 24);
 			this->label4->Name = S"label4";
 			this->label4->Size = System::Drawing::Size(56, 16);
 			this->label4->TabIndex = 1;
@@ -454,7 +459,7 @@ namespace OCR
 			// 
 			// pictureBoxSmall
 			// 
-			this->pictureBoxSmall->Location = System::Drawing::Point(120, 256);
+			this->pictureBoxSmall->Location = System::Drawing::Point(120, 248);
 			this->pictureBoxSmall->Name = S"pictureBoxSmall";
 			this->pictureBoxSmall->TabIndex = 0;
 			this->pictureBoxSmall->TabStop = false;
@@ -468,6 +473,7 @@ namespace OCR
 			this->groupBox3->TabIndex = 2;
 			this->groupBox3->TabStop = false;
 			this->groupBox3->Text = S"Logs";
+			this->groupBox3->Visible = false;
 			// 
 			// myRTB
 			// 
@@ -486,11 +492,12 @@ namespace OCR
 			// mnuImage
 			// 
 			this->mnuImage->Index = 0;
-			System::Windows::Forms::MenuItem* __mcTemp__2[] = new System::Windows::Forms::MenuItem*[4];
+			System::Windows::Forms::MenuItem* __mcTemp__2[] = new System::Windows::Forms::MenuItem*[5];
 			__mcTemp__2[0] = this->mnuSave;
 			__mcTemp__2[1] = this->menuItem1;
 			__mcTemp__2[2] = this->mnuSingleRecognize;
 			__mcTemp__2[3] = this->mnuRecognizeAll;
+			__mcTemp__2[4] = this->mnuLogs;
 			this->mnuImage->MenuItems->AddRange(__mcTemp__2);
 			this->mnuImage->Text = S"Image";
 			// 
@@ -519,6 +526,27 @@ namespace OCR
 			this->mnuRecognizeAll->Shortcut = System::Windows::Forms::Shortcut::CtrlO;
 			this->mnuRecognizeAll->Text = S"Recognize all";
 			this->mnuRecognizeAll->Click += new System::EventHandler(this, mnuRecognizeAll_Click);
+			// 
+			// mnuLogs
+			// 
+			this->mnuLogs->Index = 4;
+			System::Windows::Forms::MenuItem* __mcTemp__3[] = new System::Windows::Forms::MenuItem*[2];
+			__mcTemp__3[0] = this->mnuLogs_Show;
+			__mcTemp__3[1] = this->mnuLogs_Hide;
+			this->mnuLogs->MenuItems->AddRange(__mcTemp__3);
+			this->mnuLogs->Text = S"Logs";
+			// 
+			// mnuLogs_Show
+			// 
+			this->mnuLogs_Show->Index = 0;
+			this->mnuLogs_Show->Text = S"Show";
+			this->mnuLogs_Show->Click += new System::EventHandler(this, mnuLogs_Show_Click);
+			// 
+			// mnuLogs_Hide
+			// 
+			this->mnuLogs_Hide->Index = 1;
+			this->mnuLogs_Hide->Text = S"Hide";
+			this->mnuLogs_Hide->Click += new System::EventHandler(this, mnuLogs_Hide_Click);
 			// 
 			// myWindow
 			// 
@@ -559,7 +587,7 @@ private: void LoadFromFile()
 			System::String* charStr;
 			System::String* unicodeStr;
 			int index;
-
+			
 			try
 			{
 				this->slForCharacters = new System::Collections::SortedList();
@@ -625,7 +653,7 @@ private: void LoadFromFile()
 				 this->Update();
 				 }
 	}// end of function MakeBinary
-
+/*
 		 private: void separateChar()
 				 {
 					 float myPenSum=0;
@@ -672,7 +700,7 @@ private: void LoadFromFile()
 
 							if(this->SeparateDone==false)
 							{
-							Separate* sp=new Separate(im,BArray,g);
+							Separate* sp=new Separate(im,BArray,g,this->TouchingCharIdentified);
 							sp->LineSeparate();						//Separate Lines from the image
 
 							this->numberOfLines=sp->getNumberOfLines(); //Get Number of Lines
@@ -685,12 +713,12 @@ private: void LoadFromFile()
 							{
 								this->separateChar();			//separate Characters
 							}
-
+							
 							
 						}
 					 
 					this->Update();
-				 }//End Separate
+				 }//End Separate*/
 	private: System::Void nextButton_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 if(charno<this->LineInfo[lineno].Words[wordno].getTotalUnit()-1)
@@ -818,6 +846,8 @@ private: void LoadFromFile()
 			
 			System::String* dirOfRecFile = rp->recognitionTempFileDir;
 			this->slModelTranscription = rp->LoadModelTranscriptions(this->modelTrainDBPath);
+
+
 			rp->SetImageBoundary(left_x,right_x,top_y,bottom_y);
 			int totalUnit =charno;
 			
@@ -954,6 +984,7 @@ private: void LoadFromFile()
 									if(ind==tempCount)
 									{
 									tempStr=ENum->Current->ToString();
+									//System::Windows::Forms::MessageBox::Show(tempStr,"tempStr=ENum->Current->ToString()");	
 									break;
 									}
 									tempCount++;
@@ -967,8 +998,9 @@ private: void LoadFromFile()
 									tempStr = (String*)tempNum->Current;
 									ucodeStr = ucodeStr->Concat(ucodeStr,slForCharacters->GetKey(slForCharacters->IndexOfValue(tempStr)));
 								}
-												
+								
 								text = text->Concat(text,ucodeStr);
+								//System::Windows::Forms::MessageBox::Show(text,"text->Concat(text,ucodestr)");			
 							}// end if
 						}
 						text = text->Concat(text,(String*)" ");						
@@ -981,23 +1013,51 @@ private: void LoadFromFile()
 				System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to provide the output!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 				exit(0);
 			}
-		 
+			this->rtbOutput->Text = text;
 			//OCR::RecognitionForm* rw=new OCR::RecognitionForm();
-			this->rtbRecognize->Text = text;
+			//rw->showText(text);
 			//rw->ShowDialog();
 		 }//End ProvideOutput
 
+private: System::Void myWindowSeparateButton_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 this->makeBinary();
+//			 this->separate();
+		 }//End myWindowSeparateButton_Click
 
+private: System::Void myWindowRecognizeButton_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 this->Recognize();
+		 }//End myWindowRecognizeButton_Click
 
 private: System::Void singleRecog_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 singleRecognize(x1,x2,y1,y2,1) ;
 		 }
 
+private: System::Void saveButton_ImageViewer_Form_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			/*
 
-		 
+			This method is used to save the image file after certain image processing portion is complete.
+			In case we need the file in future.
 
+			*/
+					saveFileDialog_Image_Viewer->Filter= "PNG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
+					saveFileDialog_Image_Viewer->FilterIndex = 1 ;
+					saveFileDialog_Image_Viewer->RestoreDirectory = true ;
 
+					System::Windows::Forms::DialogResult d = this->saveFileDialog_Image_Viewer->ShowDialog();
+						if (d == System::Windows::Forms::DialogResult::OK)				 
+							{			 
+							// creating a bitmap
+							Bitmap* save;
+							save=new Bitmap(this->pictureBoxSmall->Image);
+							save->Save(saveFileDialog_Image_Viewer->FileName);
+							
+							}
+		
+		 }
 
 private: System::Void mnuSave_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
@@ -1025,18 +1085,21 @@ private: System::Void mnuSave_Click(System::Object *  sender, System::EventArgs 
 private: System::Void mnuSingleRecognize_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 singleRecognize(x1,x2,y1,y2,1) ;
-		
 		 }
 
 private: System::Void mnuRecognizeAll_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			  this->Recognize();
+			 this->Recognize();
 		 }
- 
 
-private: System::Void btnSingleRecognize_Click(System::Object *  sender, System::EventArgs *  e)
+private: System::Void mnuLogs_Show_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 singleRecognize(x1,x2,y1,y2,1) ;
+			 this->groupBox3->Visible = true;
+		 }
+
+private: System::Void mnuLogs_Hide_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			 this->groupBox3->Visible = false;
 		 }
 
 };

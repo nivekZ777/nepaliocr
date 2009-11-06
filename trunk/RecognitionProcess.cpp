@@ -29,7 +29,9 @@ RecognitionProcess::RecognitionProcess(System::String* path,int **imgArray)
 	this->dictFilePath = this->dictFilePath->Concat(path ,"\\htk\\files\\def\\dict.txt");
 	this->wordNetFilePath = this->wordNetFilePath->Concat(path ,"\\htk\\files\\def\\net.slf");
 	this->recognitionTempFileDir = this->recognitionTempFileDir->Concat(path ,"\\htk\\recognizer\\");
-	
+	this->aakarsList = new System::Collections::ArrayList();
+	this->rassoEEkarList = new System::Collections::ArrayList();
+
 }
 
 void RecognitionProcess::ImageBoundarySet(int left_x, int right_x,int top_y, int bottom_y)
@@ -46,6 +48,8 @@ System::Collections::SortedList* RecognitionProcess::LoadModelTranscriptions(Sys
 	// load the model transcription database
 	 System::IO::StreamReader* sr = System::IO::StreamReader::Null;
 	 slModel = new System ::Collections::SortedList();
+
+
 	 System::String* key;
 	 System::String* tempStr;
 	 int count=0;
@@ -53,15 +57,16 @@ System::Collections::SortedList* RecognitionProcess::LoadModelTranscriptions(Sys
 	 try
 	 {
 		sr = new System::IO::StreamReader(dbFilePath);
-
-		 
 		while(sr->Peek()>=0)
 		{
+			
 			tempStr=sr->ReadLine();
 			if(tempStr->Equals("*"))
 			{
 				count = 0;
 				slModel->Add(key,alModelTrans);
+				
+				
 			}
 			else
 			{
@@ -74,12 +79,28 @@ System::Collections::SortedList* RecognitionProcess::LoadModelTranscriptions(Sys
 				else
 				{
 					alModelTrans->Add(tempStr);
+	//PostProcessing Details Here
+					 //ArrayList aakarList contains list of model names
+					if(tempStr->Equals("093E")){
+						this->aakarsList->Add(key);
+	//PostProcessing Details here
+						
+					}
+					if(tempStr->Equals("093F")){
+						this->rassoEEkarList->Add(key);
+					}
 				}
 			}
-			
-		}
+			//if(tempStr->Equals("093E")){
+			//	System::Windows::Forms::MessageBox::Show("Found",key->ToString());
+			//}
+		} //End while
 		sr->Close();
-
+		 
+		//while(aaKarList->GetEnumerator()->MoveNext()){
+		//	  
+		//	myaaKarListCounter++;
+		//}
 		return slModel;
 	 }
 	 catch(System::Exception* ex)
@@ -114,6 +135,7 @@ System::Collections::ArrayList* RecognitionProcess::RecognizeByHTK()
 	fm->RecognizeByHMM(this->recognitionTempFileDir,this->exeFileDir,this->mmfFilePath,this->mlfFilePath,this->wordNetFilePath,this->dictFilePath,this->HMMListFilePath, this->scriptFilePath); 
 	
 	System::Collections::ArrayList* al = fm->FetchOutputModels(this->mlfFilePath);
+	
 
 	return al;
 }
