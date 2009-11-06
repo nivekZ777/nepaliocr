@@ -253,9 +253,9 @@ namespace OCR
 			// 
 			this->panel1->AutoScroll = true;
 			this->panel1->Controls->Add(this->pictureBox_myWindow);
-			this->panel1->Location = System::Drawing::Point(8, 80);
+			this->panel1->Location = System::Drawing::Point(8, 40);
 			this->panel1->Name = S"panel1";
-			this->panel1->Size = System::Drawing::Size(312, 360);
+			this->panel1->Size = System::Drawing::Size(480, 432);
 			this->panel1->TabIndex = 0;
 			// 
 			// pictureBox_myWindow
@@ -273,40 +273,40 @@ namespace OCR
 			this->groupBox1->Controls->Add(this->bigHeightLabel);
 			this->groupBox1->Controls->Add(this->label1);
 			this->groupBox1->Controls->Add(this->panel1);
-			this->groupBox1->Location = System::Drawing::Point(24, 24);
+			this->groupBox1->Location = System::Drawing::Point(0, 0);
 			this->groupBox1->Name = S"groupBox1";
-			this->groupBox1->Size = System::Drawing::Size(336, 448);
+			this->groupBox1->Size = System::Drawing::Size(504, 480);
 			this->groupBox1->TabIndex = 0;
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = S"Input Image";
 			// 
 			// bigWidthLabel
 			// 
-			this->bigWidthLabel->Location = System::Drawing::Point(136, 48);
+			this->bigWidthLabel->Location = System::Drawing::Point(224, 16);
 			this->bigWidthLabel->Name = S"bigWidthLabel";
-			this->bigWidthLabel->Size = System::Drawing::Size(120, 24);
+			this->bigWidthLabel->Size = System::Drawing::Size(120, 16);
 			this->bigWidthLabel->TabIndex = 4;
 			// 
 			// label2
 			// 
-			this->label2->Location = System::Drawing::Point(24, 48);
+			this->label2->Location = System::Drawing::Point(144, 16);
 			this->label2->Name = S"label2";
-			this->label2->Size = System::Drawing::Size(88, 24);
+			this->label2->Size = System::Drawing::Size(72, 16);
 			this->label2->TabIndex = 3;
 			this->label2->Text = S"Image Width";
 			// 
 			// bigHeightLabel
 			// 
-			this->bigHeightLabel->Location = System::Drawing::Point(136, 24);
+			this->bigHeightLabel->Location = System::Drawing::Point(88, 16);
 			this->bigHeightLabel->Name = S"bigHeightLabel";
-			this->bigHeightLabel->Size = System::Drawing::Size(120, 16);
+			this->bigHeightLabel->Size = System::Drawing::Size(56, 16);
 			this->bigHeightLabel->TabIndex = 2;
 			// 
 			// label1
 			// 
-			this->label1->Location = System::Drawing::Point(24, 24);
+			this->label1->Location = System::Drawing::Point(8, 16);
 			this->label1->Name = S"label1";
-			this->label1->Size = System::Drawing::Size(96, 24);
+			this->label1->Size = System::Drawing::Size(72, 16);
 			this->label1->TabIndex = 1;
 			this->label1->Text = S"Image Height";
 			// 
@@ -328,24 +328,24 @@ namespace OCR
 			this->groupBox2->Controls->Add(this->smallHeightLabel);
 			this->groupBox2->Controls->Add(this->label4);
 			this->groupBox2->Controls->Add(this->pictureBoxSmall);
-			this->groupBox2->Location = System::Drawing::Point(368, 32);
+			this->groupBox2->Location = System::Drawing::Point(512, 0);
 			this->groupBox2->Name = S"groupBox2";
-			this->groupBox2->Size = System::Drawing::Size(280, 448);
+			this->groupBox2->Size = System::Drawing::Size(264, 480);
 			this->groupBox2->TabIndex = 1;
 			this->groupBox2->TabStop = false;
 			this->groupBox2->Text = S"Sliced Single Image";
 			// 
 			// rtbOutput
 			// 
-			this->rtbOutput->Location = System::Drawing::Point(24, 152);
+			this->rtbOutput->Location = System::Drawing::Point(56, 112);
 			this->rtbOutput->Name = S"rtbOutput";
-			this->rtbOutput->Size = System::Drawing::Size(208, 64);
+			this->rtbOutput->Size = System::Drawing::Size(192, 64);
 			this->rtbOutput->TabIndex = 15;
 			this->rtbOutput->Text = S"";
 			// 
 			// saveButton_ImageViewer_Form
 			// 
-			this->saveButton_ImageViewer_Form->Location = System::Drawing::Point(32, 312);
+			this->saveButton_ImageViewer_Form->Location = System::Drawing::Point(64, 272);
 			this->saveButton_ImageViewer_Form->Name = S"saveButton_ImageViewer_Form";
 			this->saveButton_ImageViewer_Form->Size = System::Drawing::Size(72, 24);
 			this->saveButton_ImageViewer_Form->TabIndex = 14;
@@ -354,7 +354,7 @@ namespace OCR
 			// 
 			// singleRecog
 			// 
-			this->singleRecog->Location = System::Drawing::Point(176, 344);
+			this->singleRecog->Location = System::Drawing::Point(168, 312);
 			this->singleRecog->Name = S"singleRecog";
 			this->singleRecog->Size = System::Drawing::Size(88, 24);
 			this->singleRecog->TabIndex = 13;
@@ -363,7 +363,7 @@ namespace OCR
 			// 
 			// myWindowRecognizeButton
 			// 
-			this->myWindowRecognizeButton->Location = System::Drawing::Point(184, 312);
+			this->myWindowRecognizeButton->Location = System::Drawing::Point(176, 272);
 			this->myWindowRecognizeButton->Name = S"myWindowRecognizeButton";
 			this->myWindowRecognizeButton->Size = System::Drawing::Size(80, 24);
 			this->myWindowRecognizeButton->TabIndex = 12;
@@ -372,7 +372,7 @@ namespace OCR
 			// 
 			// myWindowSeparateButton
 			// 
-			this->myWindowSeparateButton->Location = System::Drawing::Point(32, 344);
+			this->myWindowSeparateButton->Location = System::Drawing::Point(64, 304);
 			this->myWindowSeparateButton->Name = S"myWindowSeparateButton";
 			this->myWindowSeparateButton->Size = System::Drawing::Size(80, 40);
 			this->myWindowSeparateButton->TabIndex = 11;
@@ -381,14 +381,14 @@ namespace OCR
 			// 
 			// avgHeightLabel
 			// 
-			this->avgHeightLabel->Location = System::Drawing::Point(120, 96);
+			this->avgHeightLabel->Location = System::Drawing::Point(152, 72);
 			this->avgHeightLabel->Name = S"avgHeightLabel";
-			this->avgHeightLabel->Size = System::Drawing::Size(128, 24);
+			this->avgHeightLabel->Size = System::Drawing::Size(72, 24);
 			this->avgHeightLabel->TabIndex = 10;
 			// 
 			// label6
 			// 
-			this->label6->Location = System::Drawing::Point(17, 96);
+			this->label6->Location = System::Drawing::Point(56, 64);
 			this->label6->Name = S"label6";
 			this->label6->Size = System::Drawing::Size(88, 24);
 			this->label6->TabIndex = 9;
@@ -396,14 +396,14 @@ namespace OCR
 			// 
 			// avgWidthLabel
 			// 
-			this->avgWidthLabel->Location = System::Drawing::Point(120, 72);
+			this->avgWidthLabel->Location = System::Drawing::Point(152, 40);
 			this->avgWidthLabel->Name = S"avgWidthLabel";
-			this->avgWidthLabel->Size = System::Drawing::Size(128, 24);
+			this->avgWidthLabel->Size = System::Drawing::Size(72, 24);
 			this->avgWidthLabel->TabIndex = 8;
 			// 
 			// label5
 			// 
-			this->label5->Location = System::Drawing::Point(16, 72);
+			this->label5->Location = System::Drawing::Point(56, 40);
 			this->label5->Name = S"label5";
 			this->label5->Size = System::Drawing::Size(80, 24);
 			this->label5->TabIndex = 7;
@@ -411,7 +411,7 @@ namespace OCR
 			// 
 			// exitButton
 			// 
-			this->exitButton->Location = System::Drawing::Point(168, 384);
+			this->exitButton->Location = System::Drawing::Point(168, 424);
 			this->exitButton->Name = S"exitButton";
 			this->exitButton->Size = System::Drawing::Size(96, 48);
 			this->exitButton->TabIndex = 6;
@@ -420,7 +420,7 @@ namespace OCR
 			// 
 			// nextButton
 			// 
-			this->nextButton->Location = System::Drawing::Point(96, 392);
+			this->nextButton->Location = System::Drawing::Point(128, 352);
 			this->nextButton->Name = S"nextButton";
 			this->nextButton->Size = System::Drawing::Size(64, 40);
 			this->nextButton->TabIndex = 5;
@@ -429,7 +429,7 @@ namespace OCR
 			// 
 			// label3
 			// 
-			this->label3->Location = System::Drawing::Point(34, 48);
+			this->label3->Location = System::Drawing::Point(128, 16);
 			this->label3->Name = S"label3";
 			this->label3->Size = System::Drawing::Size(56, 16);
 			this->label3->TabIndex = 4;
@@ -437,29 +437,29 @@ namespace OCR
 			// 
 			// smallWidthLabel
 			// 
-			this->smallWidthLabel->Location = System::Drawing::Point(120, 48);
+			this->smallWidthLabel->Location = System::Drawing::Point(192, 16);
 			this->smallWidthLabel->Name = S"smallWidthLabel";
-			this->smallWidthLabel->Size = System::Drawing::Size(128, 16);
+			this->smallWidthLabel->Size = System::Drawing::Size(56, 16);
 			this->smallWidthLabel->TabIndex = 3;
 			// 
 			// smallHeightLabel
 			// 
-			this->smallHeightLabel->Location = System::Drawing::Point(120, 24);
+			this->smallHeightLabel->Location = System::Drawing::Point(64, 16);
 			this->smallHeightLabel->Name = S"smallHeightLabel";
-			this->smallHeightLabel->Size = System::Drawing::Size(120, 16);
+			this->smallHeightLabel->Size = System::Drawing::Size(56, 16);
 			this->smallHeightLabel->TabIndex = 2;
 			// 
 			// label4
 			// 
-			this->label4->Location = System::Drawing::Point(32, 24);
+			this->label4->Location = System::Drawing::Point(16, 16);
 			this->label4->Name = S"label4";
-			this->label4->Size = System::Drawing::Size(56, 16);
+			this->label4->Size = System::Drawing::Size(40, 16);
 			this->label4->TabIndex = 1;
 			this->label4->Text = S"Height";
 			// 
 			// pictureBoxSmall
 			// 
-			this->pictureBoxSmall->Location = System::Drawing::Point(120, 248);
+			this->pictureBoxSmall->Location = System::Drawing::Point(152, 200);
 			this->pictureBoxSmall->Name = S"pictureBoxSmall";
 			this->pictureBoxSmall->TabIndex = 0;
 			this->pictureBoxSmall->TabStop = false;
@@ -467,9 +467,9 @@ namespace OCR
 			// groupBox3
 			// 
 			this->groupBox3->Controls->Add(this->myRTB);
-			this->groupBox3->Location = System::Drawing::Point(656, 32);
+			this->groupBox3->Location = System::Drawing::Point(784, 0);
 			this->groupBox3->Name = S"groupBox3";
-			this->groupBox3->Size = System::Drawing::Size(240, 448);
+			this->groupBox3->Size = System::Drawing::Size(240, 472);
 			this->groupBox3->TabIndex = 2;
 			this->groupBox3->TabStop = false;
 			this->groupBox3->Text = S"Logs";
@@ -479,7 +479,7 @@ namespace OCR
 			// 
 			this->myRTB->Location = System::Drawing::Point(16, 40);
 			this->myRTB->Name = S"myRTB";
-			this->myRTB->Size = System::Drawing::Size(208, 392);
+			this->myRTB->Size = System::Drawing::Size(208, 424);
 			this->myRTB->TabIndex = 0;
 			this->myRTB->Text = S"";
 			// 
@@ -552,7 +552,7 @@ namespace OCR
 			// 
 			this->AllowDrop = true;
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
-			this->ClientSize = System::Drawing::Size(912, 494);
+			this->ClientSize = System::Drawing::Size(1028, 497);
 			this->Controls->Add(this->groupBox3);
 			this->Controls->Add(this->groupBox2);
 			this->Controls->Add(this->groupBox1);

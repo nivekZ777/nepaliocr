@@ -140,6 +140,9 @@
 				RelativePath=".\OCR.cpp">
 			</File>
 			<File
+				RelativePath=".\PostProcessor.cpp">
+			</File>
+			<File
 				RelativePath=".\RecognitionForm.cpp">
 			</File>
 			<File
@@ -223,6 +226,9 @@
 							ResourceFileName="$(IntDir)/OCR.myWindow.resources"/>
 					</FileConfiguration>
 				</File>
+			</File>
+			<File
+				RelativePath=".\PostProcessor.h">
 			</File>
 			<File
 				RelativePath=".\RecognitionForm.h"

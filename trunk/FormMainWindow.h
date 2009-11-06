@@ -38,6 +38,8 @@
 #include "myWindow.h"
 #include "Resegment.h"
 #include "RemoveNoise.h"
+#include "PostProcessor.h"
+ 
 
 
 #pragma once
@@ -322,7 +324,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			// 
 			this->picture_panel->AllowDrop = true;
 			this->picture_panel->AutoScroll = true;
-			this->picture_panel->BackColor = System::Drawing::Color::AliceBlue;
+			this->picture_panel->BackColor = System::Drawing::Color::Gainsboro;
 			this->picture_panel->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
 			this->picture_panel->Controls->Add(this->statusBar1);
 			this->picture_panel->Controls->Add(this->pictureBox1);
@@ -905,6 +907,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 		catch(Exception* ex)
 			{
 				System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to Improve the Contrast!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+				this->Cursor = System::Windows::Forms::Cursors::Default;
 			}
 		this->Cursor = System::Windows::Forms::Cursors::Default;
 	
@@ -1484,6 +1487,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			notepadOutSw->Write(text);
 			notepadOutSw->Close();
 			 
+		//	PostProcessor *pp = new PostProcessor(text);
 			//OCR::RecognitionForm* rw=new OCR::RecognitionForm();
 			//
 			////rw->showText(text);
@@ -1664,6 +1668,8 @@ private: System::Void picture_panel_DragDrop(System::Object *  sender, System::W
 				g=this->pictureBox1->CreateGraphics();
 				myInfo->Text="";
 				myInfo1->Text="";
+
+				this->setResetMenu(this->ImageLoaded,this->BinaryDone,this->SeparateDone);
 			  
 			 }
   		 
@@ -2740,16 +2746,19 @@ private: System::Void mnuSaveOutput_Click(System::Object *  sender, System::Even
 			 //Output Saving rajesh
 			 if(this->rtbOutputShowing){
 				// this->saveOutputDialog->Filter = "Text Files (*.txt)";
-				 this->saveOutputDialog->Filter =  "Txt files (*.txt)|*.txt" ;
-				 saveImageDialog->Filter= "PNG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
+				 //this->saveOutputDialog->Filter =  "Txt files (*.txt)|*.txt" ;
+				 this->saveOutputDialog->Filter = L"DOC|*.doc|RTF|*.rtf";
+				 //saveImageDialog->Filter= "PNG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
 				 this->saveOutputDialog->RestoreDirectory = true;
 				 this->saveOutputDialog->FilterIndex = 1;
 				 System::Windows::Forms::DialogResult outputDialog = this->saveOutputDialog->ShowDialog();
 				 if(outputDialog == System::Windows::Forms::DialogResult::OK){
-					System::String* notepadOutputFileName = this->saveOutputDialog->FileName;
-					System::IO::StreamWriter* notepadOutSw = new System::IO::StreamWriter(notepadOutputFileName);
-					notepadOutSw->Write(this->rtbMainOutput->Text);
-					notepadOutSw->Close();
+					//System::String* notepadOutputFileName = this->saveOutputDialog->FileName;
+					//System::IO::StreamWriter* notepadOutSw = new System::IO::StreamWriter(notepadOutputFileName);
+					this->rtbMainOutput->SaveFile(this->saveOutputDialog->FileName,System::Windows::Forms::RichTextBoxStreamType::RichText);
+					System::Windows::Forms::MessageBox::Show("File Saved Successfully","Saved Successfully!",System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Exclamation);
+					//notepadOutSw->Write(this->rtbMainOutput->Text);
+					//notepadOutSw->Close();
 					}
 			 }
 			 else{
