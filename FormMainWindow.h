@@ -85,7 +85,6 @@ namespace OCR
 			this->meanDone=false;
 			this->deskewDone=false;
 			this->TouchingCharIdentified=false;
-			this->rtbOutputShowing = false;
 
 			InitializeComponent();
 
@@ -110,7 +109,6 @@ namespace OCR
 			this->scriptFilePath = this->scriptFilePath->Concat(this->applicationPath ,"\\htk\\recognizer\\script.txt");
 
 			this->LoadFromFile();
-			this->delRTB();
 			//this->MdiChildren = OCR::myWindow ;
 			//this->MdiChildren = OCR::TrainingForm;
 			//
@@ -440,7 +438,6 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			// 
 			// mnuSaveOutput
 			// 
-			this->mnuSaveOutput->Enabled = false;
 			this->mnuSaveOutput->Index = 3;
 			this->mnuSaveOutput->Shortcut = System::Windows::Forms::Shortcut::CtrlD;
 			this->mnuSaveOutput->Text = S"Save Output";
@@ -633,7 +630,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			__mcTemp__6[0] = this->mnuVersionInfo;
 			__mcTemp__6[1] = this->menuItem4;
 			this->mnuAbout->MenuItems->AddRange(__mcTemp__6);
-			this->mnuAbout->Text = S"A&bout";
+			this->mnuAbout->Text = S"&About";
 			// 
 			// mnuVersionInfo
 			// 
@@ -833,7 +830,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 				//System::Windows::Forms::MessageBox::Show("Pixelformat is not 24 bytes per pixel RGB","Format24bppRgb");
 				return;
 			}
-			//this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
+			this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
 			try{
 			double pixel = 0, contrast = (100.0+nContrast)/100.0;
 
@@ -985,7 +982,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 			{
 				if(this->rtbOutputShowing == true) this->delRTB();
 				this->pbOCR->Value =30;
-				try{
+				
 				System::Windows::Forms::DialogResult d = this->openImageDialog->ShowDialog();
 				
 				if (d == System::Windows::Forms::DialogResult::OK)				 
@@ -1018,11 +1015,7 @@ private: System::Windows::Forms::MenuItem *  mnuSaveOutput;
 				 this->pbOCR->Value = 99;
 				this->Update();
 				this->pbOCR->Value = 0; //reset value in progressbar
-				}//end try
-				catch(System::Exception *fileOpenException){
-					System::Windows::Forms::MessageBox::Show(fileOpenException->ToString(),"Unable to open Image",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 
-				 }
 
 				
 				 
@@ -1936,7 +1929,6 @@ private: System::Void mnuTrain_Click(System::Object *  sender, System::EventArgs
 		private: void createRTB(){
 			  //this function is used to create the richtextbox used producing output after recognition
 				this->rtbMainOutput->Visible = true;
-				this->mnuSaveOutput->Enabled = true;
 			  if(this->rtbOutputShowing == false){
 				  
 				this->picture_panel->Size = System::Drawing::Size((this->picture_panel->Width),(this->picture_panel->Height-96));
@@ -1953,7 +1945,6 @@ private: System::Void mnuTrain_Click(System::Object *  sender, System::EventArgs
 			
 			this->picture_panel->Size = System::Drawing::Size((this->picture_panel->Width),(this->picture_panel->Height+96));
 			this->rtbMainOutput->Visible = false;
-			//this->mnuSaveOutput->Enabled = true;
 			//this->rtbOutput->Container->Dispose();
 			this->rtbOutputShowing = false;
 			 
@@ -2014,7 +2005,7 @@ private: System::Void mnuDeskew_Click(System::Object *  sender, System::EventArg
 
 private: System::Void mnuContrast_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			if(this->ImageLoaded==true){
+			 if(this->ImageLoaded==true){
 			this->Contrast(10);
 			this->ContrastDone=true;
 			this->Update();
@@ -2057,12 +2048,7 @@ private: void enableCropper(System::Windows::Forms::ContextMenu *ocrCMenu){
 			mnuCropSelected->Text = "Crop Selected";
 			mnuCropSelected->Click+= new System::EventHandler(this,mnuCropSelected_Click);
 			ocrCMenu->MenuItems->Add(mnuCropSelected);
-			System::Drawing::Pen *myCropPen = new System::Drawing::Pen(System::Drawing::Color::Blue,1);
-			//p->Color = System::Drawing::Color::Blue;
-			myCropPen->DashStyle = System::Drawing::Drawing2D::DashStyle::Dash;
-			
-			//this->g->DrawRectangle(Pens::Blue, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
-			this->g->DrawRectangle(myCropPen, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+			this->g->DrawRectangle(Pens::Blue, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
 			this->imageSelection = true;
 			
 			
@@ -2526,7 +2512,6 @@ private: System::Void pictureBox1_MouseDown(System::Object *  sender, System::Wi
 			 this->pointX1 = e->X;
 			 this->pointY1 = e->Y;
 			 this->crobPictureBox->Visible = false;
-			 this->dragEnabled = true;
 			 
 		 }
 
@@ -2536,54 +2521,7 @@ private: System::Void pictureBox1_MouseUp(System::Object *  sender, System::Wind
 			 this->pointY2 = e->Y;
 			 
 			this->drawContextMenu(e);
-			this->dragEnabled = false;
 			 
-		 }
-private: System::Void pictureBox1_MouseMove(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
-		 {
-			 //this->crobPictureBox->Visible = true;
-			 //this->crobPictureBox->BringToFront();
-			 //g->Flush();
-			 //draw rectangles on mouse move event
-			 System::Drawing::Pen *myPen_MouseMove = new System::Drawing::Pen(System::Drawing::Color::Red,1);
-			//p->Color = System::Drawing::Color::Blue;
-			 myPen_MouseMove->DashStyle = System::Drawing::Drawing2D::DashStyle::DashDot;
-		
-			 if(this->dragEnabled){
-			 this->pointX2 = e->X;
-			 this->pointY2 = e->Y;
-			 this->pictureBox1->Refresh();
-
-			 //point checker
-				//Graphics.DrawImage(newImage, destRect, srcRect, units);
-			 if(this->pointX1 < this->pointX2){ //Normal condition, drag from left to right (x1 <x2)
-				 if(this->pointY1 < this->pointY2){ //Normal Condition drag from top to bottom (y1 <y2)
-					 this->g->DrawRectangle(myPen_MouseMove, Rectangle(this->pointX1,this->pointY1,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));
-				 }
-				 else {	//drag from bottom to top (y1 > y2)
-                     this->g->DrawRectangle(myPen_MouseMove, Rectangle(this->pointX1,this->pointY2,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));	
-				 }
-				}
-			 else{	//drag from right to left i.e. (this->pointX1 > this->pointX2)
-				 if(this->pointY1 < this->pointY2){ //Normal Condition drag from top to bottom (y1 <y2)
-					 this->g->DrawRectangle(myPen_MouseMove, Rectangle(this->pointX2,this->pointY1,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));			 		 
-					 }
-				 else{//drag from bottom to top (y1 > y2)
-					 this->g->DrawRectangle(myPen_MouseMove, Rectangle(this->pointX2,this->pointY2,Math::Abs(this->pointX2-this->pointX1),Math::Abs(this->pointY2-this->pointY1)));			 		 
-				 }
-				}
-
-			 //point checker ends
-			 }
-			////Debugging Codes :P
-			 //String *temp123 = "";
-			 //temp123= temp123->Concat(temp123," x1:",this->pointX1.ToString());
-			 //temp123= temp123->Concat(temp123," x2:",this->pointX2.ToString());
-			 //temp123= temp123->Concat(temp123," y1:",this->pointY1.ToString());			 
-			 //temp123= temp123->Concat(temp123," y2:",this->pointY2.ToString());
-			 //temp123= temp123->Concat(temp123," x2-x1:",(this->pointX2-this->pointX1).ToString());
-			 //temp123= temp123->Concat(temp123," y2-y1:",(this->pointY2-this->pointY1).ToString());
-			 //this->statusBar1->Text = temp123;
 		 }
 
 private: void drawMyMenu(System::Windows::Forms::MenuItem *abc, String *myMenuText){
@@ -2598,7 +2536,7 @@ private: void drawMyMenu(System::Windows::Forms::MenuItem *abc, String *myMenuTe
 		 }
 private: System::Void mnuVersionInfo_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 System::Windows::Forms::MessageBox::Show("Build: September 28 2008","Nepali OCR ");
+			 System::Windows::Forms::MessageBox::Show("Build: September 12 2008","Nepali OCR ");
 		 }
 
 		 
@@ -2618,7 +2556,7 @@ private: System::Void mnuVersionInfo_Click(System::Object *  sender, System::Eve
 		 
 			} // if(this->xMouseDistance < this->im->Width && this->yMouseDistance < this->im->Height)
 			else{
-				this->statusBar1->Text = "Image Cropped Must be Smaller than the original Image, Please crop again";
+				this->statusBar1->Text = "Image Cropped Must be Smaller than the original Image, Pls crop again";
 				return;
 				//MessageBox::Show("Image cropped must be smaller than the original image ","Crop Again");
 			}
@@ -2654,16 +2592,18 @@ private: void enableNewCropper(System::Windows::Forms::ContextMenu *ocrCMenu){
 				return;
 			}
 			this->pictureBox1->Refresh();
-			System::Drawing::Pen *myCropPen = new System::Drawing::Pen(System::Drawing::Color::Blue,1);
-			//p->Color = System::Drawing::Color::Blue;
-			myCropPen->DashStyle = System::Drawing::Drawing2D::DashStyle::Dot;
-			
-			//this->g->DrawRectangle(Pens::Black, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
-			this->g->DrawRectangle(myCropPen, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+			this->g->DrawRectangle(Pens::Black, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
 			this->imageSelection = true;
-			//delete myCropPen;
 					
 }
+private: System::Void pictureBox1_MouseMove(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
+		 {
+			 //this->crobPictureBox->Visible = true;
+			 //this->crobPictureBox->BringToFront();
+			 //g->Flush();
+			 //this->g->DrawRectangle(Pens::Black, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
+
+		 }
 
 
 
@@ -2674,16 +2614,8 @@ private: System::Void rtbMainOutput_MouseUp(System::Object *  sender, System::Wi
 					
 					System::Windows::Forms::ContextMenu *rtbCMenu = new System::Windows::Forms::ContextMenu();
 					System::Windows::Forms::MenuItem *rtbExit = new System::Windows::Forms::MenuItem();
-					System::Windows::Forms::MenuItem *rtbSaveInputMenu = new System::Windows::Forms::MenuItem();
-
 					rtbExit->Text = "Hide Output";
-					rtbSaveInputMenu->Text = "Save ";
 					rtbExit->Click+= new System::EventHandler(this,rtbExit_Click);
-					rtbSaveInputMenu->Shortcut = System::Windows::Forms::Shortcut::CtrlD;
-					rtbSaveInputMenu->Click+= new System::EventHandler(this,mnuSaveOutput_Click);
-					
-					
-					rtbCMenu->MenuItems->Add(rtbSaveInputMenu);
 					rtbCMenu->MenuItems->Add(rtbExit);
 					rtbCMenu->Show(this,System::Drawing::Point(e->X,this->picture_panel->Height+e->Y));
 				}
@@ -2695,14 +2627,11 @@ private: System::Void rtbMainOutput_MouseUp(System::Object *  sender, System::Wi
 private: System::Void rtbExit_Click(System::Object *  sender, System::EventArgs *  e){
 			 this->delRTB();
 			 }
- 
 private: System::Void mnuSaveOutput_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 //Output Saving rajesh
 			 if(this->rtbOutputShowing){
 				// this->saveOutputDialog->Filter = "Text Files (*.txt)";
-				 this->saveOutputDialog->Filter =  "Txt files (*.txt)|*.txt" ;
-				 saveImageDialog->Filter= "PNG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
 				 this->saveOutputDialog->RestoreDirectory = true;
 				 this->saveOutputDialog->FilterIndex = 1;
 				 System::Windows::Forms::DialogResult outputDialog = this->saveOutputDialog->ShowDialog();
@@ -2712,9 +2641,6 @@ private: System::Void mnuSaveOutput_Click(System::Object *  sender, System::Even
 					notepadOutSw->Write(this->rtbMainOutput->Text);
 					notepadOutSw->Close();
 					}
-			 }
-			 else{
-				 this->statusBar1->Text = "No output to save";
 			 }
 		 }
 
