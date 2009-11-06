@@ -2629,8 +2629,44 @@ private: System::Void pictureBox1_MouseMove(System::Object *  sender, System::Wi
 			 this->pointX2 = e->X;
 			 this->pointY2 = e->Y;
 			 this->pictureBox1->Refresh();
+			 if (e->Button == MouseButtons::Left) {
+				 long xBoundary = 0;
+				long yBoundary = 0;
 
-			 //point checker
+				long DeltaX = 0;
+				long DeltaY = 0;
+				bool DoScroll = false;
+				// CurrentPos represents the top left corner's coordinates.
+				System::Drawing::Point CurrentPos = System::Drawing::Point(Math::Abs(picture_panel->AutoScrollPosition.X), (Math::Abs(picture_panel->AutoScrollPosition.Y)));
+
+				//Pretty sure this isn't the best way of doing this
+				//However, if we don't pause a little, the user could easily scroll
+				//at super-speeds. I'd look into another way of throttling the scroll speed.
+				System::Threading::Thread::Sleep(50);
+				
+				xBoundary = CurrentPos.X + picture_panel->Width - SystemInformation::VerticalScrollBarWidth;
+				yBoundary = CurrentPos.Y + picture_panel->Height - SystemInformation::HorizontalScrollBarHeight;
+
+				
+				//Check to see if we are out of the visible area
+				if (e->X > xBoundary | e->X < CurrentPos.X) {
+					DeltaX = e->X - xBoundary;
+					DoScroll = true;
+				}
+				if (e->Y > yBoundary | e->Y < CurrentPos.Y) {
+					DeltaY = e->Y - yBoundary;
+					DoScroll = true;
+				}
+
+				//Make the adjustment.
+				if (DoScroll == true) {
+					this->picture_panel->AutoScrollPosition = System::Drawing::Point((DeltaX - picture_panel->AutoScrollPosition.X), (DeltaY - picture_panel->AutoScrollPosition.Y));
+				}
+
+			
+					
+				 
+				 //point checker
 				//Graphics.DrawImage(newImage, destRect, srcRect, units);
 			 if(this->pointX1 < this->pointX2){ //Normal condition, drag from left to right (x1 <x2)
 				 if(this->pointY1 < this->pointY2){ //Normal Condition drag from top to bottom (y1 <y2)
@@ -2650,6 +2686,10 @@ private: System::Void pictureBox1_MouseMove(System::Object *  sender, System::Wi
 				}
 
 			 //point checker ends
+
+			
+				 }
+			 this->pictureBox1->Refresh();
 			 }
 			////Debugging Codes :P
 			 //String *temp123 = "";
