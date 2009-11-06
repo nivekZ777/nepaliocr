@@ -27,7 +27,9 @@ namespace OCR
 			InitializeComponent();
 			this->im2 = im2;
 			this->pictureBox1->Image = im2;
+			g=this->pictureBox1->CreateGraphics();
 			this->BinArray = BinArray;
+
 
 		}
 
@@ -53,6 +55,7 @@ namespace OCR
 	private: System::Windows::Forms::Panel *  panel2;
 	private: System::Windows::Forms::PictureBox *  pictureBox2;
 	private: int x1,x2,y1,y2;
+			 Graphics *g;
 
 	
 
@@ -162,7 +165,7 @@ namespace OCR
 			 }
 	private: System::Void pictureBox1_MouseDown(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
 			 {
-
+				  
 				 this->x1 = e->X;
 				 this->y1 = e->Y;
 			 }
@@ -234,7 +237,8 @@ private: System::Void pictureBox1_MouseUp(System::Object *  sender, System::Wind
 			 } // for(int i=0;i<cropImage->Height;i++){for(int j=0;j<cropImage->Width;j++)
 		 } // for(int i=0;i<cropImage->Height;i++)
 
-		 
+		 this->g->DrawRectangle(Pens::Blue, Rectangle(this->x1,this->y1,(this->x2-this->x1),(this->y2-this->y1)));
+		 this->g->Flush();
 		
 		 this->pictureBox2->Image = cropImage;
 
@@ -243,29 +247,13 @@ private: System::Void pictureBox1_MouseUp(System::Object *  sender, System::Wind
 
 
 private: System::Void pictureBox1_Paint(System::Object *  sender, System::Windows::Forms::PaintEventArgs *  e)
-		 {
+		 {			 
 			 e->Graphics->DrawRectangle(Pens::Blue, Rectangle(this->x1,this->y1,(this->x2-this->x1),(this->y2-this->y1)));
-			 this->Update();
-			 
-
 		 }
 
 
 };
 }
-
-
-
-
-
-
-
-
-		//if(this->BinArray[this->y2+i][this->x2+j] == true )
-				//	 cropImage->SetPixel(j,i,Color::White);
-				// else 				 
-				//	 cropImage->SetPixel(j,i,Color::Black);
-										
 
 
 
@@ -282,34 +270,3 @@ private: System::Void pictureBox1_Paint(System::Object *  sender, System::Window
 
 
 
-
-/*
-		 for(int i=this->y1, int cropRow=0;  i<this->y2,cropRow<(cropImage->Height-1); i++,cropRow++){
-			 for(int cropColumn=0,j=this->x1; j<this->x2,cropColumn<(cropImage->Width-1) ; j++,cropColumn++){
-				 
-				 if(this->BinArray[i][j]==true){
-					 cropImage->SetPixel(cropColumn,cropRow,System::Drawing::Color::White);
-				 }
-				 else{
-					 cropImage->SetPixel(cropColumn,cropRow,System::Drawing::Color::Black);
-				 }
-
-			 } // for(int i=0;i<cropImage->Height;i++){for(int j=0;j<cropImage->Width;j++)
-
-		 } // for(int i=0;i<cropImage->Height;i++)
-
-*/
-
-
-/*
-
-for(int i = 0; i<cropImage->Height; i++){
-			 for(int j=0;j<cropImage->Width;j++){
-			if(this->BinArray[this->y2+j][this->x2+i] == true )
-					cropImage->SetPixel(j,i,Color::White);
-				else 				 
-					cropImage->SetPixel(j,i,Color::Black);
-			
-			 } // for(int i = 0; i<cropImage->Height; i++){for(int j=0;j<cropImage->Width;j++)
-		 } // for(int i = 0; i<cropImage->Height; i++)
-*/
