@@ -96,6 +96,20 @@ namespace OCR
 		private: System::Windows::Forms::TextBox *  combineChar;
 	private: System::Windows::Forms::StatusBar *  statusBar1;
 	private: System::Windows::Forms::Label *  lblOutput;
+	private: System::Windows::Forms::MainMenu *  trainMenu;
+	private: System::Windows::Forms::MenuItem *  mnuTrainer;
+
+
+
+	private: System::Windows::Forms::MenuItem *  menuItem4;
+	private: System::Windows::Forms::MenuItem *  mnuAdd;
+	private: System::Windows::Forms::MenuItem *  mnuTrain;
+	private: System::Windows::Forms::MenuItem *  mnuExit;
+	private: System::Windows::Forms::MenuItem *  mnuNext;
+	private: System::Windows::Forms::MenuItem *  mnuPrevious;
+
+
+
 	private: System::Windows::Forms::Button *  addChar;
 		
 
@@ -218,6 +232,14 @@ namespace OCR
 			this->addChar = new System::Windows::Forms::Button();
 			this->statusBar1 = new System::Windows::Forms::StatusBar();
 			this->lblOutput = new System::Windows::Forms::Label();
+			this->trainMenu = new System::Windows::Forms::MainMenu();
+			this->mnuTrainer = new System::Windows::Forms::MenuItem();
+			this->mnuAdd = new System::Windows::Forms::MenuItem();
+			this->mnuTrain = new System::Windows::Forms::MenuItem();
+			this->mnuExit = new System::Windows::Forms::MenuItem();
+			this->menuItem4 = new System::Windows::Forms::MenuItem();
+			this->mnuNext = new System::Windows::Forms::MenuItem();
+			this->mnuPrevious = new System::Windows::Forms::MenuItem();
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -243,18 +265,18 @@ namespace OCR
 			// 
 			this->nextButton->Location = System::Drawing::Point(296, 40);
 			this->nextButton->Name = S"nextButton";
-			this->nextButton->Size = System::Drawing::Size(56, 24);
+			this->nextButton->Size = System::Drawing::Size(56, 40);
 			this->nextButton->TabIndex = 7;
-			this->nextButton->Text = S"NEXT>>";
+			this->nextButton->Text = S"NEXT>> (Ctrl N)";
 			this->nextButton->Click += new System::EventHandler(this, nextButton_Click);
 			// 
 			// prevButton
 			// 
 			this->prevButton->Location = System::Drawing::Point(200, 40);
 			this->prevButton->Name = S"prevButton";
-			this->prevButton->Size = System::Drawing::Size(56, 24);
+			this->prevButton->Size = System::Drawing::Size(72, 40);
 			this->prevButton->TabIndex = 8;
-			this->prevButton->Text = S"<<PREV";
+			this->prevButton->Text = S"<<Previous (Ctrl P)";
 			this->prevButton->Click += new System::EventHandler(this, prevButton_Click);
 			// 
 			// characterBox
@@ -266,10 +288,11 @@ namespace OCR
 			// 
 			// trainButton
 			// 
-			this->trainButton->Location = System::Drawing::Point(248, 208);
+			this->trainButton->Location = System::Drawing::Point(304, 200);
 			this->trainButton->Name = S"trainButton";
+			this->trainButton->Size = System::Drawing::Size(56, 40);
 			this->trainButton->TabIndex = 10;
-			this->trainButton->Text = S"TRAIN";
+			this->trainButton->Text = S"Train (Ctrl T)";
 			this->trainButton->Click += new System::EventHandler(this, trainButton_Click);
 			// 
 			// combineChar
@@ -281,10 +304,11 @@ namespace OCR
 			// 
 			// addChar
 			// 
-			this->addChar->Location = System::Drawing::Point(304, 166);
+			this->addChar->Location = System::Drawing::Point(304, 160);
 			this->addChar->Name = S"addChar";
+			this->addChar->Size = System::Drawing::Size(56, 34);
 			this->addChar->TabIndex = 12;
-			this->addChar->Text = S"ADD";
+			this->addChar->Text = S"Add (CtrlA)";
 			this->addChar->Click += new System::EventHandler(this, addChar_Click);
 			// 
 			// statusBar1
@@ -301,6 +325,67 @@ namespace OCR
 			this->lblOutput->Size = System::Drawing::Size(48, 24);
 			this->lblOutput->TabIndex = 15;
 			// 
+			// trainMenu
+			// 
+			System::Windows::Forms::MenuItem* __mcTemp__1[] = new System::Windows::Forms::MenuItem*[2];
+			__mcTemp__1[0] = this->mnuTrainer;
+			__mcTemp__1[1] = this->menuItem4;
+			this->trainMenu->MenuItems->AddRange(__mcTemp__1);
+			// 
+			// mnuTrainer
+			// 
+			this->mnuTrainer->Index = 0;
+			System::Windows::Forms::MenuItem* __mcTemp__2[] = new System::Windows::Forms::MenuItem*[3];
+			__mcTemp__2[0] = this->mnuAdd;
+			__mcTemp__2[1] = this->mnuTrain;
+			__mcTemp__2[2] = this->mnuExit;
+			this->mnuTrainer->MenuItems->AddRange(__mcTemp__2);
+			this->mnuTrainer->Text = S"Trainer";
+			// 
+			// mnuAdd
+			// 
+			this->mnuAdd->Index = 0;
+			this->mnuAdd->Shortcut = System::Windows::Forms::Shortcut::CtrlA;
+			this->mnuAdd->Text = S"&Add";
+			this->mnuAdd->Click += new System::EventHandler(this, addChar_Click);
+			// 
+			// mnuTrain
+			// 
+			this->mnuTrain->Index = 1;
+			this->mnuTrain->Shortcut = System::Windows::Forms::Shortcut::CtrlT;
+			this->mnuTrain->Text = S"&Train";
+			this->mnuTrain->Click += new System::EventHandler(this, trainButton_Click);
+			// 
+			// mnuExit
+			// 
+			this->mnuExit->Index = 2;
+			this->mnuExit->Shortcut = System::Windows::Forms::Shortcut::CtrlW;
+			this->mnuExit->Text = S"&Exit";
+			this->mnuExit->Click += new System::EventHandler(this, mnuExit_Click);
+			// 
+			// menuItem4
+			// 
+			this->menuItem4->Index = 1;
+			System::Windows::Forms::MenuItem* __mcTemp__3[] = new System::Windows::Forms::MenuItem*[2];
+			__mcTemp__3[0] = this->mnuNext;
+			__mcTemp__3[1] = this->mnuPrevious;
+			this->menuItem4->MenuItems->AddRange(__mcTemp__3);
+			this->menuItem4->Text = S"Scroll";
+			// 
+			// mnuNext
+			// 
+			this->mnuNext->Index = 0;
+			this->mnuNext->Shortcut = System::Windows::Forms::Shortcut::CtrlN;
+			this->mnuNext->Text = S"&Next";
+			this->mnuNext->Click += new System::EventHandler(this, nextButton_Click);
+			// 
+			// mnuPrevious
+			// 
+			this->mnuPrevious->Index = 1;
+			this->mnuPrevious->Shortcut = System::Windows::Forms::Shortcut::CtrlP;
+			this->mnuPrevious->Text = S"&Previous";
+			this->mnuPrevious->Click += new System::EventHandler(this, prevButton_Click);
+			// 
 			// TrainingForm
 			// 
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
@@ -315,6 +400,7 @@ namespace OCR
 			this->Controls->Add(this->nextButton);
 			this->Controls->Add(this->panel1);
 			this->Icon = (__try_cast<System::Drawing::Icon *  >(resources->GetObject(S"$this.Icon")));
+			this->Menu = this->trainMenu;
 			this->Name = S"TrainingForm";
 			this->Text = S"TrainingForm";
 			this->panel1->ResumeLayout(false);
@@ -501,6 +587,16 @@ private: System::Void trainButton_Click(System::Object *  sender, System::EventA
 			 this->statusBar1->Text = "          Done    ";
 			 this->Cursor = System::Windows::Forms::Cursors::Default;
 		 }
+
+ 
+
+ 
+
+private: System::Void mnuExit_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+		 }
+
+ 
 
 };
 }
