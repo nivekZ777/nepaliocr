@@ -114,6 +114,8 @@ namespace OCR
 			__super::Dispose(disposing);
 		}
 	private: System::Windows::Forms::Panel *  panel1;
+	private: System::Windows::Forms::SaveFileDialog *  saveFileDialog_Image_Viewer;
+	private: System::Windows::Forms::Button *  saveButton_ImageViewer_Form;
 	private: System::Windows::Forms::Button *  singleRecog;
 	private: System::Windows::Forms::GroupBox *  groupBox1;
 	private: System::Windows::Forms::GroupBox *  groupBox2;
@@ -202,6 +204,7 @@ namespace OCR
 			this->bigHeightLabel = new System::Windows::Forms::Label();
 			this->label1 = new System::Windows::Forms::Label();
 			this->groupBox2 = new System::Windows::Forms::GroupBox();
+			this->saveButton_ImageViewer_Form = new System::Windows::Forms::Button();
 			this->singleRecog = new System::Windows::Forms::Button();
 			this->myWindowRecognizeButton = new System::Windows::Forms::Button();
 			this->myWindowSeparateButton = new System::Windows::Forms::Button();
@@ -218,6 +221,7 @@ namespace OCR
 			this->pictureBoxSmall = new System::Windows::Forms::PictureBox();
 			this->groupBox3 = new System::Windows::Forms::GroupBox();
 			this->myRTB = new System::Windows::Forms::RichTextBox();
+			this->saveFileDialog_Image_Viewer = new System::Windows::Forms::SaveFileDialog();
 			this->panel1->SuspendLayout();
 			this->groupBox1->SuspendLayout();
 			this->groupBox2->SuspendLayout();
@@ -287,6 +291,7 @@ namespace OCR
 			// 
 			// groupBox2
 			// 
+			this->groupBox2->Controls->Add(this->saveButton_ImageViewer_Form);
 			this->groupBox2->Controls->Add(this->singleRecog);
 			this->groupBox2->Controls->Add(this->myWindowRecognizeButton);
 			this->groupBox2->Controls->Add(this->myWindowSeparateButton);
@@ -307,6 +312,15 @@ namespace OCR
 			this->groupBox2->TabIndex = 1;
 			this->groupBox2->TabStop = false;
 			this->groupBox2->Text = S"Sliced Single Image";
+			// 
+			// saveButton_ImageViewer_Form
+			// 
+			this->saveButton_ImageViewer_Form->Location = System::Drawing::Point(40, 256);
+			this->saveButton_ImageViewer_Form->Name = S"saveButton_ImageViewer_Form";
+			this->saveButton_ImageViewer_Form->Size = System::Drawing::Size(72, 24);
+			this->saveButton_ImageViewer_Form->TabIndex = 14;
+			this->saveButton_ImageViewer_Form->Text = S"Save";
+			this->saveButton_ImageViewer_Form->Click += new System::EventHandler(this, saveButton_ImageViewer_Form_Click);
 			// 
 			// singleRecog
 			// 
@@ -918,6 +932,30 @@ private: System::Void myWindowRecognizeButton_Click(System::Object *  sender, Sy
 private: System::Void singleRecog_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 			 singleRecognize(x1,x2,y1,y2,1) ;
+		 }
+
+private: System::Void saveButton_ImageViewer_Form_Click(System::Object *  sender, System::EventArgs *  e)
+		 {
+			/*
+
+			This method is used to save the image file after certain image processing portion is complete.
+			In case we need the file in future.
+
+			*/
+					saveFileDialog_Image_Viewer->Filter= "PNG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
+					saveFileDialog_Image_Viewer->FilterIndex = 1 ;
+					saveFileDialog_Image_Viewer->RestoreDirectory = true ;
+
+					System::Windows::Forms::DialogResult d = this->saveFileDialog_Image_Viewer->ShowDialog();
+						if (d == System::Windows::Forms::DialogResult::OK)				 
+							{			 
+							// creating a bitmap
+							Bitmap* save;
+							save=new Bitmap(this->pictureBoxSmall->Image);
+							save->Save(saveFileDialog_Image_Viewer->FileName);
+							
+							}
+		
 		 }
 
 };

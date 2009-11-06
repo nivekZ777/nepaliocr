@@ -85,11 +85,7 @@ void FileManipulating::CreatePrototypeFile(System::String* fromFile, System::Str
     System::String* tempStr;
     bool firstLine = true;
 	System::String *mytmp;
-
-	System::Windows::Forms::MessageBox::Show(fromFile->ToString(),"From: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-	System::Windows::Forms::MessageBox::Show(toFile->ToString(),"To: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-	System::Windows::Forms::MessageBox::Show(modelName->ToString(),"ModelName: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
-		
+ 	
 
     try
     {
