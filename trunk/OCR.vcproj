@@ -143,10 +143,10 @@
 				RelativePath=".\RecognitionProcess.cpp">
 			</File>
 			<File
-				RelativePath=".\Resegment.cpp">
+				RelativePath=".\Separate.cpp">
 			</File>
 			<File
-				RelativePath=".\Separate.cpp">
+				RelativePath=".\stdafx.cpp">
 			</File>
 			<File
 				RelativePath=".\ThresholedValue.cpp">
@@ -167,9 +167,6 @@
 			</File>
 			<File
 				RelativePath=".\Deskew.h">
-			</File>
-			<File
-				RelativePath=".\FileManipulating.h">
 			</File>
 			<File
 				RelativePath=".\FormMainWindow.h"
@@ -238,15 +235,6 @@
 				</File>
 			</File>
 			<File
-				RelativePath=".\RecognitionProcess.h">
-			</File>
-			<File
-				RelativePath=".\removeNoise.h">
-			</File>
-			<File
-				RelativePath=".\Resegment.h">
-			</File>
-			<File
 				RelativePath=".\resource.h">
 			</File>
 			<File
@@ -254,9 +242,6 @@
 			</File>
 			<File
 				RelativePath=".\Separate.h">
-			</File>
-			<File
-				RelativePath=".\stdafx.cpp">
 			</File>
 			<File
 				RelativePath=".\stdafx.h">
@@ -302,6 +287,9 @@
 			</File>
 			<File
 				RelativePath=".\BloodHound.ico">
+			</File>
+			<File
+				RelativePath=".\deskew.txt">
 			</File>
 			<File
 				RelativePath=".\icon3.ico">
