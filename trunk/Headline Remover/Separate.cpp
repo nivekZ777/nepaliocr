@@ -10,7 +10,7 @@ Separate::Separate(Bitmap* im,bool **B,Graphics* gr)
 	this->Horizontal=new int[ySize];
 	this->g=gr;
 	this->numberOfLines=0;
-
+	
 }
 
 void Separate::LineSeparate()
@@ -488,63 +488,11 @@ void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd,ArrayList** w
 				imageCopy->DrawLine(p,0,mIndex[k],this->xSize,mIndex[k]);
 			}
 		}
-	/*
-		bool fflag=false;
-		int r1;
-		for(int j=y1;j<=maxIndex;j++)
-		{
-			for(int k=0;k<this->xSize;k++)
-			{
-				if(!this->BinaryArray[j][k])
-				{
-					fflag=true;
-					r1=j;
-					break;
-				}
-			}
-			if (fflag)
-			{
-				break;
-			}
-		}*/
-		//Removing top Modifier
-		for(int k=0;k<this->xSize;k++)
-		{
-			for(int j=y1;j<=maxIndex;j++)
-			{
-				this->BinaryArray[j][k]=true;
-			}
-		}
-		
-		for(int j=y1;j<=maxIndex;j++)
-		{
-			g->DrawLine(p,0,j,this->xSize,j);
-			imageCopy->DrawLine(p,0,j,this->xSize,j);
-		}
-		
-		
-		/*
-		int temp=maxIndex-r1;
-		System::Windows::Forms::MessageBox::Show(temp.ToString(),"Temp");
-		int r2=y2-temp;
-		System::Windows::Forms::MessageBox::Show(r2.ToString(),"R2");
-			
-		for(int k=0;k<this->xSize;k++)
-		{
-			for(int j=r2;j<=y2;j++)
-			{
-				this->BinaryArray[j][k]=true;
-			}
-		}
-		
-		for(int j=r2;j<=y2;j++)
-		{
-			g->DrawLine(p,0,j,this->xSize,j);
-			imageCopy->DrawLine(p,0,j,this->xSize,j);
-		}*/
-
-
+		 	
+		 
+	
 	}
+
 	this->CharSeparate(lineStart,lineEnd,wordStart,wordEnd);
 	imageCopy->Dispose();
 	tempoImage->Save("C:\\test.jpg");
@@ -600,7 +548,6 @@ void Separate::CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wStart,A
 							}
 					}
 				VerticalC[verticalCount][i]=count;
-				//System::Windows::Forms::MessageBox::Show(count.ToString(),"Vertical Count");
 			}
 
 		verticalCount++;
@@ -833,6 +780,12 @@ void Separate::CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wStart,A
 
 		lineCount++;
 	}
+ 
+
+
+
+	
+	
 }
 
 int Separate::getNumberOfLines()
