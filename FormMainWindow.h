@@ -206,9 +206,9 @@ private: System::Windows::Forms::MenuItem *  mnuCropper;
 private: System::Windows::Forms::StatusBar *  statusBar1;
 private: System::Windows::Forms::MenuItem *  mnuFastRecognize2;
 private: System::Windows::Forms::MenuItem *  menuItem5;
-private: System::Windows::Forms::ContextMenu *  ocrCntMenu;
-private: System::Windows::Forms::MenuItem *  cMenuLoadImage;
-private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
+
+
+
 
 
 
@@ -273,9 +273,6 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 			this->mnuRotate = new System::Windows::Forms::MenuItem();
 			this->mnuCropper = new System::Windows::Forms::MenuItem();
 			this->splitter1 = new System::Windows::Forms::Splitter();
-			this->ocrCntMenu = new System::Windows::Forms::ContextMenu();
-			this->cMenuLoadImage = new System::Windows::Forms::MenuItem();
-			this->cMenuFastRecognize = new System::Windows::Forms::MenuItem();
 			this->picture_panel->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -295,7 +292,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 			this->picture_panel->DragEnter += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragEnter);
 			this->picture_panel->MouseUp += new System::Windows::Forms::MouseEventHandler(this, picture_panel_MouseUp);
 			this->picture_panel->DragDrop += new System::Windows::Forms::DragEventHandler(this, picture_panel_DragDrop);
-
+			this->picture_panel->DoubleClick += new System::EventHandler(this, picture_panel_DoubleClick);
 			// 
 			// statusBar1
 			// 
@@ -504,25 +501,6 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 			this->splitter1->Size = System::Drawing::Size(3, 503);
 			this->splitter1->TabIndex = 17;
 			this->splitter1->TabStop = false;
-			// 
-			// ocrCntMenu
-			// 
-			System::Windows::Forms::MenuItem* __mcTemp__6[] = new System::Windows::Forms::MenuItem*[2];
-			__mcTemp__6[0] = this->cMenuLoadImage;
-			__mcTemp__6[1] = this->cMenuFastRecognize;
-			this->ocrCntMenu->MenuItems->AddRange(__mcTemp__6);
-			// 
-			// cMenuLoadImage
-			// 
-			this->cMenuLoadImage->Index = 0;
-			this->cMenuLoadImage->Text = S"Load Image";
-			this->cMenuLoadImage->Click += new System::EventHandler(this, cMenuLoadImage_Click);
-			// 
-			// cMenuFastRecognize
-			// 
-			this->cMenuFastRecognize->Index = 1;
-			this->cMenuFastRecognize->Text = S"Fast Recognize";
-			this->cMenuFastRecognize->Click += new System::EventHandler(this, cMenuFastRecognize_Click);
 			// 
 			// FormMainWindow
 			// 
@@ -777,7 +755,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 					try{
 					 // set the cursor to wait.... 
 						this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
-
+						this->statusBar1->Text = "Binarizing Image...";
 					 
 					 // calculating Thresholed Value for binary image					 
 						ThresholedValue* ts = new ThresholedValue(im);
@@ -802,10 +780,12 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 						myInfo1->Text = "Threshold Value";
 						myInfo->Text = this->intLevel.ToString();
 						this->BinaryDone=true;
+						this->statusBar1->Text  = "Image is binarized, now Separate it.";
 					}
 				 catch(System::Exception* ex)
 					{
 					System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to Binarize the Image!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+					this->statusBar1->Text = "Binarization Failed";
 					this->Update();
 					}
 				 this->Update();
@@ -815,6 +795,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 
 		private: void openImageFile()
 			{
+				this->statusBar1->Text = "Opening Image...";
 				System::Windows::Forms::DialogResult d = this->openImageDialog->ShowDialog();
 				if (d == System::Windows::Forms::DialogResult::OK)				 
 				 {			 
@@ -837,7 +818,8 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 					
 					
 					//System::Windows::Forms::MessageBox::Show("Image successfully loaded","Success");
-				 }
+				 } // if (d == System::Windows::Forms::DialogResult::OK)
+				 this->statusBar1->Text = "Image Loaded";
 				this->Update();
 				 
 			}
@@ -854,6 +836,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 
 				//if(this->BinaryDone)
 				//{	
+				this->statusBar1->Text = "Save Image";
 					saveImageDialog->Filter= "PNG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
 					saveImageDialog->FilterIndex = 1 ;
 					saveImageDialog->RestoreDirectory = true ;
@@ -873,6 +856,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 					
 			//	}
 				 
+							this->statusBar1->Text = "Image saved";
 			}
 
 		
@@ -882,7 +866,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 
 	This method is used to separate the characters, or the connected units  after the words are separated.
 
-*/
+*/					//this->statusBar1->Text = "Separating Characters";
 					 Pen* p=new Pen(Color::Blue,1);
 	
 								for(int i=0;i<this->numberOfLines;i++)
@@ -898,6 +882,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 
 														g->DrawLine(p,x1,y1,x1,y2);
 														g->DrawLine(p,x2,y1,x2,y2);
+														//this->statusBar1->Text = "Characters are Separated. Now train or recognize. ";
 													}
 											}
 									}
@@ -909,7 +894,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 				/*
 				This method is used to separate the words and lines after binarization.
 				*/
-
+					this->statusBar1->Text = "Separating Lines and words..";
 					 this->tmpBArray=new bool*[im->Height];
 					 //System::Windows::Forms::MessageBox::Show(im->Height.ToString(),"Height");
 					 myInfo1->Text = "Image Height";
@@ -935,12 +920,14 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 							this->numberOfLines=sp->getNumberOfLines(); //Get Number of Lines
 							this->Lines=sp->getLines();			//Get Lines
 							this->SeparateDone=true;
+							this->statusBar1->Text = "Line separate Done, now Separating Characters ..";
 							this->separateChar();				//separate Characters					
 							}
 
 							else
 							{
 								this->separateChar();			//separate Characters
+								this->statusBar1->Text = "Separating Characters";
 							}
 
 							 
@@ -954,7 +941,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 				
 				//If the lines in the image is tilted or slanted, this method is used to deskew the image. 
 					 
-				 
+					  this->statusBar1->Text = "Deskewing Image";
 					Deskew* ds=new Deskew(im);
 					double skewAngle=ds->GetSkewAngle();
 					
@@ -968,6 +955,14 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 					if(skewAngle !=0){
 						im=this->RotateImage(-skewAngle); 
 						this->pictureBox1->Image = im;
+						
+						//reset Image and image variables 
+						this->im = im;
+						
+						this->SeparateDone = false;
+						this->BinaryDone = false;
+						this->makeBinary();
+
 						}
 					//System::Windows::Forms::MessageBox::Show(" Image rotated successfully","Action Complete");
 
@@ -996,7 +991,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 		{
 /*
 		This method is used to recognize the text in the image.
-*/	 
+*/						this->statusBar1->Text = "OCRing .. Recognizing characters...";
 						RecognitionProcess* rp = new RecognitionProcess(this->applicationPath,this->ImgArray);
 
 						// load the transcription of the models
@@ -1058,7 +1053,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 						
 						 
 
-						 
+						 this->statusBar1->Text = "Displaying recognized characters.";
 						this->ProvideOutput();
 
 						/* after recognizing is done remove the script file and also the associated image features files */
@@ -1072,7 +1067,8 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 							System::String* tmp=tmp->Concat(dirOfRecFile,i.ToString(),".txt");
 							//System::IO::File::Delete(dirOfRecFile+i+".txt");
 							System::IO::File::Delete(tmp);
-						}
+						} // for(int i=1;i<=totalUnit;i++)
+				this->statusBar1->Text = "Done.";
 
 		}
 
@@ -1176,7 +1172,7 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 				System::Windows::Forms::MessageBox::Show(ex->Message->ToString(),"Failed to provide the output!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 				exit(0);
 			}
-		 
+		 this->statusBar1->Text = "Characters Recognition Complete";
 			OCR::RecognitionForm* rw=new OCR::RecognitionForm();
 			rw->showText(text);
 			rw->ShowDialog();
@@ -1186,156 +1182,11 @@ private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
 private: System::Void close_button_Click_1(System::Object *  sender, System::EventArgs *  e)
 			 {
 				//this->Dispose(true);
-				this->makeBinary();
-			
+				this->makeBinary();		
 					
 			 }
 
 
-private: System::Void openImage_Click(System::Object *  sender, System::EventArgs *  e)
-			{
-				this->openImageFile();
-				
-				
-			}
-
-private: System::Void separate_button_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 if( (this->ImageLoaded==true  ) && (this->BinaryDone==true) )
-			 {
-				this->separate();
-			 }
-			 else if( (this->ImageLoaded==false  ) )
-			 {
-				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
-			 }
-			 else if(this->BinaryDone==false)
-					 {
-						 //System::Windows::Forms::Show("Please binarize the image before separating","Binarization not done");
-						 System::Windows::Forms::MessageBox::Show("Please binarize the image first","Binarization not done");
-
-				}
-		 }
-
-private: System::Void saveImage_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 this->saveImageFile();
-		 }
-
-private: System::Void imContrast_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			if(this->ImageLoaded==true){
-			this->Contrast(10);
-			this->ContrastDone=true;
-			this->Update();
-			 }
-			 else{
-				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
-			 }
-		 }
-
-private: System::Void meanRemoval_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-
-			 if( (this->ImageLoaded==true) ){
-				this->MeanRemoval(9);
-				this->meanDone= true;
-				this->Update();
-				
-			 }
-			 
-
-		 }
-
-private: System::Void deSkew_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 if(this->ImageLoaded==true){
-			 this->doDeSkew();
-			  }
-			 else{
-				 System::Windows::Forms::MessageBox::Show("Please Load the image first","Image not loaded");
-			 }
-		 }
-
-private: System::Void train_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 //Check If the image is loaded or not.
-			 if(this->ImageLoaded){
-			
-				 //Check If the image is binarized first or not.
-
-				 if(this->BinaryDone){
-						OCR::TrainingForm* tw=new OCR::TrainingForm();
-						tw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
-						tw->ShowDialog();
-				 }
-					//If not binarized print an error message				
-				 else{
-					 System::Windows::Forms::MessageBox::Show("Image is not Binarized","Please Binarize first");
-				 }
-				
-				}
-			 //If an Image is not loaded, Print an error message to load the image.
-			 else{
-				 //Please Browse for image and Load the image
-				 System::Windows::Forms::MessageBox::Show("Image not loaded, Please Browse for image and load image first ","Image Not loaded");
-			 }
-			 
-			
-		 }
-
-private: System::Void recognize_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 if(this->ImageLoaded){
-				 if(this->SeparateDone){
-					 //if the image is loaded and words are separated.. recognition process is started
-						this->Recognize();
-
-				 }
-				 else{
-					 System::Windows::Forms::MessageBox::Show("First Complete the preprocessing steps, words are not separated","Preprocessing steps not complete");
-				 }
-			 }
-			 else{
-				 //Image is not loaded
-				 System::Windows::Forms::MessageBox::Show("Image not loaded, Please load the image first","Image not loaded");
-			 }
-			 //OCR::RecognitionForm* rw=new OCR::RecognitionForm();
-			 //rw->ShowDialog();
-		 }
-
-private: System::Void fastRecognizeButton_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 if(this->ImageLoaded==true){
-				 
-				//contrast
-				this->Contrast(10);
-				this->ContrastDone=true;
-				this->Update();
-				
-				//mean removal
-				this->MeanRemoval(9);
-				this->meanDone= true;
-				this->Update();
-
-				//Binarization
-				this->makeBinary();
-				
-				//separation
-				this->separate();
-
-				//Recognition
-				 this->Recognize();
-
-
-			 }
-			 else{
-				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
-
-			 }
-
-		 }//End function recognize button
-//Try magnify function
 		 
 private: void tryMagnify(){
 			  
@@ -1384,32 +1235,6 @@ private: void tryMagnify(){
 				mw->ShowDialog();
 			 	  }
 
-private: System::Void findMagnification_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-
-			 if(this->ImageLoaded){ 
-			tryMagnify();		
-			
-			 }
-			 else{
-				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
-			 }
-			
-		 }
-
-
-private: System::Void cb_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			if(this->ImageLoaded==true){
-			this->Contrast(10);
-			this->ContrastDone=true;
-			this->makeBinary();
-			this->Update();
-			 }
-			 else{
-				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
-			 }
-		 }
 
 private: System::Void picture_panel_DragDrop(System::Object *  sender, System::Windows::Forms::DragEventArgs *  e)
 		 {
@@ -1460,14 +1285,7 @@ private: System::Void picture_panel_DragEnter(System::Object *  sender, System::
 					e->Effect = DragDropEffects::None;
 		 }
 
-private: System::Void btnRotate_right_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 //Function to rotate clockwise direction by 90 degrees
-			 //Button_rotate_right : click event
- 
-			 im->RotateFlip(RotateFlipType::Rotate90FlipNone);
-			 this->pictureBox1->Image = im;
-		 }
+
 
 private: void tryImageCropperLoad(){
 			 if(this->BinaryDone ==false) 
@@ -1478,16 +1296,11 @@ private: void tryImageCropperLoad(){
 			 //myCroper->ImgArray = this->ImgArray;
 			 //myCroper->BinArray  = this->BArray;
 			 this->Hide();
-
-			 
+	 
 
 
 		 }
-private: System::Void btnCrop_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 this->tryImageCropperLoad();
-			 
-		 }
+
 
 private: System::Void mnuFastRecognize_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
@@ -1589,6 +1402,7 @@ private: System::Void mnuMagnification_Click(System::Object *  sender, System::E
 			 }
 			 else{
 				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
+				 this->statusBar1->Text = "Please Load the Image first";
 			 }
 		 }
 
@@ -1606,6 +1420,13 @@ private: System::Void mnuRotate_Click(System::Object *  sender, System::EventArg
  
 			 im->RotateFlip(RotateFlipType::Rotate90FlipNone);
 			 this->pictureBox1->Image = im;
+			 //reset Image and image variables 
+			this->im = im;
+						
+			this->SeparateDone = false;
+			this->BinaryDone = false;
+			this->makeBinary();
+
 
 		 }
 
@@ -1683,7 +1504,10 @@ private: System::Void mnuCropper_Click(System::Object *  sender, System::EventAr
 
 
 
-
+private: System::Void picture_panel_DoubleClick(System::Object *  sender, System::EventArgs *  e)
+		 {
+			this->openImageFile();
+		 }
 
 private: System::Void mnuRecognize_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
@@ -1739,11 +1563,6 @@ private: System::Void mnuFastRecognize2_Click(System::Object *  sender, System::
 		 }
 		 }
 
-private: System::Void cMenuLoadImage_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 this->openImageFile();
-			 //this->cMenuLoadImage->Enabled = false;
-		 }
 
 private: System::Void picture_panel_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
@@ -1753,51 +1572,16 @@ private: System::Void picture_panel_Click(System::Object *  sender, System::Even
 
 private: System::Void picture_panel_MouseUp(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
 		 {
-			 this->drawContextMenu(e);
+			  //drawContextMenu(e);
 		 }
 
-private: System::Void cMenuFastRecognize_Click(System::Object *  sender, System::EventArgs *  e)
-		 {
-			 
-			 
-			 if(this->ImageLoaded==true){
-				 
-				//contrast
-				this->Contrast(10);
-				this->ContrastDone=true;
-				this->Update();
-				
-				//mean removal
-				this->MeanRemoval(9);
-				this->meanDone= true;
-				this->Update();
-
-				//Binarization
-				this->makeBinary();
-				
-				//separation
-				this->separate();
-
-				//Recognition
-				 this->Recognize();
-
-
-			 }
-			 else{
-				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
-
-			 }
-
-		
-		  
-
-		 }
 
 private: System::Void pictureBox1_MouseUp(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
 		 {
-				 this->drawContextMenu(e);
-		 }
+			 //drawContextMenu(e);
 
+
+		 }
 private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
 
 			 //Left Click
@@ -1854,5 +1638,7 @@ private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
 
 
 }
+
+
 
 
