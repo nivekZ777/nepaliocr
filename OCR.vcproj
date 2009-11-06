@@ -140,6 +140,9 @@
 				RelativePath=".\helpLoadImage.cpp">
 			</File>
 			<File
+				RelativePath=".\helpOCR.cpp">
+			</File>
+			<File
 				RelativePath=".\HShell.cpp">
 			</File>
 			<File
@@ -177,25 +180,6 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
-			<File
-				RelativePath=".\about.h"
-				FileType="3">
-				<File
-					RelativePath=".\about.resX">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/OCR.about.resources"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/OCR.about.resources"/>
-					</FileConfiguration>
-				</File>
-			</File>
 			<File
 				RelativePath=".\Convolution.h">
 			</File>
@@ -360,6 +344,25 @@
 			Name="Help"
 			Filter="">
 			<File
+				RelativePath=".\about.h"
+				FileType="3">
+				<File
+					RelativePath=".\about.resX">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCManagedResourceCompilerTool"
+							ResourceFileName="$(IntDir)/OCR.about.resources"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCManagedResourceCompilerTool"
+							ResourceFileName="$(IntDir)/OCR.about.resources"/>
+					</FileConfiguration>
+				</File>
+			</File>
+			<File
 				RelativePath=".\helpLoadImage.h"
 				FileType="3">
 				<File
@@ -375,6 +378,25 @@
 						<Tool
 							Name="VCManagedResourceCompilerTool"
 							ResourceFileName="$(IntDir)/OCR.helpLoadImage.resources"/>
+					</FileConfiguration>
+				</File>
+			</File>
+			<File
+				RelativePath=".\helpOCR.h"
+				FileType="3">
+				<File
+					RelativePath=".\helpOCR.resX">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCManagedResourceCompilerTool"
+							ResourceFileName="$(IntDir)/OCR.helpOCR.resources"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCManagedResourceCompilerTool"
+							ResourceFileName="$(IntDir)/OCR.helpOCR.resources"/>
 					</FileConfiguration>
 				</File>
 			</File>
