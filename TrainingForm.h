@@ -14,6 +14,7 @@
 
 
 
+
 namespace OCR
 {
 	/// <summary> 
@@ -54,7 +55,7 @@ namespace OCR
 			//this->applicationPath = Application::StartupPath->ToString();
 			// for the directory, path appear an extra '/'
 			// here we are removing that '/'
-			
+			bool enableTrainingOnTextChanged = false;
 		}
         
 	protected: 
@@ -111,6 +112,7 @@ namespace OCR
 
 
 	private: System::Windows::Forms::Button *  addChar;
+			bool enableTrainingOnTextChanged;
 		
 
 
@@ -301,6 +303,7 @@ namespace OCR
 			this->combineChar->Name = S"combineChar";
 			this->combineChar->TabIndex = 11;
 			this->combineChar->Text = S"";
+			this->combineChar->TextChanged += new System::EventHandler(this, combineChar_TextChanged);
 			// 
 			// addChar
 			// 
@@ -527,6 +530,9 @@ private: System::Void addChar_Click(System::Object *  sender, System::EventArgs 
 
 private: System::Void trainButton_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
+			 if(this->enableTrainingOnTextChanged ==true){
+			 
+				 System::Windows::Forms::MessageBox::Show(this->combineChar->Text);
 			 TrainingProcess* tp=new TrainingProcess(this->applicationPath,this->ImageArray,this->x1,this->x2,this->y1,this->y2);
 			 tp->PrepareTrainingData();
 			 this->statusBar1->Text = "Training Please wait..";
@@ -586,6 +592,11 @@ private: System::Void trainButton_Click(System::Object *  sender, System::EventA
 			 
 			 this->statusBar1->Text = "          Done    ";
 			 this->Cursor = System::Windows::Forms::Cursors::Default;
+			 bool enableTrainingOnTextChanged = false;
+		 }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Nothing to Train.");
+			 }
 		 }
 
  
@@ -598,6 +609,11 @@ private: System::Void mnuExit_Click(System::Object *  sender, System::EventArgs 
 		 }
 
  
+
+private: System::Void combineChar_TextChanged(System::Object *  sender, System::EventArgs *  e)
+		 {
+				this->enableTrainingOnTextChanged = true;
+		 }
 
 };
 }

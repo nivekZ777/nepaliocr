@@ -322,12 +322,6 @@
 				RelativePath=".\app.ico">
 			</File>
 			<File
-				RelativePath=".\bitmap1.bmp">
-			</File>
-			<File
-				RelativePath=".\BloodHound.ico">
-			</File>
-			<File
 				RelativePath=".\icon1.ico">
 			</File>
 			<File
@@ -335,9 +329,6 @@
 			</File>
 			<File
 				RelativePath=".\OCR1.rc">
-			</File>
-			<File
-				RelativePath=".\wiki.bmp">
 			</File>
 		</Filter>
 		<Filter
