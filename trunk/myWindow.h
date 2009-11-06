@@ -193,6 +193,7 @@ namespace OCR
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::Resources::ResourceManager *  resources = new System::Resources::ResourceManager(__typeof(OCR::myWindow));
 			this->panel1 = new System::Windows::Forms::Panel();
 			this->pictureBox_myWindow = new System::Windows::Forms::PictureBox();
 			this->groupBox1 = new System::Windows::Forms::GroupBox();
@@ -201,6 +202,7 @@ namespace OCR
 			this->bigHeightLabel = new System::Windows::Forms::Label();
 			this->label1 = new System::Windows::Forms::Label();
 			this->groupBox2 = new System::Windows::Forms::GroupBox();
+			this->singleRecog = new System::Windows::Forms::Button();
 			this->myWindowRecognizeButton = new System::Windows::Forms::Button();
 			this->myWindowSeparateButton = new System::Windows::Forms::Button();
 			this->avgHeightLabel = new System::Windows::Forms::Label();
@@ -216,7 +218,6 @@ namespace OCR
 			this->pictureBoxSmall = new System::Windows::Forms::PictureBox();
 			this->groupBox3 = new System::Windows::Forms::GroupBox();
 			this->myRTB = new System::Windows::Forms::RichTextBox();
-			this->singleRecog = new System::Windows::Forms::Button();
 			this->panel1->SuspendLayout();
 			this->groupBox1->SuspendLayout();
 			this->groupBox2->SuspendLayout();
@@ -306,6 +307,15 @@ namespace OCR
 			this->groupBox2->TabIndex = 1;
 			this->groupBox2->TabStop = false;
 			this->groupBox2->Text = S"Sliced Single Image";
+			// 
+			// singleRecog
+			// 
+			this->singleRecog->Location = System::Drawing::Point(160, 304);
+			this->singleRecog->Name = S"singleRecog";
+			this->singleRecog->Size = System::Drawing::Size(88, 24);
+			this->singleRecog->TabIndex = 13;
+			this->singleRecog->Text = S"Single Recog";
+			this->singleRecog->Click += new System::EventHandler(this, singleRecog_Click);
 			// 
 			// myWindowRecognizeButton
 			// 
@@ -428,15 +438,6 @@ namespace OCR
 			this->myRTB->TabIndex = 0;
 			this->myRTB->Text = S"";
 			// 
-			// singleRecog
-			// 
-			this->singleRecog->Location = System::Drawing::Point(160, 304);
-			this->singleRecog->Name = S"singleRecog";
-			this->singleRecog->Size = System::Drawing::Size(88, 24);
-			this->singleRecog->TabIndex = 13;
-			this->singleRecog->Text = S"Single Recog";
-			this->singleRecog->Click += new System::EventHandler(this, singleRecog_Click);
-			// 
 			// myWindow
 			// 
 			this->AllowDrop = true;
@@ -445,6 +446,7 @@ namespace OCR
 			this->Controls->Add(this->groupBox3);
 			this->Controls->Add(this->groupBox2);
 			this->Controls->Add(this->groupBox1);
+			this->Icon = (__try_cast<System::Drawing::Icon *  >(resources->GetObject(S"$this.Icon")));
 			this->Name = S"myWindow";
 			this->Text = S"Image Viewer";
 			this->panel1->ResumeLayout(false);
@@ -653,7 +655,7 @@ private: void LoadFromFile()
 					 }
 				 }
 				 this->display(this->lineno,this->wordno,this->charno);
-				 this->Update;
+				 this->Update();
 
 
 				 this->myRTB->AppendText("\n x1:");

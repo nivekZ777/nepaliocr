@@ -24,7 +24,7 @@ namespace OCR
 	using namespace System::Drawing::Imaging;
 
 	/// <summary> 
-	/// Summary for Form1
+	/// Summary for FormMainWindow
 	///
 	/// WARNING: If you change the name of this class, you will need to change the 
 	///          'Resource File Name' property for the managed resource compiler tool 
@@ -40,10 +40,10 @@ namespace OCR
  
 */
 
-	public __gc class Form1 : public System::Windows::Forms::Form
+	public __gc class FormMainWindow : public System::Windows::Forms::Form
 	{	
 	public:
-		Form1(void)
+		FormMainWindow(void)
 		{
 			//user declarations
  			this->BinaryDone=false;
@@ -144,6 +144,7 @@ namespace OCR
 	private: System::Windows::Forms::Label *  myInfo;
 	private: System::Windows::Forms::Label *  myInfo1;
 	private: System::Windows::Forms::Button *  findMagnification;
+	private: System::Windows::Forms::Button *  cb;
 
 
 
@@ -162,6 +163,7 @@ namespace OCR
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::Resources::ResourceManager *  resources = new System::Resources::ResourceManager(__typeof(OCR::FormMainWindow));
 			this->convertToBinary_button = new System::Windows::Forms::Button();
 			this->picture_panel = new System::Windows::Forms::Panel();
 			this->pictureBox1 = new System::Windows::Forms::PictureBox();
@@ -179,6 +181,7 @@ namespace OCR
 			this->myInfo = new System::Windows::Forms::Label();
 			this->myInfo1 = new System::Windows::Forms::Label();
 			this->findMagnification = new System::Windows::Forms::Button();
+			this->cb = new System::Windows::Forms::Button();
 			this->picture_panel->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -255,7 +258,7 @@ namespace OCR
 			// 
 			this->imContrast->BackColor = System::Drawing::Color::Transparent;
 			this->imContrast->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->imContrast->Location = System::Drawing::Point(64, 96);
+			this->imContrast->Location = System::Drawing::Point(232, 64);
 			this->imContrast->Name = S"imContrast";
 			this->imContrast->TabIndex = 3;
 			this->imContrast->Text = S"CONTRAST";
@@ -264,7 +267,7 @@ namespace OCR
 			// meanRemoval
 			// 
 			this->meanRemoval->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->meanRemoval->Location = System::Drawing::Point(144, 96);
+			this->meanRemoval->Location = System::Drawing::Point(312, 64);
 			this->meanRemoval->Name = S"meanRemoval";
 			this->meanRemoval->TabIndex = 4;
 			this->meanRemoval->Text = S"MEAN";
@@ -273,7 +276,7 @@ namespace OCR
 			// deSkew
 			// 
 			this->deSkew->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->deSkew->Location = System::Drawing::Point(8, 72);
+			this->deSkew->Location = System::Drawing::Point(32, 72);
 			this->deSkew->Name = S"deSkew";
 			this->deSkew->TabIndex = 7;
 			this->deSkew->Text = S"DE-SKEW";
@@ -324,20 +327,30 @@ namespace OCR
 			// findMagnification
 			// 
 			this->findMagnification->Cursor = System::Windows::Forms::Cursors::Hand;
-			this->findMagnification->Location = System::Drawing::Point(392, 64);
+			this->findMagnification->Location = System::Drawing::Point(416, 64);
 			this->findMagnification->Name = S"findMagnification";
 			this->findMagnification->Size = System::Drawing::Size(88, 24);
 			this->findMagnification->TabIndex = 13;
 			this->findMagnification->Text = S"Magnification";
 			this->findMagnification->Click += new System::EventHandler(this, findMagnification_Click);
 			// 
-			// Form1
+			// cb
+			// 
+			this->cb->Location = System::Drawing::Point(136, 96);
+			this->cb->Name = S"cb";
+			this->cb->Size = System::Drawing::Size(88, 24);
+			this->cb->TabIndex = 14;
+			this->cb->Text = S"C and B";
+			this->cb->Click += new System::EventHandler(this, cb_Click);
+			// 
+			// FormMainWindow
 			// 
 			this->AccessibleRole = System::Windows::Forms::AccessibleRole::Application;
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
 			this->AutoScroll = true;
 			this->BackColor = System::Drawing::Color::WhiteSmoke;
 			this->ClientSize = System::Drawing::Size(794, 518);
+			this->Controls->Add(this->cb);
 			this->Controls->Add(this->findMagnification);
 			this->Controls->Add(this->myInfo1);
 			this->Controls->Add(this->myInfo);
@@ -353,8 +366,9 @@ namespace OCR
 			this->Controls->Add(this->convertToBinary_button);
 			this->Controls->Add(this->deSkew);
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::Fixed3D;
+			this->Icon = (__try_cast<System::Drawing::Icon *  >(resources->GetObject(S"$this.Icon")));
 			this->MaximizeBox = false;
-			this->Name = S"Form1";
+			this->Name = S"FormMainWindow";
 			this->Text = S"Nepali OCR";
 			this->picture_panel->ResumeLayout(false);
 			this->ResumeLayout(false);
@@ -490,6 +504,10 @@ namespace OCR
 				Thus making the image more visible. 
 
 			*/
+			if(this->im->PixelFormat != System::Drawing::Imaging::PixelFormat::Format24bppRgb){
+				System::Windows::Forms::MessageBox::Show("Pixelformat is not 24 bytes per pixel RGB","Format24bppRgb");
+				return;
+			}
 			this->Cursor = System::Windows::Forms::Cursors::WaitCursor;
 			try{
 			double pixel = 0, contrast = (100.0+nContrast)/100.0;
@@ -582,7 +600,7 @@ namespace OCR
 					//if (this->BinaryDone)
 					//	return;
 				 
-					
+					 	
 					
 					try{
 					 // set the cursor to wait.... 
@@ -598,7 +616,7 @@ namespace OCR
 					 
 					 // getting an binary array of 					 
 						rgbConvert* rgbC = new rgbConvert(im);
-						BArray = rgbC->GetBinaryArray(200);
+						BArray = rgbC->GetBinaryArray(intLevel);
 						ImgArray = rgbC->GetImageArray( );
 					   	
 					 // Showing the binary image
@@ -608,6 +626,7 @@ namespace OCR
 					 // set the cursor to Default.... 
 						this->Cursor = System::Windows::Forms::Cursors::Default;
 						//System::Windows::Forms::MessageBox::Show(this->intLevel.ToString()/*fLevel.ToString()*/,"Threshold Value");
+						
 						myInfo1->Text = "Threshold Value";
 						myInfo->Text = this->intLevel.ToString();
 						this->BinaryDone=true;
@@ -661,8 +680,8 @@ namespace OCR
 			*/
 
 
-				if(this->BinaryDone)
-				{	
+				//if(this->BinaryDone)
+				//{	
 					saveImageDialog->Filter= "PNG files (*.jpg)|*.jpg|PNG files (*.png)|*.png|All valid files (*.jpg/*.png)|*.jpg/*.png" ;
 					saveImageDialog->FilterIndex = 1 ;
 					saveImageDialog->RestoreDirectory = true ;
@@ -676,11 +695,11 @@ namespace OCR
 							save->Save(saveImageDialog->FileName);
 							
 							}
-				}
-				else{
-					System::Windows::Forms::MessageBox::Show("The file was not saved because \n the image processing is not completed", "Action Incomplete");
+				//}
+				//else{
+			//		System::Windows::Forms::MessageBox::Show("The file was not saved because \n the image processing is not completed", "Action Incomplete");
 					
-				}
+			//	}
 				 
 			}
 
@@ -757,14 +776,12 @@ namespace OCR
 					 
 					this->Update();
 				 }
-
-
-
+ 
 		private: void doDeSkew()
 				  {
-				/*
-				If the lines in the image is tilted or slanted, this method is used to deskew the image. 
-				*/		 
+				
+				//If the lines in the image is tilted or slanted, this method is used to deskew the image. 
+					 
 				 
 					Deskew* ds=new Deskew(im);
 					double skewAngle=ds->GetSkewAngle();
@@ -786,6 +803,9 @@ namespace OCR
 					
 					
 				  }
+
+
+				  
 		private: Bitmap* RotateImage(double angle)
 					{
 						Graphics* gr;
@@ -1045,18 +1065,13 @@ private: System::Void imContrast_Click(System::Object *  sender, System::EventAr
 private: System::Void meanRemoval_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
 
-			 if( (this->ImageLoaded==true) && (this->ContrastDone==true) ){
+			 if( (this->ImageLoaded==true) ){
 				this->MeanRemoval(9);
 				this->meanDone= true;
 				this->Update();
 				
 			 }
-			 else if( (this->ImageLoaded==true) && (this->ContrastDone==false ) ){
-				 System::Windows::Forms::MessageBox::Show("Please set the contrast first","Contrast not done");
-			 }
-			 else if( this->ImageLoaded==false){
-				 System::Windows::Forms::MessageBox::Show("Please Load the image first","Image not loaded");
-			 }
+			 
 
 		 }
 
@@ -1064,7 +1079,7 @@ private: System::Void deSkew_Click(System::Object *  sender, System::EventArgs *
 		 {
 			 if(this->ImageLoaded==true){
 			 this->doDeSkew();
-			 }
+			  }
 			 else{
 				 System::Windows::Forms::MessageBox::Show("Please Load the image first","Image not loaded");
 			 }
@@ -1072,15 +1087,26 @@ private: System::Void deSkew_Click(System::Object *  sender, System::EventArgs *
 
 private: System::Void train_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
+			 //Check If the image is loaded or not.
 			 if(this->ImageLoaded){
+			
+				 //Check If the image is binarized first or not.
 
-			 OCR::TrainingForm* tw=new OCR::TrainingForm();
-			 tw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
-			 tw->ShowDialog();
-
+				 if(this->BinaryDone){
+						OCR::TrainingForm* tw=new OCR::TrainingForm();
+						tw->defineVar(this->ImgArray,this->tmpBArray,this->Lines,this->numberOfLines);
+						tw->ShowDialog();
+				 }
+					//If not binarized print an error message				
+				 else{
+					 System::Windows::Forms::MessageBox::Show("Image is not Binarized","Please Binarize first");
+				 }
+				
 				}
+			 //If an Image is not loaded, Print an error message to load the image.
 			 else{
-				 System::Windows::Forms::MessageBox::Show("Image not loaded, Please load image first ","Image Not loaded");
+				 //Please Browse for image and Load the image
+				 System::Windows::Forms::MessageBox::Show("Image not loaded, Please Browse for image and load image first ","Image Not loaded");
 			 }
 			 
 			
@@ -1197,9 +1223,18 @@ private: System::Void findMagnification_Click(System::Object *  sender, System::
 
 		 }
 
-private: System::Void B2Button_Click(System::Object *  sender, System::EventArgs *  e)
+
+private: System::Void cb_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
-			 System::Windows::Forms::MessageBox::Show("This is b2 message","This is b2 title");
+			if(this->ImageLoaded==true){
+			this->Contrast(10);
+			this->ContrastDone=true;
+			this->makeBinary();
+			this->Update();
+			 }
+			 else{
+				 System::Windows::Forms::MessageBox::Show("Please load the image first","Image not loaded");
+			 }
 		 }
 
 };

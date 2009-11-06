@@ -3,8 +3,8 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="OCR"
-	ProjectGUID="{C2EFC1D3-8175-48A0-A977-302E79AF620A}"
-	RootNamespace="Exercise1"
+	ProjectGUID="{96C21A66-4468-429E-8BCC-513CEB04A56A}"
+	RootNamespace="OCR"
 	Keyword="ManagedCProj">
 	<Platforms>
 		<Platform
@@ -25,7 +25,6 @@
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="1"
-				UsePrecompiledHeader="3"
 				WarningLevel="3"
 				DebugInformationFormat="3"/>
 			<Tool
@@ -35,8 +34,7 @@
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
-				AssemblyDebug="1"
-				SubSystem="2"/>
+				AssemblyDebug="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -70,7 +68,6 @@
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				MinimalRebuild="FALSE"
 				RuntimeLibrary="0"
-				UsePrecompiledHeader="3"
 				WarningLevel="3"
 				DebugInformationFormat="3"/>
 			<Tool
@@ -79,8 +76,7 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
-				GenerateDebugInformation="TRUE"
-				SubSystem="2"/>
+				GenerateDebugInformation="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -123,19 +119,22 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
-				RelativePath=".\AssemblyInfo.cpp">
+				RelativePath=".\Deskew.cpp">
 			</File>
 			<File
 				RelativePath=".\FileManipulating.cpp">
 			</File>
 			<File
-				RelativePath=".\Form1.cpp">
+				RelativePath=".\FormMainWindow.cpp">
 			</File>
 			<File
 				RelativePath=".\HShell.cpp">
 			</File>
 			<File
 				RelativePath=".\myWindow.cpp">
+			</File>
+			<File
+				RelativePath=".\OCR.cpp">
 			</File>
 			<File
 				RelativePath=".\RecognitionForm.cpp">
@@ -148,18 +147,6 @@
 			</File>
 			<File
 				RelativePath=".\stdafx.cpp">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\ThresholedValue.cpp">
@@ -182,9 +169,6 @@
 				RelativePath=".\Deskew.h">
 			</File>
 			<File
-				RelativePath=".\FileManipulating.h">
-			</File>
-			<File
 				RelativePath=".\FormMainWindow.h"
 				FileType="3">
 				<File
@@ -193,13 +177,13 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/Exercise1.FormMainWindow.resources"/>
+							ResourceFileName="$(IntDir)/OCR.FormMainWindow.resources"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCManagedResourceCompilerTool"
-							ResourceFileName="$(IntDir)/Exercise1.FormMainWindow.resources"/>
+							ResourceFileName="$(IntDir)/OCR.FormMainWindow.resources"/>
 					</FileConfiguration>
 				</File>
 			</File>
@@ -249,9 +233,6 @@
 							ResourceFileName="$(IntDir)/OCR.RecognitionForm.resources"/>
 					</FileConfiguration>
 				</File>
-			</File>
-			<File
-				RelativePath=".\RecognitionProcess.h">
 			</File>
 			<File
 				RelativePath=".\resource.h">
@@ -305,15 +286,18 @@
 				RelativePath=".\app.ico">
 			</File>
 			<File
-				RelativePath=".\app.rc">
+				RelativePath=".\BloodHound.ico">
+			</File>
+			<File
+				RelativePath=".\icon3.ico">
 			</File>
 			<File
 				RelativePath=".\myIcon.ico">
 			</File>
+			<File
+				RelativePath=".\OCR.rc">
+			</File>
 		</Filter>
-		<File
-			RelativePath=".\ReadMe.txt">
-		</File>
 	</Files>
 	<Globals>
 	</Globals>

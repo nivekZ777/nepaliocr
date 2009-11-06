@@ -428,7 +428,7 @@ void Separate::CheckMattra(ArrayList* lineStart,ArrayList* lineEnd,ArrayList** w
 	lineEndEnumerator=lineEnd->GetEnumerator();
 
 	Pen* p=new Pen(Color::White,1);
-
+ 
 	//int cnt=0;
 	//drawHorizontalHist();
 

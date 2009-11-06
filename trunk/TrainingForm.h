@@ -205,6 +205,7 @@ namespace OCR
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::Resources::ResourceManager *  resources = new System::Resources::ResourceManager(__typeof(OCR::TrainingForm));
 			this->panel1 = new System::Windows::Forms::Panel();
 			this->pictureBox1 = new System::Windows::Forms::PictureBox();
 			this->nextButton = new System::Windows::Forms::Button();
@@ -293,6 +294,7 @@ namespace OCR
 			this->Controls->Add(this->prevButton);
 			this->Controls->Add(this->nextButton);
 			this->Controls->Add(this->panel1);
+			this->Icon = (__try_cast<System::Drawing::Icon *  >(resources->GetObject(S"$this.Icon")));
 			this->Name = S"TrainingForm";
 			this->Text = S"TrainingForm";
 			this->panel1->ResumeLayout(false);
@@ -336,7 +338,7 @@ namespace OCR
 					 }
 				 }
 				 this->display(this->lineno,this->wordno,this->charno);
-				 this->Update;
+				 this->Update();
 			 }
 
 private: System::Void prevButton_Click(System::Object *  sender, System::EventArgs *  e)
@@ -373,7 +375,7 @@ private: System::Void prevButton_Click(System::Object *  sender, System::EventAr
 					 }
 				 }
 				 this->display(this->lineno,this->wordno,this->charno);
-				 this->Update;
+				 this->Update();
 
 		 }
 
