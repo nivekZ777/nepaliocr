@@ -143,6 +143,9 @@
 				RelativePath=".\RecognitionProcess.cpp">
 			</File>
 			<File
+				RelativePath=".\Resegment.cpp">
+			</File>
+			<File
 				RelativePath=".\Separate.cpp">
 			</File>
 			<File
@@ -233,6 +236,9 @@
 							ResourceFileName="$(IntDir)/OCR.RecognitionForm.resources"/>
 					</FileConfiguration>
 				</File>
+			</File>
+			<File
+				RelativePath=".\Resegment.h">
 			</File>
 			<File
 				RelativePath=".\resource.h">

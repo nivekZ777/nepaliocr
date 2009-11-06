@@ -85,7 +85,11 @@ void FileManipulating::CreatePrototypeFile(System::String* fromFile, System::Str
     System::String* tempStr;
     bool firstLine = true;
 	System::String *mytmp;
- 	
+
+	System::Windows::Forms::MessageBox::Show(fromFile->ToString(),"From: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+	System::Windows::Forms::MessageBox::Show(toFile->ToString(),"To: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+	System::Windows::Forms::MessageBox::Show(modelName->ToString(),"ModelName: yup u got it!!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		
 
     try
     {
@@ -192,7 +196,7 @@ void FileManipulating::CreateHMMFile(System::String *exeFileDir, System::String 
 		sw->Write(tempStr);
 		sw->Close();
 		
-	//	System::Windows::Forms::MessageBox::Show("Create HMM File on Process","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
+		System::Windows::Forms::MessageBox::Show("Create HMM File on Process","ya sounds gud!",System::Windows::Forms::MessageBoxButtons::OK,System::Windows::Forms::MessageBoxIcon::Error);
 		
 		// create a process and execute 
 		System::Diagnostics::Process *p = new System::Diagnostics::Process();
