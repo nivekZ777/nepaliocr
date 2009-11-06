@@ -1355,10 +1355,13 @@ private: System::Void btnRotate_right_Click(System::Object *  sender, System::Ev
 		 }
 
 private: void tryImageLoad(){
+			 if(this->BinaryDone ==false) 
+						this->makeBinary(); //binarize before cropping
+
 			 croper *myCroper = new croper(im,this->BArray);
 			 myCroper->Show();
-			 myCroper->ImgArray = this->ImgArray;
-			 myCroper->BinArray  = this->BArray;
+			 //myCroper->ImgArray = this->ImgArray;
+			 //myCroper->BinArray  = this->BArray;
 			 this->Hide();
 
 			 
