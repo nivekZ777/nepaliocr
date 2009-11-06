@@ -11,11 +11,11 @@ using namespace System::Security::Permissions;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly:AssemblyTitleAttribute("ocrPostProcessor")];
+[assembly:AssemblyTitleAttribute("ocrTextProcessor")];
 [assembly:AssemblyDescriptionAttribute("")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("mpp")];
-[assembly:AssemblyProductAttribute("ocrPostProcessor")];
+[assembly:AssemblyProductAttribute("ocrTextProcessor")];
 [assembly:AssemblyCopyrightAttribute("Copyright (c) mpp 2008")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
