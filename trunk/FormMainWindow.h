@@ -209,10 +209,7 @@ private: System::Windows::Forms::MenuItem *  menuItem5;
 private: System::Windows::Forms::ContextMenu *  ocrCntMenu;
 private: System::Windows::Forms::MenuItem *  cMenuLoadImage;
 private: System::Windows::Forms::MenuItem *  cMenuFastRecognize;
-private: System::Windows::Forms::ProgressBar *  pbOCR; 
-private: System::Windows::Forms::MenuItem *  cropperEnabler; 
-
-private: int pointX1,pointX2,pointY1,pointY2; //for capturing the points
+private: System::Windows::Forms::ProgressBar *  pbOCR;
 
 
 
@@ -277,7 +274,6 @@ private: int pointX1,pointX2,pointY1,pointY2; //for capturing the points
 			this->mnuDeskew = new System::Windows::Forms::MenuItem();
 			this->mnuRotate = new System::Windows::Forms::MenuItem();
 			this->mnuCropper = new System::Windows::Forms::MenuItem();
-			this->cropperEnabler = new System::Windows::Forms::MenuItem();
 			this->splitter1 = new System::Windows::Forms::Splitter();
 			this->ocrCntMenu = new System::Windows::Forms::ContextMenu();
 			this->cMenuLoadImage = new System::Windows::Forms::MenuItem();
@@ -318,9 +314,7 @@ private: int pointX1,pointX2,pointY1,pointY2; //for capturing the points
 			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
 			this->pictureBox1->TabIndex = 0;
 			this->pictureBox1->TabStop = false;
-			this->pictureBox1->Paint += new System::Windows::Forms::PaintEventHandler(this, pictureBox1_Paint);
 			this->pictureBox1->MouseUp += new System::Windows::Forms::MouseEventHandler(this, pictureBox1_MouseUp);
-			this->pictureBox1->MouseDown += new System::Windows::Forms::MouseEventHandler(this, pictureBox1_MouseDown);
 			// 
 			// openImageDialog
 			// 
@@ -473,12 +467,11 @@ private: int pointX1,pointX2,pointY1,pointY2; //for capturing the points
 			// menuItem2
 			// 
 			this->menuItem2->Index = 3;
-			System::Windows::Forms::MenuItem* __mcTemp__5[] = new System::Windows::Forms::MenuItem*[5];
+			System::Windows::Forms::MenuItem* __mcTemp__5[] = new System::Windows::Forms::MenuItem*[4];
 			__mcTemp__5[0] = this->mnuSaveImage;
 			__mcTemp__5[1] = this->mnuDeskew;
 			__mcTemp__5[2] = this->mnuRotate;
 			__mcTemp__5[3] = this->mnuCropper;
-			__mcTemp__5[4] = this->cropperEnabler;
 			this->menuItem2->MenuItems->AddRange(__mcTemp__5);
 			this->menuItem2->Text = S"Image";
 			// 
@@ -505,11 +498,6 @@ private: int pointX1,pointX2,pointY1,pointY2; //for capturing the points
 			this->mnuCropper->Index = 3;
 			this->mnuCropper->Text = S"Image Cropper";
 			this->mnuCropper->Click += new System::EventHandler(this, mnuCropper_Click);
-			// 
-			// cropperEnabler
-			// 
-			this->cropperEnabler->Index = 4;
-			this->cropperEnabler->Text = S"Crop";
 			// 
 			// splitter1
 			// 
@@ -1890,10 +1878,7 @@ private: System::Void cMenuFastRecognize_Click(System::Object *  sender, System:
 
 private: System::Void pictureBox1_MouseUp(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
 		 {
-
 				 this->drawContextMenu(e);
-				 if(this->BinaryDone == true) cropMe(e);
-
 		 }
 
 private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
@@ -1942,75 +1927,6 @@ private: void drawContextMenu(System::Windows::Forms::MouseEventArgs *  e){
 					ocrCMenu->Show(this,System::Drawing::Point(e->X,e->Y));
 				 }
 			 } // if(e->Button == MouseButtons::Right)
-
-
-		 }
-
-private: System::Void pictureBox1_Paint(System::Object *  sender, System::Windows::Forms::PaintEventArgs *  e)
-		 {
-			 //e->Graphics->DrawRectangle(Pens::Blue, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
-		 }
-
-private: System::Void pictureBox1_MouseDown(System::Object *  sender, System::Windows::Forms::MouseEventArgs *  e)
-		 {
-			 this->pointX1 = e->X;
-			 this->pointY1 = e->Y;
-		 }
-
-private: void cropMe(System::Windows::Forms::MouseEventArgs *  e){
-			
-			 this->pointX2 = e->X;
-			 this->pointY2 = e->Y;
-			 int temp;
-
-
-			 if(this->pointX1 != this->pointX2 && this->pointY1 != this->pointY2)
-			 {
-				if(this->pointX1>this->pointX2)
-				{
-					temp=this->pointX1;
-					this->pointX1=this->pointX2;
-					this->pointX2=temp;
-				} // if(this->pointX1>this->pointX2)
-                
-				if(this->pointY1>this->pointY2)
-				{
-					temp=this->pointY1;
-					this->pointY1=this->pointY2;
-					this->pointY2=temp;
-				} // if(this->pointY1>this->pointY2) 
-                
-			 } // if(this->pointX1 != this->pointX2 && this->pointY1 != this->pointY2)
-
-
-			 //int mouse_dragged_Image_width = System::Math::Abs(this->x2 - this->x1) ;
-			int mouse_dragged_Image_width = (this->pointX2 - this->pointX1) ;
-		//int mouse_dragged_Image_height = System::Math::Abs(this->y2 - this->y1);
-			int mouse_dragged_Image_height = (this->pointY2 - this->pointY1);
-
-			 Bitmap *cropImage1 = new Bitmap( mouse_dragged_Image_width+1,mouse_dragged_Image_height+1,Imaging::PixelFormat::Format24bppRgb);
-		 for(int cropRow=0;  cropRow<(cropImage1->Height); cropRow++){
-			 for(int cropColumn=0;cropColumn<(cropImage1->Width) ;cropColumn++){
-				cropImage1->SetPixel(cropColumn,cropRow,System::Drawing::Color::White);
-				} // for(int cropRow=0;  cropRow<(cropImage->Height); cropRow++){for(int cropColumn=0;cropColumn<(cropImage->Width) ;cropColumn++)
-          } // for(int cropRow=0;  cropRow<(cropImage->Height); cropRow++)
-
-		 for(int i=this->pointY1, int cropRow=0;  i<this->pointY2,cropRow<(cropImage1->Height)-1; i++,cropRow++){
-			 for(int cropColumn=0,j=this->pointX1; j<this->pointX2,cropColumn<(cropImage1->Width)-1 ; j++,cropColumn++){
-				 
-				 if(this->BArray[i][j]==true)
-					 cropImage1->SetPixel(cropColumn,cropRow,System::Drawing::Color::White);
-				 else
-					 cropImage1->SetPixel(cropColumn,cropRow,System::Drawing::Color::Black);
-				 
-			 } // for(int i=0;i<cropImage->Height;i++){for(int j=0;j<cropImage->Width;j++)
-		 } // for(int i=0;i<cropImage->Height;i++)
-
-		 this->g->DrawRectangle(Pens::Blue, Rectangle(this->pointX1,this->pointY1,(this->pointX2-this->pointX1),(this->pointY2-this->pointY1)));
-		 this->g->Flush();
-		
-		 this->pictureBox1->Image = cropImage1;
-
 
 
 		 }
