@@ -50,6 +50,7 @@ namespace OCR
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			System::Resources::ResourceManager *  resources = new System::Resources::ResourceManager(__typeof(OCR::RecognitionForm));
 			this->charRecBox = new System::Windows::Forms::RichTextBox();
 			this->SuspendLayout();
 			// 
@@ -68,6 +69,7 @@ namespace OCR
 			this->AutoScaleBaseSize = System::Drawing::Size(5, 13);
 			this->ClientSize = System::Drawing::Size(448, 342);
 			this->Controls->Add(this->charRecBox);
+			this->Icon = (__try_cast<System::Drawing::Icon *  >(resources->GetObject(S"$this.Icon")));
 			this->Name = S"RecognitionForm";
 			this->Text = S"Recognized Text";
 			this->ResumeLayout(false);
