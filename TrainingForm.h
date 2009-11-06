@@ -292,7 +292,7 @@ namespace OCR
 			this->trainButton->Name = S"trainButton";
 			this->trainButton->Size = System::Drawing::Size(56, 40);
 			this->trainButton->TabIndex = 10;
-			this->trainButton->Text = S"Train (Ctrl T)";
+			this->trainButton->Text = S"Train (Ctrl S)";
 			this->trainButton->Click += new System::EventHandler(this, trainButton_Click);
 			// 
 			// combineChar
@@ -352,7 +352,7 @@ namespace OCR
 			// mnuTrain
 			// 
 			this->mnuTrain->Index = 1;
-			this->mnuTrain->Shortcut = System::Windows::Forms::Shortcut::CtrlT;
+			this->mnuTrain->Shortcut = System::Windows::Forms::Shortcut::CtrlS;
 			this->mnuTrain->Text = S"&Train";
 			this->mnuTrain->Click += new System::EventHandler(this, trainButton_Click);
 			// 
@@ -594,6 +594,7 @@ private: System::Void trainButton_Click(System::Object *  sender, System::EventA
 
 private: System::Void mnuExit_Click(System::Object *  sender, System::EventArgs *  e)
 		 {
+			 this->Close();
 		 }
 
  
