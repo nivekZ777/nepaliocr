@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<title>OCR: HoughLine.h Source File</title>
+<link href="ocr.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Created By Rajesh Pandey   -->
+<h1>HoughLine.h</h1><div class="fragment"><pre>00001 <span class="preprocessor">#pragma once</span>
+00002 <span class="preprocessor"></span>
+00003 <span class="keyword">using</span> <span class="keyword">namespace </span>System::Collections;
+00004 <span class="keyword">using</span> <span class="keyword">namespace </span>System;
+00005 
+00006 <span class="keyword">public</span> __gc <span class="keyword">class </span>HoughLine
+00007 {
+00008 <span class="keyword">public</span>:
+00009     <span class="keywordtype">int</span> Count;  <span class="comment">// Count of points in the line.</span>
+00010     <span class="keywordtype">int</span> Index;  <span class="comment">// Index in Matrix.</span>
+00011     <span class="keywordtype">double</span> Alpha; 
+00012     <span class="comment">// The line is represented as all x,y that solve y*cos(alpha)-x*sin(alpha)=d</span>
+00013     <span class="keywordtype">double</span> d;
+00014 
+00015     <span class="comment">/*int Count;</span>
+00016 <span class="comment">    int Index;</span>
+00017 <span class="comment">    double Alpha;</span>
+00018 <span class="comment">    double d;*/</span>
+00019 };
+00020 
+00021 
+00022 
+00023 <span class="comment">/*</span>
+00024 <span class="comment">//houghline algorithm :: as folows</span>
+00025 <span class="comment">public HoughLine(double angle,</span>
+00026 <span class="comment">                 int radius,</span>
+00027 <span class="comment">                 int accumulator,</span>
+00028 <span class="comment">                 int width,</span>
+00029 <span class="comment">                 int height);</span>
+00030 <span class="comment"></span>
+00031 <span class="comment">*/</span>
+</pre></div><hr><address style="align: right;"><small>
+Generated on Tue Jul 1 18:54:50 2008 for OCR by <a href="http://www.mpp.org.np">
+<img src="doxygen.png" alt="doxygen" align="middle" border=0 width=110 height=53>
+</a>    </small></address>
+</body>
+</html>
