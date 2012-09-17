@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<title>OCR: Separate.h Source File</title>
+<link href="ocr.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Created By Rajesh Pandey   -->
+<h1>Separate.h</h1><div class="fragment"><pre>00001 <span class="preprocessor">#ifndef SEPARATE_H</span>
+00002 <span class="preprocessor"></span><span class="preprocessor">#define SEPARATE_H</span>
+00003 <span class="preprocessor"></span>
+00004 <span class="preprocessor">#include "Line.h"</span>
+00005 <span class="preprocessor">#pragma once</span>
+00006 <span class="preprocessor"></span><span class="comment">//#include &lt;vector&gt;</span>
+00007 
+00008 
+00009 <span class="keyword">using</span> <span class="keyword">namespace </span>System::Drawing;
+00010 <span class="keyword">using</span> <span class="keyword">namespace </span>System::Collections;
+00011 <span class="keyword">using</span> <span class="keyword">namespace </span>System;
+00012 
+00013 <span class="keyword">public</span> __gc <span class="keyword">class </span>Separate
+00014 {
+00015 <span class="keyword">private</span>:
+00016     <span class="keywordtype">bool</span> **BinaryArray;
+00017 
+00018     <span class="keywordtype">int</span> xSize;
+00019     <span class="keywordtype">int</span> ySize;
+00020     <span class="keywordtype">int</span> *Horizontal;
+00021     <span class="keywordtype">int</span> **Vertical;
+00022     <span class="comment">//int **VerticalC;</span>
+00023     <span class="keywordtype">int</span> numberOfLines;
+00024     <span class="keyword">static</span> <span class="keywordtype">int</span> thresh_char_gap=2;
+00025 
+00026     Graphics* g;
+00027 
+00028 
+00029 
+00030 <span class="keyword">public</span>:
+00031     Separate(Bitmap* im,<span class="keywordtype">bool</span> **B,Graphics* gr);
+00032     Line *Lines;
+00033     <span class="keywordtype">void</span> LineSeparate();
+00034     <span class="keywordtype">void</span> drawHorizontalHist();
+00035     <span class="keywordtype">void</span> WordSeparate(ArrayList* start,ArrayList* end);
+00036     <span class="keywordtype">void</span> WordSeparate1(ArrayList* start,ArrayList* end);
+00037     <span class="keywordtype">void</span> CheckMattra(ArrayList* start,ArrayList* end,ArrayList** wordStart,ArrayList** wordEnd);
+00038     <span class="keywordtype">void</span> CharSeparate(ArrayList* start,ArrayList* end,ArrayList** wordStart,ArrayList** wordEnd);
+00039     <span class="keywordtype">int</span> getNumberOfLines();
+00040     Line* getLines();
+00041 
+00042 };
+00043 
+00044 
+00045 
+00046     
+00047 <span class="preprocessor">#endif </span>
+00048 <span class="preprocessor"></span>
+00049     
+00050 
+00051     
+</pre></div><hr><address style="align: right;"><small>
+Generated on Tue Jul 1 18:54:50 2008 for OCR by <a href="http://www.mpp.org.np">
+<img src="doxygen.png" alt="doxygen" align="middle" border=0 width=110 height=53>
+</a>    </small></address>
+</body>
+</html>

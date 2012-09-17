@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1">
+<title>OCR: Line.h Source File</title>
+<link href="ocr.css" rel="stylesheet" type="text/css">
+</head><body>
+<!-- Created By Rajesh Pandey   -->
+<h1>Line.h</h1><div class="fragment"><pre>00001 <span class="preprocessor">#pragma once</span>
+00002 <span class="preprocessor"></span><span class="preprocessor">#include "Word.h"</span>
+00003 
+00004 <span class="keyword">class </span>Line
+00005 {
+00006 <span class="comment">//private: int LineNo;</span>
+00007 <span class="keyword">private</span>: <span class="keywordtype">int</span> TotalWord;
+00008 <span class="keyword">private</span>: <span class="keywordtype">int</span> StartRow;
+00009 <span class="keyword">private</span>: <span class="keywordtype">int</span> EndRow;
+00010 
+00011 <span class="keyword">public</span>:
+00012     Word *Words;
+00013 
+00014     Line(<span class="keywordtype">void</span>)
+00015     {
+00016     }
+00017     
+00020     <span class="keywordtype">void</span> set( <span class="keywordtype">int</span> sr, <span class="keywordtype">int</span> er)
+00021     {
+00022         
+00023         this-&gt;StartRow = sr;
+00024         this-&gt;EndRow = er;
+00025     
+00026     }
+00028     <span class="keywordtype">void</span> setWord( <span class="keywordtype">int</span> Wd )
+00029     {
+00030         this-&gt;TotalWord = Wd;
+00031         this-&gt;Words = <span class="keyword">new</span> Word[Wd];
+00032     }
+00033     
+00034     <span class="keywordtype">int</span> getStartRow()
+00035     {
+00036         <span class="keywordflow">return</span> this-&gt;StartRow;
+00037     }
+00039     <span class="keywordtype">int</span> getEndRow()
+00040     {
+00041         <span class="keywordflow">return</span> this-&gt;EndRow;
+00042     }
+00043     <span class="keywordtype">int</span> getTotalWord()
+00044     {
+00045         <span class="keywordflow">return</span> this-&gt;TotalWord;
+00046     }
+00047 };
+</pre></div><hr><address style="align: right;"><small>
+Generated on Tue Jul 1 18:54:50 2008 for OCR by <a href="http://www.mpp.org.np">
+<img src="doxygen.png" alt="doxygen" align="middle" border=0 width=110 height=53>
+</a>    </small></address>
+</body>
+</html>

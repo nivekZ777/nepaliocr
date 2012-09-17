@@ -1,0 +1,37 @@
+VERSION=1.0
+N=13   L=22   
+I=0    W=!NULL               
+I=1    W=!NULL               
+I=2    W=h1                  
+I=3    W=!NULL               
+I=4    W=h2                  
+I=5    W=h3                  
+I=6    W=h4                  
+I=7    W=h5                  
+I=8    W=h6                  
+I=9    W=h7                  
+I=10   W=h8                  
+I=11   W=h9                  
+I=12   W=h10                 
+J=0     S=0    E=1    
+J=1     S=3    E=1    
+J=2     S=0    E=2    
+J=3     S=2    E=3    
+J=4     S=4    E=3    
+J=5     S=5    E=3    
+J=6     S=6    E=3    
+J=7     S=7    E=3    
+J=8     S=8    E=3    
+J=9     S=9    E=3    
+J=10    S=10   E=3    
+J=11    S=11   E=3    
+J=12    S=12   E=3    
+J=13    S=0    E=4    
+J=14    S=0    E=5    
+J=15    S=0    E=6    
+J=16    S=0    E=7    
+J=17    S=0    E=8    
+J=18    S=0    E=9    
+J=19    S=0    E=10   
+J=20    S=0    E=11   
+J=21    S=0    E=12   
