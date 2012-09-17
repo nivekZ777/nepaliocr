@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * Original code was forked from : http://code.google.com/p/nepaliocr/source/browse/trunk/TrainingForm.cpp?spec=svn146&r=138 and 
+ * http://code.google.com/p/nepaliocr/source/browse/trunk/TrainingProcess.h?spec=svn146&r=138
+ */
+using System;
 
 namespace NOCR
 {
@@ -61,7 +65,7 @@ namespace NOCR
             //this.ImageBoundarySet(this.leftX,this.rightX,this.topY,this.bottomY);
         }
 
-       public void ImageBoundarySet(int left_x, int right_x, int top_y, int bottom_y)
+        public void ImageBoundarySet(int left_x, int right_x, int top_y, int bottom_y)
         {
             try
             {
@@ -70,13 +74,13 @@ namespace NOCR
                 {
                     for (int xVal = left_x; xVal <= right_x; xVal++)
                     {
-                        if (this.imageArr[yVal,xVal] == 0 && pixelFound)
+                        if (this.imageArr[yVal, xVal] == 0 && pixelFound)
                         {
                             if (xVal < this.leftX) { this.leftX = xVal; }
                             if (xVal > this.rightX) { this.rightX = xVal; }
                             if (yVal > this.bottomY) { this.bottomY = yVal; }
                         }
-                        else if (this.imageArr[yVal,xVal] == 0)
+                        else if (this.imageArr[yVal, xVal] == 0)
                         {
                             pixelFound = true;
                             this.leftX = xVal;
@@ -97,7 +101,7 @@ namespace NOCR
         public void PrepareTrainingData()
         {
             FileManipulating fm = new FileManipulating();
-            fm.PrepareData(this.trainingFilePath,  this.imageArr, this.leftX, this.rightX, this.topY, this.bottomY);
+            fm.PrepareData(this.trainingFilePath, this.imageArr, this.leftX, this.rightX, this.topY, this.bottomY);
             this.numOfFrame = fm.numOfFrame;
         }
 
@@ -176,10 +180,48 @@ namespace NOCR
             }
         }
 
-       public System.String GetTrainedModelName()
+        public System.String GetTrainedModelName()
         {
             return this.modelName;
         }
 
     }
 }
+
+
+/**
+ *   OCR
+ * Programmed in C#, Visual Studio 2010
+ * Microsoft Windows 7 
+ * Professional 
+ * Home Premium
+ 
+ * Intel[R] 
+ * 3 GB RAM
+ * 2.80 GHZ , 1.00 GB of  RAM 
+ *
+ *
+ * Requirements:
+ *  
+ * win2k or later\n
+ * .NET FrameWork 4.0 or later 
+ *
+ * Version 1.0
+ * first version
+ *
+ * Date 9-18-2012
+ *
+ ** Author Rajesh Pandey
+ *
+ * license
+ * This code is absolutely free to use and modify. The code is provided "as is" with
+ * no expressed or implied warranty. The author accepts no liability if it causes
+ * any damage to your computer, causes your pet to fall ill, increases baldness
+ * or makes your car start emitting strange noises when you start it up.
+ * This code has no bugs, just undocumented features!
+ * 
+ *  
+ *
+ *  
+ *
+ */

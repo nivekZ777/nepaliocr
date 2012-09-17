@@ -1,25 +1,28 @@
+/*
+* Original Code was forked from : http://code.google.com/p/nepaliocr/source/browse/trunk/FileManipulating.cpp?spec=svn146&r=108
+*/
 
 /**
  *   OCR
- * Programmed in Visual C++ 2003 
- * Microsoft Windows XP 
+ * Programmed in C#, Visual Studio 2010
+ * Microsoft Windows 7 
  * Professional 
- * Version 2002 
- * Service Pack 3  
+ * Home Premium
+ 
  * Intel[R] 
- * Pentium 4 CPU  2.80 GHZ 
+ * 3 GB RAM
  * 2.80 GHZ , 1.00 GB of  RAM 
  *
  *
  * Requirements:
  *  
  * win2k or later\n
- * .NET FrameWork 1.1 or later 
+ * .NET FrameWork 4.0 or later 
  *
  * Version 1.0
  * first version
  *
- * Date 11-01-2008
+ * Date 9-18-2012
  *
  ** Author Rajesh Pandey
  *
