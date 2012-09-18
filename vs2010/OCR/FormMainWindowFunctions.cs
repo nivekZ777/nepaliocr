@@ -14,6 +14,7 @@ namespace NOCR
         private delegate void SetWaitCursor(Cursor c);
         private delegate void SetNormalCursor(Cursor c);
         private delegate void UpdateStatusBar(string text);
+        private delegate void UpdatePictureBox1(Bitmap image);
 
 
         private void SetWaitCursorMethod(Cursor c)
@@ -22,9 +23,7 @@ namespace NOCR
             {
                 SetWaitCursor s = new SetWaitCursor(SetWaitCursorMethod);
                 this.Invoke(s, new object[] {c});
-            }
-            else
-            {
+            }else{
                 this.Cursor = c;
             }
         }
@@ -34,9 +33,7 @@ namespace NOCR
             {
                 SetNormalCursor s = new SetNormalCursor(SetNormalCursorMethod);
                 this.Invoke(s, new object[] { c });
-            }
-            else
-            {
+            }else{
                 this.Cursor = c;
             }
         }
@@ -47,13 +44,21 @@ namespace NOCR
             {
                 UpdateStatusBar u = new UpdateStatusBar(UpdateStatusBarMethod);
                 this.Invoke(u, new object[]{text});
-            }
-            else
-            {
+            }else{
                 this.statusBar1.Text = text;
             }
         }
         
+        private void UpdatePictureBox1Method(Bitmap image)
+        {
+            if(this.pictureBox1.InvokeRequired)
+            {
+                UpdatePictureBox1 u = new UpdatePictureBox1(UpdatePictureBox1Method);
+                this.Invoke(u, new object[] {image});
+            }else{
+                this.pictureBox1.Image = image;
+            }
+        }
 
         private void rtbMainOutput_MouseUp(System.Object sender, System.Windows.Forms.MouseEventArgs e)
         {
@@ -287,7 +292,8 @@ namespace NOCR
                     // creating a bitmap
                     im = new System.Drawing.Bitmap(this.openImageDialog.OpenFile());
                     //this.pbOCR.Value = 40;
-                    this.pictureBox1.Image = im;
+                    UpdatePictureBox1Method(im);
+                    //this.pictureBox1.Image = im;
                     //this.pbOCR.Value = 70;
                     g = this.pictureBox1.CreateGraphics();
                     //this.pbOCR.Value = 80;
@@ -369,7 +375,8 @@ namespace NOCR
             {
                 im = this.RotateImage(-(float)skewAngle);
                 //this.pbOCR.Value += 30;
-                this.pictureBox1.Image = im;
+                UpdatePictureBox1Method(im);
+                //this.pictureBox1.Image = im;
                 if (this.BinaryDone)
                 {
                     this.resetVariablesAfterRotation();
@@ -427,7 +434,9 @@ namespace NOCR
                     int thresholdValue = 0;
                     // calculating Thresholed Value for binary image					 
                     this.BinaryImage =  BinarizeUsingvc2003Method(this.im, out this.ImgArray, out this.BArray, out thresholdValue);
-                    this.pictureBox1.Image = BinaryImage;
+                    
+                    //this.pictureBox1.Image = BinaryImage;
+                    UpdatePictureBox1Method(BinaryImage);
                     this.BackupImgArray = this.ImgArray;
                     this.BackupBArray = this.BArray;
 
@@ -437,8 +446,11 @@ namespace NOCR
                     
                      * 
                      */
-                    myInfo1.Text = "Threshold Value";
-                    myInfo.Text = thresholdValue.ToString();
+                    if (!this.InvokeRequired)
+                    {
+                        myInfo1.Text = "Threshold Value";
+                        myInfo.Text = thresholdValue.ToString();
+                    }
                     this.BinaryDone = true;
                     //this.pbOCR.Value += 5;
                 }
@@ -508,7 +520,7 @@ namespace NOCR
             {
                 for (int j = 0; j < this.Lines[i].getTotalWord(); j++)
                 {
-                    for (int k = 0; k < this.Lines[i].Words[j].getTotalUnit(); k++)
+                    for (int k = 0; k < this.Lines[i].Words[j].getTotalUnit()-1; k++)
                     {
                         int x1 = this.Lines[i].Words[j].Units[k].getStartColumn();
                         int x2 = this.Lines[i].Words[j].Units[k].getEndColumn();
@@ -540,8 +552,11 @@ namespace NOCR
 
                 this.tmpBArray = new bool[im.Height, im.Width];
                 //System.Windows.Forms.MessageBox.Show(im.Height.ToString(),"Height");
-                myInfo1.Text = "Image Height";
-                myInfo.Text = im.Height.ToString();
+                if (!this.InvokeRequired)
+                {
+                    myInfo1.Text = "Image Height";
+                    myInfo.Text = im.Height.ToString();
+                }
                 //this.tmpBArray=this.BArray;
                 for (int i = 0; i < im.Height; i++)
                 {

@@ -7,10 +7,10 @@ using System.Text;
 
 namespace NOCR
 {
-    public class Separate
+    public unsafe class Separate
     {
-        bool[,] BinaryArray;
-
+    
+    bool[,] BinaryArray;
 	int xSize;
 	int ySize;
 	int[] Horizontal;
@@ -47,8 +47,8 @@ internal Separate(Bitmap im,bool[,] B,Graphics gr)
 //This is a function which separates lines
 internal void LineSeparate()
 {
-	ArrayList lineStart=new ArrayList();
-	ArrayList lineEnd=new ArrayList();
+	List<int> lineStart=new List<int>();
+    List<int> lineEnd = new List<int>();
 //	vector <int> lineStart;
 //	vector <int> lineEnd;
 
@@ -107,20 +107,19 @@ internal void LineSeparate()
 	g.DrawLine(p,0,e,this.xSize,e);
 	}
 	this.HeadBottom=new int[this.numberOfLines,1000];
-	for(int i=0;i<this.numberOfLines;i++)
-	{
-		this.HeadBottom[i,1000]= new int();
-            //new int[2];
-	}
+    //for(int i=0;i<this.numberOfLines;i++)
+    //{
+    //    this.HeadBottom[i,1000]= new int();
+    //        //new int[2];
+    //}
  
 	//System.Windows.Forms.MessageBox.Show("ok");
 	WordSeparate1(lineStart,lineEnd);
 }
 
 //WordSeparate is used to separate words 
-void WordSeparate(ArrayList start,ArrayList end)
+void WordSeparate(List<int> start, List<int> end)
 {
-	//System.Windows.Forms.MessageBox.Show(numberOfLines.ToString(),"Total Number Of Lines");
 	
 	IEnumerator startEnumerator;
 	IEnumerator endEnumerator;
@@ -128,7 +127,7 @@ void WordSeparate(ArrayList start,ArrayList end)
 	startEnumerator=start.GetEnumerator();
 	endEnumerator=end.GetEnumerator();
 	
-	Vertical=new int[numberOfLines,1000];
+	//Vertical=new int[numberOfLines,1000];
 	
 	
 	int verticalCount=0;
@@ -138,10 +137,8 @@ void WordSeparate(ArrayList start,ArrayList end)
 		int y1=(int)(startEnumerator.Current);
 		int y2=(int) (endEnumerator.Current);
 
-		Vertical[verticalCount,1000] = new int();
+		//Vertical[verticalCount,1000] = new int();
             //new int[xSize,1000];
-		//System.Windows.Forms.MessageBox.Show(y1.ToString(),"Y1 Value");
-		//System.Windows.Forms.MessageBox.Show(y2.ToString(),"Y2 Value");
 	
 		for(int i=0;i<this.xSize;i++)
 			{
@@ -149,7 +146,6 @@ void WordSeparate(ArrayList start,ArrayList end)
 				
 				for(int j=y1;j<=y2;j++)
 					{
-						//System.Windows.Forms.MessageBox.Show(this.BinaryArray[i,j].ToString(),"Binary Value");
 						if(BinaryArray[j,i]==false)
 							{
 							count++;
@@ -180,8 +176,8 @@ while(startEnumerator.MoveNext() && endEnumerator.MoveNext())
 	int y2=(int) (endEnumerator.Current);
 	
 	
-	ArrayList wordStart=new ArrayList();
-	ArrayList wordEnd=new ArrayList();
+	List<int> wordStart=new List<int>();
+    List<int> wordEnd = new List<int>();
 	IEnumerator wordStartEnumerator,wordEndEnumerator;
 	
 	bool hasWordStarted=false;
@@ -247,18 +243,20 @@ void drawHorizontalHist()
 }
 
 //Word separate
-void WordSeparate1(ArrayList start,ArrayList end)
-{ 
-	List<ArrayList> wordStart=new List<ArrayList>();
-	List<ArrayList> wordEnd=new List<ArrayList>();
-	IEnumerator wordStartEnumerator,wordEndEnumerator;
-	List<ArrayList> wordStart1=new List<ArrayList>();
-    List<ArrayList> wordEnd1 = new List<ArrayList>();
-	//IEnumerator *wordStartEnumerator1,*wordEndEnumerator1;
+void WordSeparate1(List<int> start, List<int> end)
+{
+    List<int> wordStart = new List<int>();
+	List<int> wordEnd=new List<int>();
+	
+	List<int> wordStart1=new List<int>();
+    List<int> wordEnd1 = new List<int>();
+	//IEnumerator wordStartEnumerator1,wordEndEnumerator1;
 	//This Function Needs to be upgraded
 	
 	IEnumerator startEnumerator;
 	IEnumerator endEnumerator;
+    IEnumerator wordStartEnumerator;
+    IEnumerator wordEndEnumerator;
 
 	int start_of_word2=0;
 	int end_of_word1=0;
@@ -269,7 +267,7 @@ void WordSeparate1(ArrayList start,ArrayList end)
 	startEnumerator=start.GetEnumerator(); //linestart (from Separate )
 	endEnumerator=end.GetEnumerator(); // lineEnd (from Separate)
 	
-	Vertical=new int[numberOfLines,1000];
+	//Vertical=new int[numberOfLines,1000];
 	
 	
 	int verticalCount=0;
@@ -279,9 +277,10 @@ void WordSeparate1(ArrayList start,ArrayList end)
 		int y1=(int) (startEnumerator.Current);
 		int y2=(int) (endEnumerator.Current);
 
-		Vertical[verticalCount,1000]= new int();
+		//Vertical[verticalCount,1000]= new int();
             //new int[xSize];
 	
+        Vertical = new int[ySize,xSize];
 		for(int i=0;i<this.xSize;i++)
 			{
 				int count=0;
@@ -293,6 +292,7 @@ void WordSeparate1(ArrayList start,ArrayList end)
 							count++;
 							}
 					}
+                
 				this.Vertical[verticalCount,i]=count;
 			}
 
@@ -313,8 +313,8 @@ while(startEnumerator.MoveNext() && endEnumerator.MoveNext())
 
 	int y1=(int) (startEnumerator.Current);
 	int y2=(int) (endEnumerator.Current);
-	wordStart[cnt]=new ArrayList();
-	wordEnd[cnt]=new ArrayList();
+	wordStart= new List<int>();
+	wordEnd = new List<int>();
 
 	
 	
@@ -326,7 +326,7 @@ while(startEnumerator.MoveNext() && endEnumerator.MoveNext())
 		{
 			if(Vertical[cnt,j]>0)
 			{
-				wordStart[cnt].Add(j);
+				wordStart.Add(j);
 				hasWordStarted=true;
 			}
 		}
@@ -334,15 +334,16 @@ while(startEnumerator.MoveNext() && endEnumerator.MoveNext())
 		{
 			if(Vertical[cnt,j]<=0)
 			{
-				wordEnd[cnt].Add(j);
+				wordEnd.Add(j);
 				hasWordStarted=false;
 			}
 		}
 
 	}
 
-	wordStartEnumerator=wordStart[cnt].GetEnumerator();
-	wordEndEnumerator=wordEnd[cnt].GetEnumerator();
+    wordStartEnumerator = wordStart.GetEnumerator();
+    wordEndEnumerator = wordEnd.GetEnumerator();
+ 
 	int no_of_word=0;
 	while (wordStartEnumerator.MoveNext() &&  wordEndEnumerator.MoveNext())
 		{
@@ -389,13 +390,13 @@ while(startEnumerator.MoveNext() && endEnumerator.MoveNext())
 		int y1=(int) (startEnumerator.Current);
 		int y2=(int) (endEnumerator.Current);
 	
-		wordStartEnumerator=wordStart[cnt].GetEnumerator();
-		wordEndEnumerator=wordEnd[cnt].GetEnumerator();
+		wordStartEnumerator=wordStart.GetEnumerator();
+		wordEndEnumerator=wordEnd.GetEnumerator();
 		int word_count=0;
 		int newx1 = 0,newx2 = 0,tempx2 = 0;
 
-		wordStart1[cnt]=new ArrayList();
-		wordEnd1[cnt]=new ArrayList();
+		wordStart1=new List<int>();
+		wordEnd1=new List<int>();
 
 		
 		while (wordStartEnumerator.MoveNext() &&  wordEndEnumerator.MoveNext())
@@ -417,8 +418,8 @@ while(startEnumerator.MoveNext() && endEnumerator.MoveNext())
 				newx2=tempx2;
 				 
 
-				wordStart1[cnt].Add(newx1);
-				wordEnd1[cnt].Add(newx2);
+				wordStart1.Add(newx1);
+				wordEnd1.Add(newx2);
 
 				//add newx1 in wordStart1
 				//add newx2 in wordEnd1
@@ -436,8 +437,8 @@ while(startEnumerator.MoveNext() && endEnumerator.MoveNext())
 		}
 		newx2=tempx2;
 		 
-		wordStart1[cnt].Add(newx1);
-		wordEnd1[cnt].Add(newx2);
+		wordStart1.Add(newx1);
+		wordEnd1.Add(newx2);
 
 
 		cnt++;
@@ -453,7 +454,7 @@ CheckMattra(start,end,wordStart1,wordEnd1);
 
 
 //Checks Mattra
-void CheckMattra(ArrayList lineStart,ArrayList lineEnd,List<ArrayList> wordStart,List<ArrayList> wordEnd)
+void CheckMattra(List<int> lineStart,List<int> lineEnd,List<int> wordStart,List<int> wordEnd)
 {
 	 
 	IEnumerator lineStartEnumerator,lineEndEnumerator;
@@ -566,7 +567,7 @@ internal int[,]  getHeadBottom()
 {
 	return (this.HeadBottom);
 }
-void CharSeparate(ArrayList start,ArrayList end,List<ArrayList> wStart,List<ArrayList> wEnd)
+void CharSeparate(List<int> start,List<int> end,List<int> wStart,List<int> wEnd)
 {
  
 	
@@ -586,7 +587,7 @@ void CharSeparate(ArrayList start,ArrayList end,List<ArrayList> wStart,List<Arra
 	startEnumerator=start.GetEnumerator();
 	endEnumerator=end.GetEnumerator();
 	
-	VerticalC=new int[numberOfLines,1000];
+	VerticalC=new int[ySize,xSize];
 	//this.Lines=new Line[this.numberOfLines];
 
 	int verticalCount=0;
@@ -596,7 +597,7 @@ void CharSeparate(ArrayList start,ArrayList end,List<ArrayList> wStart,List<Arra
 		int y1=(int) (startEnumerator.Current);
 		int y2=(int) (endEnumerator.Current);
 
-		VerticalC[verticalCount,1000]=new int();
+		//VerticalC[ySize,xSize]=new int();
 	
 		for(int i=0;i<this.xSize;i++)
 			{
@@ -626,8 +627,8 @@ void CharSeparate(ArrayList start,ArrayList end,List<ArrayList> wStart,List<Arra
 		int y1=(int) (startEnumerator.Current);
 		int y2=(int) (endEnumerator.Current);
 		
-		wordStartEnumerator=wStart[lineCount].GetEnumerator();
-		wordEndEnumerator=wEnd[lineCount].GetEnumerator();
+		wordStartEnumerator=wStart.GetEnumerator();
+		wordEndEnumerator=wEnd.GetEnumerator();
 
 		 
 		int wordCount=0;
@@ -688,8 +689,8 @@ void CharSeparate(ArrayList start,ArrayList end,List<ArrayList> wStart,List<Arra
 		int y1=(int) (startEnumerator.Current);
 		int y2=(int) (endEnumerator.Current);
 		
-		wordStartEnumerator=wStart[lineCount].GetEnumerator();
-		wordEndEnumerator=wEnd[lineCount].GetEnumerator();
+		wordStartEnumerator=wStart.GetEnumerator();
+		wordEndEnumerator=wEnd.GetEnumerator();
  
 		int wordCount=0;
 			
@@ -756,11 +757,12 @@ void CharSeparate(ArrayList start,ArrayList end,List<ArrayList> wStart,List<Arra
 	{
 		int y1=(int) (startEnumerator.Current);
 		int y2=(int) (endEnumerator.Current);
-		
+
+        if (this.Lines[lineCount]==null) this.Lines[lineCount] = new Line();
 		this.Lines[lineCount].set(y1,y2);
 
-		wordStartEnumerator=wStart[lineCount].GetEnumerator();
-		wordEndEnumerator=wEnd[lineCount].GetEnumerator();
+		wordStartEnumerator=wStart.GetEnumerator();
+		wordEndEnumerator=wEnd.GetEnumerator();
  
 		
 					int wordCountInLine=0;
@@ -785,7 +787,9 @@ void CharSeparate(ArrayList start,ArrayList end,List<ArrayList> wStart,List<Arra
 				{
 					int x1 = (int)(wordStartEnumerator.Current);
 					int x2 = (int)(wordEndEnumerator.Current);
-					
+
+                    if (this.Lines[lineCount].Words[wordCount]==null)
+                        this.Lines[lineCount].Words[wordCount] = new Word();
 					this.Lines[lineCount].Words[wordCount].set(x1,x2);
 
 					int charCountInWord=0;
@@ -825,7 +829,8 @@ void CharSeparate(ArrayList start,ArrayList end,List<ArrayList> wStart,List<Arra
 											{
 												//charEnd[lineCount,wordCount].Add(__box(j));
 												x22=j;
-												
+												if(this.Lines[lineCount].Words[wordCount].Units[charCount] ==null)
+                                                    this.Lines[lineCount].Words[wordCount].Units[charCount] = new Unit();
 												this.Lines[lineCount].Words[wordCount].Units[charCount].set(x11,x22);
 												charCount++;
 												

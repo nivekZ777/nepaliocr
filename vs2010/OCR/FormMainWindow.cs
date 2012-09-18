@@ -349,7 +349,7 @@ namespace NOCR
                     unitCount = this.Lines[i].Words[j].getTotalUnit();
                     for (int k = 0; k < unitCount; k++)
                     {
-                        left_x = this.Lines[i].Words[j].Units[k].getStartColumn();//wrod start
+                        left_x = this.Lines[i].Words[j].Units[k].getStartColumn();//word start
                         right_x = this.Lines[i].Words[j].Units[k].getEndColumn();//word end
 
                         // setting the actual image boundary
@@ -357,7 +357,7 @@ namespace NOCR
 
                         rp.SetImageBoundary(left_x, right_x, top_y, bottom_y);
                         totalUnit++;
-                        wordToRec += string.Concat(dirOfRecFile, totalUnit.ToString(), ".txt");
+                        wordToRec = string.Concat(dirOfRecFile, totalUnit.ToString(), ".txt");
 
                         UpdateStatusBarMethod("Preparing word datas.. and running HTK Recognizer..  ");
 
@@ -715,7 +715,7 @@ namespace NOCR
             {
                 for (int j = 0; j < this.Lines[i].getTotalWord(); j++)
                 {
-                    for (int k = 0; k < this.Lines[i].Words[j].getTotalUnit(); k++)
+                    for (int k = 0; k < this.Lines[i].Words[j].getTotalUnit()-1; k++)
                     {
                         int x1 = this.Lines[i].Words[j].Units[k].getStartColumn();
                         int x2 = this.Lines[i].Words[j].Units[k].getEndColumn();
@@ -739,7 +739,7 @@ namespace NOCR
             {
                 for (int j = 0; j < this.Lines[i].getTotalWord(); j++)
                 {
-                    for (int k = 0; k < this.Lines[i].Words[j].getTotalUnit(); k++)
+                    for (int k = 0; k < this.Lines[i].Words[j].getTotalUnit()-1; k++)
                     {
                         int x1 = this.Lines[i].Words[j].Units[k].getStartColumn();
                         int x2 = this.Lines[i].Words[j].Units[k].getEndColumn();
