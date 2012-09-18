@@ -11,7 +11,49 @@ namespace NOCR
 {
     public partial class FormMainWindow
     {
+        private delegate void SetWaitCursor(Cursor c);
+        private delegate void SetNormalCursor(Cursor c);
+        private delegate void UpdateStatusBar(string text);
 
+
+        private void SetWaitCursorMethod(Cursor c)
+        {
+            if(this.InvokeRequired)
+            {
+                SetWaitCursor s = new SetWaitCursor(SetWaitCursorMethod);
+                this.Invoke(s, new object[] {c});
+            }
+            else
+            {
+                this.Cursor = c;
+            }
+        }
+        private void SetNormalCursorMethod(Cursor c)
+        {
+            if (this.InvokeRequired)
+            {
+                SetNormalCursor s = new SetNormalCursor(SetNormalCursorMethod);
+                this.Invoke(s, new object[] { c });
+            }
+            else
+            {
+                this.Cursor = c;
+            }
+        }
+
+        private void UpdateStatusBarMethod(string text)
+        {
+            if(this.statusBar1.InvokeRequired)
+            {
+                UpdateStatusBar u = new UpdateStatusBar(UpdateStatusBarMethod);
+                this.Invoke(u, new object[]{text});
+            }
+            else
+            {
+                this.statusBar1.Text = text;
+            }
+        }
+        
 
         private void rtbMainOutput_MouseUp(System.Object sender, System.Windows.Forms.MouseEventArgs e)
         {
@@ -199,7 +241,8 @@ namespace NOCR
         private void MeanRemoval(int nWeight)
         {
 
-            this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            
+            SetWaitCursorMethod(Cursors.WaitCursor);
             /*
 
 				This method does the mean removal of the image, before it is binarized. 
@@ -215,8 +258,9 @@ namespace NOCR
             m.SetAll(-1);
             m.Pixel = nWeight;
             m.Factor = nWeight - 8;
-            //this.Conv3x3(m);
-            this.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Conv3x3(m);
+            SetNormalCursorMethod(Cursors.Default);
+            
         }
 
         private void openImageFile()
@@ -354,7 +398,8 @@ namespace NOCR
 
         private void makeBinary()
         {
-            if (this.rtbOutputShowing == true) this.delRTB();
+            if (this.rtbOutputShowing == true) 
+                this.delRTB();
 
             //this.pbOCR.Value = 0;
 
@@ -375,7 +420,7 @@ namespace NOCR
                 try
                 {
                     // set the cursor to wait.... 
-                    this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+                    SetWaitCursorMethod(Cursors.WaitCursor);
                     //this.pbOCR.Value += 5;
 
                     int thresholdValue = 0;
@@ -415,9 +460,11 @@ namespace NOCR
                 }
                 else
                 {
-                    this.Cursor = System.Windows.Forms.Cursors.Default;
+                    SetNormalCursorMethod(Cursors.Default);
+                    
                     this.Update();
-                    this.statusBar1.Text = "Binarization Done.";
+                    UpdateStatusBarMethod("Binarization Done.");
+                    
                     this.setResetMenu(this.ImageLoaded, this.BinaryDone, this.SeparateDone);
                 }
 
@@ -712,8 +759,9 @@ namespace NOCR
             if (!this.InvokeRequired)
             {
                 //this.pbOCR.Value = 100;
-                this.statusBar1.Text = "Recognition Complete";
-                this.Cursor = System.Windows.Forms.Cursors.Default;
+                
+                UpdateStatusBarMethod("Recognition Complete");
+                SetNormalCursorMethod(Cursors.Default);
             }
             /*this.rtbOutput.Text = text;*/
         }

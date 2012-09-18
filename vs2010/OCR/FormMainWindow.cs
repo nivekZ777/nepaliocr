@@ -42,7 +42,7 @@ namespace NOCR
         bool imageSelection;
         bool TouchingCharIdentified;
         bool dragEnabled;
-        private System.Drawing.Point m_PanStartPoint;
+        private Point m_PanStartPoint;
 
 
 
@@ -104,10 +104,11 @@ namespace NOCR
         }
 
 
-        /*
-        public void Conv3x3(ConvMatrix m)
+        
+        public unsafe void Conv3x3(ConvMatrix m)
         {
-            this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+            SetWaitCursorMethod(Cursors.WaitCursor);
+            
 			
             try{
             // Avoid divide by zero errors
@@ -124,8 +125,8 @@ namespace NOCR
             IntPtr Scan0 = bmData.Scan0;
             IntPtr SrcScan0 = bmSrc.Scan0;
 
-                Byte  p = (Byte)Scan0;
-                Byte  pSrc = (Byte)SrcScan0;
+                Byte*  p = (Byte*)Scan0;
+                Byte*  pSrc = (Byte*)SrcScan0;
 
                 int nOffset = stride - im.Width*3;
                 int nWidth = im.Width - 2;
@@ -182,10 +183,11 @@ namespace NOCR
             {
                 System.Windows.Forms.MessageBox.Show(ex.Message.ToString(),"Failed to Apply Mean Removal!!",System.Windows.Forms.MessageBoxButtons.OK,System.Windows.Forms.MessageBoxIcon.Error);
             }
-        this.Cursor = System.Windows.Forms.Cursors.Default;
+            SetNormalCursorMethod(Cursors.Default);
+        
 			
         }
-        */
+        
 
         #region uncomment later
         /*
@@ -306,19 +308,17 @@ namespace NOCR
 
 
             */
-            if (!this.InvokeRequired)
-            {
-                this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
-            }
+
+            SetWaitCursorMethod(Cursors.WaitCursor);
+            
 
             //Setting the cursor to wait because we will have a long process in the background
             RecognitionProcess rp = new RecognitionProcess(this.applicationPath, this.ImgArray);
             //Calling the recognition Process
             // load the transcription of the models
-            if (!this.InvokeRequired)
-            {
-                this.statusBar1.Text = "Loading Models ....";
-            }
+
+            UpdateStatusBarMethod("Loading Models ....");
+            
             //aakarList added 
             //aakarList = new System.Collections.ArrayList();
             this.slModelTranscription = rp.LoadModelTranscriptions(this.modelTrainDBPath);
@@ -432,14 +432,12 @@ namespace NOCR
                 //System.IO.File.Delete(dirOfRecFile+i+".txt");
                 System.IO.File.Delete(tmp);
             }
-            if (!this.InvokeRequired)
-            {
-                this.Cursor = System.Windows.Forms.Cursors.Default;
 
-                //	this.statusBar1.Text = "Output window closed";
-                this.pbOCR.Value = 100;
-                this.Cursor = System.Windows.Forms.Cursors.Default;
-            }
+            SetNormalCursorMethod(Cursors.Default);
+            UpdateStatusBarMethod("Output window closed");
+            //this.pbOCR.Value = 100;
+                
+             
             this.logFile.Close();
         }
 
@@ -577,11 +575,7 @@ namespace NOCR
             this.ContrastDone = true;
             this.Update();
 
-            //mean removal
-            //this.MeanRemoval(9);
-            //this.meanDone= true;
-            //this.Update();
-
+             
             //Binarization
             this.makeBinary();
 
