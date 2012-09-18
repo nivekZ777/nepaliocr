@@ -104,61 +104,62 @@ namespace NOCR
         }
 
 
-        
+
         public unsafe void Conv3x3(ConvMatrix m)
         {
             SetWaitCursorMethod(Cursors.WaitCursor);
-            
-			
-            try{
-            // Avoid divide by zero errors
-            if (0 == m.Factor) return;
 
-            Bitmap bSrc = (Bitmap)im.Clone(); 
 
-            // GDI+ still lies to us - the return format is BGR, NOT RGB.
-            BitmapData bmData = im.LockBits(new Rectangle(0, 0, im.Width, im.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            BitmapData bmSrc = bSrc.LockBits(new Rectangle(0, 0, bSrc.Width, bSrc.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            try
+            {
+                // Avoid divide by zero errors
+                if (0 == m.Factor) return;
 
-            int stride = bmData.Stride;
-            int stride2 = stride * 2;
-            IntPtr Scan0 = bmData.Scan0;
-            IntPtr SrcScan0 = bmSrc.Scan0;
+                Bitmap bSrc = (Bitmap)im.Clone();
 
-                Byte*  p = (Byte*)Scan0;
-                Byte*  pSrc = (Byte*)SrcScan0;
+                // GDI+ still lies to us - the return format is BGR, NOT RGB.
+                BitmapData bmData = im.LockBits(new Rectangle(0, 0, im.Width, im.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+                BitmapData bmSrc = bSrc.LockBits(new Rectangle(0, 0, bSrc.Width, bSrc.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
 
-                int nOffset = stride - im.Width*3;
+                int stride = bmData.Stride;
+                int stride2 = stride * 2;
+                IntPtr Scan0 = bmData.Scan0;
+                IntPtr SrcScan0 = bmSrc.Scan0;
+
+                Byte* p = (Byte*)Scan0;
+                Byte* pSrc = (Byte*)SrcScan0;
+
+                int nOffset = stride - im.Width * 3;
                 int nWidth = im.Width - 2;
                 int nHeight = im.Height - 2;
 
                 int nPixel;
 
-                for(int y=0;y < nHeight;++y)
+                for (int y = 0; y < nHeight; ++y)
                 {
-                    for(int x=0; x < nWidth; ++x )
+                    for (int x = 0; x < nWidth; ++x)
                     {
-                        nPixel = ( ( ( (pSrc[2] * m.TopLeft) + (pSrc[5] * m.TopMid) + (pSrc[8] * m.TopRight) +
+                        nPixel = ((((pSrc[2] * m.TopLeft) + (pSrc[5] * m.TopMid) + (pSrc[8] * m.TopRight) +
                             (pSrc[2 + stride] * m.MidLeft) + (pSrc[5 + stride] * m.Pixel) + (pSrc[8 + stride] * m.MidRight) +
-                            (pSrc[2 + stride2] * m.BottomLeft) + (pSrc[5 + stride2] * m.BottomMid) + (pSrc[8 + stride2] * m.BottomRight)) / m.Factor) + m.Offset); 
+                            (pSrc[2 + stride2] * m.BottomLeft) + (pSrc[5 + stride2] * m.BottomMid) + (pSrc[8 + stride2] * m.BottomRight)) / m.Factor) + m.Offset);
 
                         if (nPixel < 0) nPixel = 0;
                         if (nPixel > 255) nPixel = 255;
 
-                        p[5 + stride]= (Byte)nPixel;
+                        p[5 + stride] = (Byte)nPixel;
 
-                        nPixel = ( ( ( (pSrc[1] * m.TopLeft) + (pSrc[4] * m.TopMid) + (pSrc[7] * m.TopRight) +
+                        nPixel = ((((pSrc[1] * m.TopLeft) + (pSrc[4] * m.TopMid) + (pSrc[7] * m.TopRight) +
                             (pSrc[1 + stride] * m.MidLeft) + (pSrc[4 + stride] * m.Pixel) + (pSrc[7 + stride] * m.MidRight) +
-                            (pSrc[1 + stride2] * m.BottomLeft) + (pSrc[4 + stride2] * m.BottomMid) + (pSrc[7 + stride2] * m.BottomRight)) / m.Factor) + m.Offset); 
+                            (pSrc[1 + stride2] * m.BottomLeft) + (pSrc[4 + stride2] * m.BottomMid) + (pSrc[7 + stride2] * m.BottomRight)) / m.Factor) + m.Offset);
 
                         if (nPixel < 0) nPixel = 0;
                         if (nPixel > 255) nPixel = 255;
-							
+
                         p[4 + stride] = (Byte)nPixel;
 
-                        nPixel = ( ( ( (pSrc[0] * m.TopLeft) + (pSrc[3] * m.TopMid) + (pSrc[6] * m.TopRight) +
+                        nPixel = ((((pSrc[0] * m.TopLeft) + (pSrc[3] * m.TopMid) + (pSrc[6] * m.TopRight) +
                             (pSrc[0 + stride] * m.MidLeft) + (pSrc[3 + stride] * m.Pixel) + (pSrc[6 + stride] * m.MidRight) +
-                            (pSrc[0 + stride2] * m.BottomLeft) + (pSrc[3 + stride2] * m.BottomMid) + (pSrc[6 + stride2] * m.BottomRight)) / m.Factor) + m.Offset); 
+                            (pSrc[0 + stride2] * m.BottomLeft) + (pSrc[3 + stride2] * m.BottomMid) + (pSrc[6 + stride2] * m.BottomRight)) / m.Factor) + m.Offset);
 
                         if (nPixel < 0) nPixel = 0;
                         if (nPixel > 255) nPixel = 255;
@@ -171,29 +172,29 @@ namespace NOCR
                     p += nOffset;
                     pSrc += nOffset;
                 }
-			
-            im.UnlockBits(bmData);
-            bSrc.UnlockBits(bmSrc);
 
-            this.pictureBox1.Image = im;
-            g=this.pictureBox1.CreateGraphics();
-            //System.Windows.Forms.MessageBox.Show("Mean Removal Done!!!!","Threshold Value");
+                im.UnlockBits(bmData);
+                bSrc.UnlockBits(bmSrc);
+
+                this.pictureBox1.Image = im;
+                g = this.pictureBox1.CreateGraphics();
+                //System.Windows.Forms.MessageBox.Show("Mean Removal Done!!!!","Threshold Value");
             }
-        catch(Exception ex)
+            catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show(ex.Message.ToString(),"Failed to Apply Mean Removal!!",System.Windows.Forms.MessageBoxButtons.OK,System.Windows.Forms.MessageBoxIcon.Error);
+                System.Windows.Forms.MessageBox.Show(ex.Message.ToString(), "Failed to Apply Mean Removal!!", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Error);
             }
             SetNormalCursorMethod(Cursors.Default);
-        
-			
+
+
         }
-        
+
 
         #region uncomment later
-        /*
-		private void Contrast(int nContrast)
+        
+		private unsafe void Contrast(int nContrast)
 		{
-			this.Cursor = System.Windows.Forms.Cursors.WaitCursor;
+			SetWaitCursorMethod(Cursors.WaitCursor);
 			
 
 				//This method increases the contrast of the image. 
@@ -201,7 +202,7 @@ namespace NOCR
 
 			
 			if(this.im.PixelFormat != System.Drawing.Imaging.PixelFormat.Format24bppRgb){
-				this.statusBar1.Text = @"Pixelformat is not 24 bytes per pixel RGB \(Format24bppRgb\)";
+				UpdateStatusBarMethod( @"Pixelformat is not 24 bytes per pixel RGB \(Format24bppRgb\)");
 				//System.Windows.Forms.MessageBox.Show("Pixelformat is not 24 bytes per pixel RGB","Format24bppRgb");
 				return;
 			}
@@ -219,7 +220,7 @@ namespace NOCR
 			IntPtr Scan0 = bmData.Scan0;
 			
 			//System.Byte p;
-			Byte p = (Byte)Scan0;
+            Byte* p = (Byte*)(void*)Scan0;
 			
 			
 				//Color clr = b.GetPixel(i,j);
@@ -277,16 +278,16 @@ namespace NOCR
 		catch(Exception ex)
 			{
 				System.Windows.Forms.MessageBox.Show(ex.Message.ToString(),"Failed to Improve the Contrast!!",System.Windows.Forms.MessageBoxButtons.OK,System.Windows.Forms.MessageBoxIcon.Error);
-				this.Cursor = System.Windows.Forms.Cursors.Default;
+				SetNormalCursorMethod(Cursors.Default);
 			}
-		this.Cursor = System.Windows.Forms.Cursors.Default;
+            SetNormalCursorMethod(Cursors.Default);
 	
 
 //			return true;
 		}
 
         // end of function 
-        */
+        
         #endregion
 
         private void Recognize()
@@ -310,7 +311,7 @@ namespace NOCR
             */
 
             SetWaitCursorMethod(Cursors.WaitCursor);
-            
+
 
             //Setting the cursor to wait because we will have a long process in the background
             RecognitionProcess rp = new RecognitionProcess(this.applicationPath, this.ImgArray);
@@ -318,7 +319,7 @@ namespace NOCR
             // load the transcription of the models
 
             UpdateStatusBarMethod("Loading Models ....");
-            
+
             //aakarList added 
             //aakarList = new System.Collections.ArrayList();
             this.slModelTranscription = rp.LoadModelTranscriptions(this.modelTrainDBPath);
@@ -334,10 +335,9 @@ namespace NOCR
             int left_x, right_x, top_y, bottom_y;
             System.String wordToRec = "";
             System.String dirOfRecFile = rp.recognitionTempFileDir;
-            if (!this.InvokeRequired)
-            {
-                this.statusBar1.Text = "Searching database directories ..";
-            }
+
+            UpdateStatusBarMethod("Searching database directories ..");
+
             for (int i = 0; i < lineCount; i++)
             {
                 top_y = this.Lines[i].getStartRow();//line start
@@ -353,23 +353,16 @@ namespace NOCR
                         right_x = this.Lines[i].Words[j].Units[k].getEndColumn();//word end
 
                         // setting the actual image boundary
-                        if (!this.InvokeRequired)
-                        {
-                            this.statusBar1.Text = "Setting Image Boundaries ..";
-                        }
+                        UpdateStatusBarMethod("Setting Image Boundaries ..");
+
                         rp.SetImageBoundary(left_x, right_x, top_y, bottom_y);
                         totalUnit++;
                         wordToRec += string.Concat(dirOfRecFile, totalUnit.ToString(), ".txt");
-                        if (!this.InvokeRequired)
-                        {
-                            this.statusBar1.Text = "Preparing word datas.. and running HTK Recognizer..  ";
-                        }
+
+                        UpdateStatusBarMethod("Preparing word datas.. and running HTK Recognizer..  ");
+
                         rp.PrepareWordData(wordToRec);
-                        if (!this.InvokeRequired)
-                        {
-                            this.statusBar1.Text =
-                                "Recognization process in progress .. This may take some time .. please wait";
-                        }
+                        UpdateStatusBarMethod("Recognization process in progress .. This may take some time .. please wait");
                     }
                 }//wordcount
             }
@@ -401,25 +394,16 @@ namespace NOCR
 
             // recognize the words from the features file using the Viterbi decoder of the HTK Toolkit HVite
             // then read the Master Labeled File(MLF) and fetch the output models
-            if (!this.InvokeRequired)
-            {
-                this.statusBar1.Text = "Recognisation process in progress.. Please wait..";
-            }
+
+            UpdateStatusBarMethod("Recognisation process in progress.. Please wait..");
+
             this.alModelRec = rp.RecognizeByHTK();
-            if (!this.InvokeRequired)
-            {
-                this.statusBar1.Text = "Recognition process complete..";
-                this.statusBar1.Text = "Showing Output...";
-            }
-
-
-
+            UpdateStatusBarMethod("Recognition process complete..Showing Output...");
 
             this.ProvideOutput();
-            if (!this.InvokeRequired)
-            {
-                this.statusBar1.Text = " Done.";
-            }
+
+             UpdateStatusBarMethod(" Done.");
+            
             /* after recognizing is done remove the script file and also the associated image features files */
             // remove the script file
 
@@ -436,8 +420,8 @@ namespace NOCR
             SetNormalCursorMethod(Cursors.Default);
             UpdateStatusBarMethod("Output window closed");
             //this.pbOCR.Value = 100;
-                
-             
+
+
             this.logFile.Close();
         }
 
@@ -570,12 +554,12 @@ namespace NOCR
         private void tryMagnify()
         {
 
-            //			this.Contrast(10);
+            this.Contrast(10);
 
             this.ContrastDone = true;
             this.Update();
 
-             
+
             //Binarization
             this.makeBinary();
 
@@ -634,7 +618,7 @@ namespace NOCR
         {
             if (this.ImageLoaded == true)
             {
-                //this.Contrast(10);
+                this.Contrast(10);
                 this.ContrastDone = true;
                 this.makeBinary();
                 this.Update();
@@ -871,7 +855,7 @@ namespace NOCR
             {
 
                 //contrast
-                //this.Contrast(10);
+                this.Contrast(10);
                 if (this.InvokeRequired)
                 {
                     this.Invoke(new MethodInvoker(delegate
@@ -985,7 +969,7 @@ namespace NOCR
             {
                 //Please Browse for image and Load the image
                 this.logFile.WriteLine("Trainer Returned: Attempted to perform operation without loading the Image");
-                this.statusBar1.Text = "Image not loaded, Please Browse for image and load image first";
+                UpdateStatusBarMethod("Image not loaded, Please Browse for image and load image first");
                 System.Windows.Forms.MessageBox.Show("Image not loaded, Please Browse for image and load image first ", "Image Not loaded");
             }
 
@@ -1094,7 +1078,7 @@ namespace NOCR
         {
             if (this.ImageLoaded == true)
             {
-                //this.Contrast(10);
+                this.Contrast(10);
                 this.ContrastDone = true;
                 this.Update();
             }
@@ -1109,7 +1093,7 @@ namespace NOCR
         {
             if (this.ImageLoaded == true)
             {
-                //this.Contrast(10);
+                this.Contrast(10);
                 this.ContrastDone = true;
                 this.makeBinary();
                 this.Update();
@@ -1224,7 +1208,7 @@ namespace NOCR
             } // if(this.x1 != this.x2 && this.y1 != this.y2)
             else
             {
-                this.statusBar1.Text = "Unable to crop";
+                UpdateStatusBarMethod("Unable to crop");
             }
 
             this.xMouseDistance = System.Math.Abs(this.pointX2 - this.pointX1);
@@ -1560,7 +1544,7 @@ namespace NOCR
             catch (System.Exception mouseExceptions)
             {
                 // this.statusBar1.Text = "Don\'t mess much with mouse";
-                this.statusBar1.Text = "Left click for options, right Click for new Image";
+                UpdateStatusBarMethod("Left click for options, right Click for new Image");
             }
         }
 
@@ -1777,7 +1761,7 @@ namespace NOCR
 
         private void mnuNewCrop_Click(System.Object sender, System.EventArgs e)
         {
-            this.statusBar1.Text = "";
+            UpdateStatusBarMethod("");
             if (this.xMouseDistance < this.im.Width && this.yMouseDistance < this.im.Height)
             {
 
@@ -1794,13 +1778,13 @@ namespace NOCR
                 }
                 catch (System.Exception CroppingException)
                 {
-                    this.statusBar1.Text = "TRY CROPPING AGAIN  ";
+                    UpdateStatusBarMethod("TRY CROPPING AGAIN  ");
                 }
 
             } // if(this.xMouseDistance < this.im.Width && this.yMouseDistance < this.im.Height)
             else
             {
-                this.statusBar1.Text = "Image Cropped Must be Smaller than the original Image, Please crop again";
+                UpdateStatusBarMethod("Image Cropped Must be Smaller than the original Image, Please crop again");
                 return;
                 //MessageBox.Show("Image cropped must be smaller than the original image ","Crop Again");
             }

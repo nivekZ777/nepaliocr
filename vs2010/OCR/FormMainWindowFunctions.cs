@@ -112,7 +112,8 @@ namespace NOCR
             }
             else
             {
-                this.statusBar1.Text = "No output to save";
+
+                UpdateStatusBarMethod("No output to save");
             }
         }
 
@@ -336,7 +337,7 @@ namespace NOCR
                 Bitmap save;
                 save = new Bitmap(this.pictureBox1.Image);
                 save.Save(saveImageDialog.FileName);
-                this.statusBar1.Text = "Image Saved Successfully";
+                UpdateStatusBarMethod("Image Saved Successfully");
             }
             //}
             //else{
@@ -454,17 +455,13 @@ namespace NOCR
                     }
 
                 }
-                if (this.InvokeRequired)
-                {
 
-                }
-                else
-                {
-                    SetNormalCursorMethod(Cursors.Default);
-                    
+                SetNormalCursorMethod(Cursors.Default);
+                UpdateStatusBarMethod("Binarization Done.");
+
+                if (this.InvokeRequired){}
+                else{
                     this.Update();
-                    UpdateStatusBarMethod("Binarization Done.");
-                    
                     this.setResetMenu(this.ImageLoaded, this.BinaryDone, this.SeparateDone);
                 }
 
@@ -523,7 +520,7 @@ namespace NOCR
                     }
                 }
             }// for(int i=0;i<this.numberOfLines;i++)
-            this.statusBar1.Text = "Character Separation Done";
+            UpdateStatusBarMethod("Character Separation Done");
             //if (this.pbOCR.Value < 50) this.pbOCR.Value += 10;
 
         }
@@ -534,7 +531,8 @@ namespace NOCR
             try
             {
                 //this.pbOCR.Value = 40;
-                this.statusBar1.Text = "Separating lines and Words...";
+                UpdateStatusBarMethod("Separating lines and Words...");
+                
 
                 /*
 				This method is used to separate the words and lines after binarization.
@@ -582,18 +580,17 @@ namespace NOCR
                 }// if(this.BinaryDone==true) //If binarization is done
 
                 this.setResetMenu(this.ImageLoaded, this.BinaryDone, this.SeparateDone);
-                this.statusBar1.Text = "Separation done";
+                UpdateStatusBarMethod("Separation done");
                 //this.Update();
                 //this.pbOCR.Value = 70;
             }//end try 
             catch (System.Exception ex)
             {
+
+                UpdateStatusBarMethod("!!!!! Separate Failed !!!!");
                 if (this.InvokeRequired) { }
                 else
                 {
-
-
-                    this.statusBar1.Text = "!!!!! Separate Failed !!!!";
                     MessageBox.Show("Cannot Separate line, words and characters", "Error!!");
                 }
             }//end Catch
@@ -734,7 +731,7 @@ namespace NOCR
             catch (System.Exception ex)
             {
                 System.Windows.Forms.MessageBox.Show("Garbled Output", "The Post Processor which checks for errors has failed, \nIt seems that the postprocessor was not found or the postprocessor cannot be run");
-                this.statusBar1.Text = "PostProcessor Failed";
+                UpdateStatusBarMethod("PostProcessor Failed");
                 this.rtbMainOutput.Text = text;
             }
 
@@ -756,13 +753,9 @@ namespace NOCR
             // 
 
             /*this.createRTB();*/
-            if (!this.InvokeRequired)
-            {
-                //this.pbOCR.Value = 100;
-                
-                UpdateStatusBarMethod("Recognition Complete");
-                SetNormalCursorMethod(Cursors.Default);
-            }
+            UpdateStatusBarMethod("Recognition Complete");
+            SetNormalCursorMethod(Cursors.Default);
+            //this.pbOCR.Value = 100;
             /*this.rtbOutput.Text = text;*/
         }
 
